@@ -1,12 +1,12 @@
-import Modal from "@app/components/Common/Modal";
-import PermissionEdit from "@app/components/PermissionEdit";
-import type { User } from "@app/hooks/useUser";
-import { useUser } from "@app/hooks/useUser";
-import globalMessages from "@app/i18n/globalMessages";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
+import Modal from '@app/components/Common/Modal';
+import PermissionEdit from '@app/components/PermissionEdit';
+import type { User } from '@app/hooks/useUser';
+import { useUser } from '@app/hooks/useUser';
+import globalMessages from '@app/i18n/globalMessages';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
 
 interface BulkEditProps {
   selectedUserIds: number[];
@@ -17,9 +17,9 @@ interface BulkEditProps {
 }
 
 const messages = defineMessages({
-  userssaved: "User permissions saved successfully!",
-  userfail: "Something went wrong while saving user permissions.",
-  edituser: "Edit User Permissions",
+  userssaved: 'User permissions saved successfully!',
+  userfail: 'Something went wrong while saving user permissions.',
+  edituser: 'Edit User Permissions',
 });
 
 const BulkEditModal = ({

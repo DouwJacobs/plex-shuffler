@@ -45,7 +45,7 @@ const LanguagePicker = () => {
           className="absolute right-0 mt-2 w-56 origin-top-right rounded-md shadow-lg"
           ref={dropdownRef}
         >
-          <div className="rounded-md plex-bg-primary px-3 py-2 ring-1 ring-black ring-opacity-5">
+          <div className="plex-bg-primary rounded-md px-3 py-2 ring-1 ring-black ring-opacity-5">
             <div>
               <label
                 htmlFor="language"
@@ -55,7 +55,7 @@ const LanguagePicker = () => {
               </label>
               <select
                 id="language"
-                className="rounded-md plex-bg-secondary"
+                className="plex-bg-secondary rounded-md"
                 onChange={(e) =>
                   setLocale && setLocale(e.target.value as AvailableLocale)
                 }

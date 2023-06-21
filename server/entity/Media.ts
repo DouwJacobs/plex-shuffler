@@ -1,7 +1,7 @@
-import { MediaType } from "@server/constants/media";
-import { getRepository } from "@server/datasource";
-import { getSettings } from "@server/lib/settings";
-import logger from "@server/logger";
+import type { MediaType } from '@server/constants/media';
+import { getRepository } from '@server/datasource';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
 import {
   AfterLoad,
   Column,
@@ -12,8 +12,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import Season from "./Season";
+} from 'typeorm';
+import Season from './Season';
 
 @Entity()
 class Media {
@@ -49,7 +49,7 @@ class Media {
 
     try {
       const media = await mediaRepository.findOne({
-        where: { tmdbId: id, mediaType }
+        where: { tmdbId: id, mediaType },
       });
 
       return media ?? undefined;
@@ -62,7 +62,7 @@ class Media {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({ type: "varchar" })
+  @Column({ type: 'varchar' })
   public mediaType: MediaType;
 
   @Column()
@@ -89,34 +89,34 @@ class Media {
   @UpdateDateColumn()
   public updatedAt: Date;
 
-  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   public lastSeasonChange: Date;
 
-  @Column({ type: "datetime", nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   public mediaAddedAt: Date;
 
-  @Column({ nullable: true, type: "int" })
+  @Column({ nullable: true, type: 'int' })
   public serviceId?: number | null;
 
-  @Column({ nullable: true, type: "int" })
+  @Column({ nullable: true, type: 'int' })
   public serviceId4k?: number | null;
 
-  @Column({ nullable: true, type: "int" })
+  @Column({ nullable: true, type: 'int' })
   public externalServiceId?: number | null;
 
-  @Column({ nullable: true, type: "int" })
+  @Column({ nullable: true, type: 'int' })
   public externalServiceId4k?: number | null;
 
-  @Column({ nullable: true, type: "varchar" })
+  @Column({ nullable: true, type: 'varchar' })
   public externalServiceSlug?: string | null;
 
-  @Column({ nullable: true, type: "varchar" })
+  @Column({ nullable: true, type: 'varchar' })
   public externalServiceSlug4k?: string | null;
 
-  @Column({ nullable: true, type: "varchar" })
+  @Column({ nullable: true, type: 'varchar' })
   public ratingKey?: string | null;
 
-  @Column({ nullable: true, type: "varchar" })
+  @Column({ nullable: true, type: 'varchar' })
   public ratingKey4k?: string | null;
 
   public serviceUrl?: string;
@@ -141,7 +141,7 @@ class Media {
 
     if (this.ratingKey) {
       this.plexUrl = `${
-        webAppUrl ? webAppUrl : "https://app.plex.tv/desktop"
+        webAppUrl ? webAppUrl : 'https://app.plex.tv/desktop'
       }#!/server/${machineId}/details?key=%2Flibrary%2Fmetadata%2F${
         this.ratingKey
       }`;
@@ -151,7 +151,7 @@ class Media {
 
     if (this.ratingKey4k) {
       this.plexUrl4k = `${
-        webAppUrl ? webAppUrl : "https://app.plex.tv/desktop"
+        webAppUrl ? webAppUrl : 'https://app.plex.tv/desktop'
       }#!/server/${machineId}/details?key=%2Flibrary%2Fmetadata%2F${
         this.ratingKey4k
       }`;

@@ -1,12 +1,15 @@
-import type { PermissionCheckOptions } from '@server/lib/permissions';
-import { hasPermission, Permission } from '@server/lib/permissions';
+import type {
+  Permission,
+  PermissionCheckOptions,
+} from '@server/lib/permissions';
+import { hasPermission } from '@server/lib/permissions';
 import {
   AfterLoad,
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
   OneToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserSettings } from './UserSettings';
@@ -89,10 +92,8 @@ export class User {
     return !!hasPermission(permissions, this.permissions, options);
   }
 
-
   @AfterLoad()
   public setDisplayName(): void {
     this.displayName = this.username || this.plexUsername || this.email;
   }
-
 }

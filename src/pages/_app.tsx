@@ -1,22 +1,22 @@
-import { SettingsProvider } from "@app/context/SettingsContext";
-import { UserContext } from "@app/context/UserContext";
-import type { User } from "@app/hooks/useUser";
-import ParticlesTS from "@app/components/Common/ParticlesJS";
-import type { AvailableLocale } from "@app/context/LanguageContext";
+import favicon from '@app/assets/favicon.ico';
+import ParticlesTS from '@app/components/Common/ParticlesJS';
+import Layout from '@app/components/Layout';
+import type { AvailableLocale } from '@app/context/LanguageContext';
 import { LanguageContext } from '@app/context/LanguageContext';
-import "@app/styles/globals.css";
+import { SettingsProvider } from '@app/context/SettingsContext';
+import { UserContext } from '@app/context/UserContext';
+import type { User } from '@app/hooks/useUser';
+import '@app/styles/globals.css';
 import { polyfillIntl } from '@app/utils/polyfillIntl';
-import type { PublicSettingsResponse } from "@server/interfaces/api/settingsInterfaces";
-import axios from "axios";
-import type { AppInitialProps, AppProps } from "next/app";
-import App from "next/app";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { SWRConfig } from "swr";
-import { Toaster } from "react-hot-toast";
-import Layout from "@app/components/Layout";
-import favicon from "@app/assets/favicon.ico";
-import { IntlProvider } from "react-intl";
+import type { PublicSettingsResponse } from '@server/interfaces/api/settingsInterfaces';
+import axios from 'axios';
+import type { AppInitialProps, AppProps } from 'next/app';
+import App from 'next/app';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { IntlProvider } from 'react-intl';
+import { SWRConfig } from 'swr';
 
 // Custom types so we can correctly type our GetInitialProps function
 // with our combined user prop
@@ -36,11 +36,11 @@ const loadLocaleData = (locale: AvailableLocale): Promise<any> => {
     case 'af':
       return import('../i18n/locale/af.json');
     default:
-      return import("../i18n/locale/en.json");
+      return import('../i18n/locale/en.json');
   }
 };
 
-const CoreApp: Omit<NextAppComponentType, "origGetInitialProps"> = ({
+const CoreApp: Omit<NextAppComponentType, 'origGetInitialProps'> = ({
   Component,
   pageProps,
   router,
@@ -72,7 +72,7 @@ const CoreApp: Omit<NextAppComponentType, "origGetInitialProps"> = ({
       value={{
         fetcher: (url) => axios.get(url).then((res) => res.data),
         fallback: {
-          "/api/v1/auth/me": user,
+          '/api/v1/auth/me': user,
         },
       }}
     >
@@ -107,19 +107,19 @@ CoreApp.getInitialProps = async (initialProps) => {
   let user: User | undefined = undefined;
   let currentSettings: PublicSettingsResponse = {
     initialized: false,
-    applicationTitle: "",
-    applicationUrl: "",
+    applicationTitle: '',
+    applicationUrl: '',
     hideAvailable: false,
     movie4kEnabled: false,
     series4kEnabled: false,
     localLogin: true,
-    region: "",
-    originalLanguage: "",
+    region: '',
+    originalLanguage: '',
     partialRequestsEnabled: true,
     cacheImages: false,
-    vapidPublic: "",
+    vapidPublic: '',
     enablePushRegistration: false,
-    locale: "en",
+    locale: 'en',
     emailEnabled: false,
     newPlexLogin: true,
   };
@@ -137,7 +137,7 @@ CoreApp.getInitialProps = async (initialProps) => {
     if (!initialized) {
       if (!router.pathname.match(/(setup|login\/plex)/)) {
         ctx.res.writeHead(307, {
-          Location: "/setup",
+          Location: '/setup',
         });
         ctx.res.end();
       }
@@ -157,7 +157,7 @@ CoreApp.getInitialProps = async (initialProps) => {
 
         if (router.pathname.match(/(setup|login)/)) {
           ctx.res.writeHead(307, {
-            Location: "/",
+            Location: '/',
           });
           ctx.res.end();
         }
@@ -167,7 +167,7 @@ CoreApp.getInitialProps = async (initialProps) => {
         // before anything actually renders
         if (!router.pathname.match(/(login|setup)/)) {
           ctx.res.writeHead(307, {
-            Location: "/login",
+            Location: '/login',
           });
           ctx.res.end();
         }

@@ -10,7 +10,7 @@ declare global {
     }
   }
 
-  export type Middleware = <ParamsDictionary, any, any>(
+  export type Middleware = (
     req: Request,
     res: Response,
     next: NextFunction

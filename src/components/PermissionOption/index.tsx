@@ -1,4 +1,3 @@
-import useSettings from '@app/hooks/useSettings';
 import type { User } from '@app/hooks/useUser';
 import { Permission } from '@app/hooks/useUser';
 import { hasPermission } from '@server/lib/permissions';
@@ -34,9 +33,6 @@ const PermissionOption = ({
   onUpdate,
   parent,
 }: PermissionOptionProps) => {
-  const settings = useSettings();
-
-
   let disabled = false;
   let checked = hasPermission(option.permission, currentPermission);
 
@@ -64,12 +60,12 @@ const PermissionOption = ({
 
   if (
     // Some permissions are dependent on others; check requirements are fulfilled
-    (option.requires &&
-      !option.requires.every((requirement) =>
-        hasPermission(requirement.permissions, currentPermission, {
-          type: requirement.type ?? 'and',
-        })
-      )) 
+    option.requires &&
+    !option.requires.every((requirement) =>
+      hasPermission(requirement.permissions, currentPermission, {
+        type: requirement.type ?? 'and',
+      })
+    )
   ) {
     disabled = true;
     checked = false;

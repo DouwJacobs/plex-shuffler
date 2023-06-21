@@ -1,26 +1,26 @@
-import VersionStatus from "@app/components/Layout/VersionStatus";
-import { Permission, useUser } from "@app/hooks/useUser";
-import { Transition } from "@headlessui/react";
+import LogoFull from '@app/assets/images/plex_shuffler_logo_long.png';
+import VersionStatus from '@app/components/Layout/VersionStatus';
+import { Permission, useUser } from '@app/hooks/useUser';
+import { Transition } from '@headlessui/react';
 import {
   CogIcon,
+  HomeIcon,
   QueueListIcon,
+  TvIcon,
   UsersIcon,
   XMarkIcon,
-  HomeIcon,
-  TvIcon,
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Fragment, useRef } from "react";
-import LogoFull from "@app/assets/images/plex_shuffler_logo_long.png";
-import { defineMessages, useIntl } from "react-intl";
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Fragment, useRef } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 export const menuMessages = defineMessages({
-  home: "Home",
-  playlists: "Playlists",
-  users: "Users",
-  settings: "Settings",
-  shows: "TV Shows",
+  home: 'Home',
+  playlists: 'Playlists',
+  users: 'Users',
+  settings: 'Settings',
+  shows: 'TV Shows',
 });
 
 interface SidebarProps {
@@ -35,7 +35,7 @@ interface SidebarLinkProps {
   activeRegExp: RegExp;
   as?: string;
   requiredPermission?: Permission | Permission[];
-  permissionType?: "and" | "or";
+  permissionType?: 'and' | 'or';
   dataTestId?: string;
 }
 
@@ -45,38 +45,38 @@ interface SidebarLinkProps {
 
 const SidebarLinks: SidebarLinkProps[] = [
   {
-    href: "/",
-    messagesKey: "home",
-    svgIcon: <HomeIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+    href: '/',
+    messagesKey: 'home',
+    svgIcon: <HomeIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/(home\/?)?$/,
   },
   {
-    href: "/user/playlists",
-    messagesKey: "playlists",
-    svgIcon: <QueueListIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+    href: '/user/playlists',
+    messagesKey: 'playlists',
+    svgIcon: <QueueListIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/user\/playlists$/,
   },
   {
-    href: "/shows",
-    messagesKey: "shows",
-    svgIcon: <TvIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+    href: '/shows',
+    messagesKey: 'shows',
+    svgIcon: <TvIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/shows/,
   },
   {
-    href: "/users",
-    messagesKey: "users",
-    svgIcon: <UsersIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+    href: '/users',
+    messagesKey: 'users',
+    svgIcon: <UsersIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/users/,
     requiredPermission: Permission.MANAGE_USERS,
-    dataTestId: "sidebar-menu-users",
+    dataTestId: 'sidebar-menu-users',
   },
   {
-    href: "/settings",
-    messagesKey: "settings",
-    svgIcon: <CogIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+    href: '/settings',
+    messagesKey: 'settings',
+    svgIcon: <CogIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/settings/,
     requiredPermission: Permission.ADMIN,
-    dataTestId: "sidebar-menu-settings",
+    dataTestId: 'sidebar-menu-settings',
   },
 ];
 
@@ -101,7 +101,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
               leaveTo="opacity-0"
             >
               <div className="fixed inset-0">
-                <div className="absolute inset-0 plex-bg-secondary opacity-90"></div>
+                <div className="plex-bg-secondary absolute inset-0 opacity-90"></div>
               </div>
             </Transition.Child>
             <Transition.Child
@@ -114,10 +114,10 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
               leaveTo="-translate-x-full"
             >
               <>
-                <div className="relative flex h-full w-full max-w-xs flex-1 flex-col plex-bg-transparent">
+                <div className="plex-bg-transparent relative flex h-full w-full max-w-xs flex-1 flex-col">
                   <div className="sidebar-close-button absolute right-0 -mr-14 p-1">
                     <button
-                      className="flex h-12 w-12 items-center justify-center rounded-full focus:bg-gray-600 focus:outline-none -z-30"
+                      className="-z-30 flex h-12 w-12 items-center justify-center rounded-full focus:bg-gray-600 focus:outline-none"
                       aria-label="Close sidebar"
                       onClick={() => setClosed()}
                     >
@@ -126,7 +126,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                   </div>
                   <div
                     ref={navRef}
-                    className="flex flex-1 flex-col overflow-y-auto pt-8 pb-8 sm:pb-4"
+                    className="flex flex-1 flex-col overflow-y-auto pb-8 pt-8 sm:pb-4"
                   >
                     <div className="flex flex-shrink-0 items-center">
                       <span className="px-4 text-2xl text-gray-50">
@@ -139,7 +139,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                       {SidebarLinks.filter((link) =>
                         link.requiredPermission
                           ? hasPermission(link.requiredPermission, {
-                              type: link.permissionType ?? "and",
+                              type: link.permissionType ?? 'and',
                             })
                           : true
                       ).map((sidebarLink) => {
@@ -150,7 +150,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                             as={sidebarLink.as}
                             onClick={() => setClosed()}
                             onKeyDown={(e) => {
-                              if (e.key === "Enter") {
+                              if (e.key === 'Enter') {
                                 setClosed();
                               }
                             }}
@@ -161,8 +161,8 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                                   router.pathname.match(
                                     sidebarLink.activeRegExp
                                   )
-                                    ? "plex-bg-secondary"
-                                    : "hover:plex-bg-transparent-10 focus:bg-gray-700"
+                                    ? 'plex-bg-secondary'
+                                    : 'hover:plex-bg-transparent-10 focus:bg-gray-700'
                                 }
                               `}
                             data-testid={`${sidebarLink.dataTestId}-mobile`}
@@ -191,10 +191,10 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
         </Transition>
       </div>
 
-      <div className="fixed top-0 bottom-0 left-0 z-30 hidden lg:flex lg:flex-shrink-0">
+      <div className="fixed bottom-0 left-0 top-0 z-30 hidden lg:flex lg:flex-shrink-0">
         <div className="sidebar flex w-64 flex-col">
           <div className="flex h-0 flex-1 flex-col">
-            <div className="flex flex-1 flex-col overflow-y-auto pt-8 pb-4">
+            <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-8">
               <div className="flex flex-shrink-0 items-center">
                 <span className="px-4 text-2xl text-gray-50">
                   <Link href="/">
@@ -206,7 +206,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                 {SidebarLinks.filter((link) =>
                   link.requiredPermission
                     ? hasPermission(link.requiredPermission, {
-                        type: link.permissionType ?? "and",
+                        type: link.permissionType ?? 'and',
                       })
                     : true
                 ).map((sidebarLink) => {
@@ -220,8 +220,8 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                                   router.pathname.match(
                                     sidebarLink.activeRegExp
                                   )
-                                    ? "bg-zinc-700"
-                                    : "hover:bg-zinc-500 focus:bg-zinc-500"
+                                    ? 'bg-zinc-700'
+                                    : 'hover:bg-zinc-500 focus:bg-zinc-500'
                                 }
                               `}
                       data-testid={sidebarLink.dataTestId}

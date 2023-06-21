@@ -1,9 +1,9 @@
-import ImageProxy from "@server/lib/imageproxy";
-import logger from "@server/logger";
-import { Router } from "express";
-import { getSettings } from "@server/lib/settings";
-import { getRepository } from "@server/datasource";
-import { User } from "@server/entity/User";
+import { getRepository } from '@server/datasource';
+import { User } from '@server/entity/User';
+import ImageProxy from '@server/lib/imageproxy';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
+import { Router } from 'express';
 
 const router = Router();
 
@@ -16,8 +16,8 @@ const createImageProxy = async () => {
     where: { id: 1 },
   });
   const plexImageProxy = new ImageProxy(
-    "plex",
-    `${settings.plex.useSsl ? "https" : "http"}://${settings.plex.ip}:${
+    'plex',
+    `${settings.plex.useSsl ? 'https' : 'http'}://${settings.plex.ip}:${
       settings.plex.port
     }`,
     {
@@ -25,7 +25,7 @@ const createImageProxy = async () => {
         maxRequests: 20,
         maxRPS: 50,
       },
-      plexToken: admin.plexToken
+      plexToken: admin.plexToken,
     }
   );
 
@@ -35,23 +35,23 @@ const createImageProxy = async () => {
 /**
  * Image Proxy
  */
-router.get("/*", async (req, res) => {
-  const imagePath = req.path.replace("/image", "");
+router.get('/*', async (req, res) => {
+  const imagePath = req.path.replace('/image', '');
   try {
     const plexImageProxy = await createImageProxy();
     const imageData = await plexImageProxy.getImage(imagePath);
 
     res.writeHead(200, {
-      "Content-Type": `image/${imageData.meta.extension}`,
-      "Content-Length": imageData.imageBuffer.length,
-      "Cache-Control": `public, max-age=${imageData.meta.curRevalidate}`,
-      "OS-Cache-Key": imageData.meta.cacheKey,
-      "OS-Cache-Status": imageData.meta.cacheMiss ? "MISS" : "HIT",
+      'Content-Type': `image/${imageData.meta.extension}`,
+      'Content-Length': imageData.imageBuffer.length,
+      'Cache-Control': `public, max-age=${imageData.meta.curRevalidate}`,
+      'OS-Cache-Key': imageData.meta.cacheKey,
+      'OS-Cache-Status': imageData.meta.cacheMiss ? 'MISS' : 'HIT',
     });
 
     res.end(imageData.imageBuffer);
   } catch (e) {
-    logger.error("Failed to proxy image", {
+    logger.error('Failed to proxy image', {
       imagePath,
       errorMessage: e.message,
     });

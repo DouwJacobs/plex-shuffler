@@ -1,26 +1,26 @@
-import Alert from "@app/components/Common/Alert";
-import Button from "@app/components/Common/Button";
-import LoadingSpinner from "@app/components/Common/LoadingSpinner";
-import PageTitle from "@app/components/Common/PageTitle";
-import PermissionEdit from "@app/components/PermissionEdit";
-import { useUser } from "@app/hooks/useUser";
-import Error from "@app/pages/_error";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
-import { Form, Formik } from "formik";
-import { useRouter } from "next/router";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
-import useSWR from "swr";
+import Alert from '@app/components/Common/Alert';
+import Button from '@app/components/Common/Button';
+import LoadingSpinner from '@app/components/Common/LoadingSpinner';
+import PageTitle from '@app/components/Common/PageTitle';
+import PermissionEdit from '@app/components/PermissionEdit';
+import { useUser } from '@app/hooks/useUser';
+import Error from '@app/pages/_error';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
 
 const messages = defineMessages({
-  toastSettingsSuccess: "Permissions saved successfully!",
-  toastSettingsFailure: "Something went wrong while saving settings.",
-  permissions: "Permissions",
-  unauthorizedDescription: "You cannot modify your own permissions.",
-  usersettings: "User Settings",
-  saving: "Saving...",
-  save: "Save Changes"
+  toastSettingsSuccess: 'Permissions saved successfully!',
+  toastSettingsFailure: 'Something went wrong while saving settings.',
+  permissions: 'Permissions',
+  unauthorizedDescription: 'You cannot modify your own permissions.',
+  usersettings: 'User Settings',
+  saving: 'Saving...',
+  save: 'Save Changes',
 });
 
 const UserPermissions = () => {
@@ -103,7 +103,7 @@ const UserPermissions = () => {
                   currentUser={user}
                   currentPermission={values.currentPermissions ?? 0}
                   onUpdate={(newPermission) =>
-                    setFieldValue("currentPermissions", newPermission)
+                    setFieldValue('currentPermissions', newPermission)
                   }
                 />
               </div>

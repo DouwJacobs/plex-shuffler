@@ -1,30 +1,28 @@
-import React from "react";
-import PageTitle from "@app/components/Common/PageTitle";
-import PlexLoginButton from "@app/components/PlexLoginButton";
-import Card from "@app/components/Common/Card";
-import Logo from "@app/components/Common/Logo";
-import useSettings from "@app/hooks/useSettings";
-import { useUser } from "@app/hooks/useUser";
-import axios from "axios";
-import { useRouter } from "next/dist/client/router";
-import { useEffect, useState } from "react";
-import { defineMessages, useIntl } from 'react-intl';
+import Card from '@app/components/Common/Card';
+import Logo from '@app/components/Common/Logo';
+import PageTitle from '@app/components/Common/PageTitle';
 import LanguagePicker from '@app/components/Layout/LanguagePicker';
-import toast from "react-hot-toast";
+import PlexLoginButton from '@app/components/PlexLoginButton';
+import { useUser } from '@app/hooks/useUser';
+import axios from 'axios';
+import { useRouter } from 'next/dist/client/router';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
 
-import styles from "./Login.module.css";
+import styles from './Login.module.css';
 
 const messages = defineMessages({
-  signin: "Sign In",
-  signinheader: "Sign in to continue",
-  signinwithplex: "Use your Plex account",
-  siginingloading: "Login Loading...",
-  signinsuccessful: "Login Successful!"
+  signin: 'Sign In',
+  signinheader: 'Sign in to continue',
+  signinwithplex: 'Use your Plex account',
+  siginingloading: 'Login Loading...',
+  signinsuccessful: 'Login Successful!',
 });
 
 const Login = () => {
   const intl = useIntl();
-  const [isProcessing, setProcessing] = useState(false);
+  const [, setProcessing] = useState(false);
   const [authToken, setAuthToken] = useState<string | undefined>(undefined);
   const { user, revalidate } = useUser();
   const router = useRouter();
@@ -38,7 +36,7 @@ const Login = () => {
       setProcessing(true);
       try {
         toastId = toast.loading(intl.formatMessage(messages.siginingloading));
-        const response = await axios.post("/api/v1/auth/plex", { authToken });
+        const response = await axios.post('/api/v1/auth/plex', { authToken });
 
         if (response.data?.id) {
           revalidate();
@@ -48,8 +46,6 @@ const Login = () => {
 
           toast.success(intl.formatMessage(messages.signinsuccessful));
         }
-
-        
       } catch (e) {
         if (toastId) {
           toast.remove(toastId);
@@ -68,7 +64,7 @@ const Login = () => {
   // valid user, we redirect the user to the home page as the login was successful.
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push('/');
     }
   }, [user, router]);
 
@@ -76,11 +72,11 @@ const Login = () => {
     <React.Fragment>
       <PageTitle title={intl.formatMessage(messages.signin)} />
       <Logo />
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute right-4 top-4 z-50">
         <LanguagePicker />
       </div>
-      <Card className={styles["login-card"]}>
-        <div className={styles["login-content"]}>
+      <Card className={styles['login-card']}>
+        <div className={styles['login-content']}>
           <h2>{intl.formatMessage(messages.signinheader)}</h2>
           <PlexLoginButton
             onAuthToken={(authToken) => setAuthToken(authToken)}

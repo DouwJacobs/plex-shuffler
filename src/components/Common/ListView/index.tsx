@@ -1,9 +1,9 @@
-import TitleCard from "@app/components/Common/TitleCard";
-import useVerticalScroll from "@app/hooks/useVerticalScroll";
-import globalMessages from "@app/i18n/globalMessages";
-import type { ShowResult, PlaylistResult } from "@server/models/Search";
-import noCover from "@app/assets/images/playlist-no-cover.png";
-import { useIntl } from "react-intl";
+import noCover from '@app/assets/images/playlist-no-cover.png';
+import TitleCard from '@app/components/Common/TitleCard';
+import useVerticalScroll from '@app/hooks/useVerticalScroll';
+import globalMessages from '@app/i18n/globalMessages';
+import type { PlaylistResult, ShowResult } from '@server/models/Search';
+import { useIntl } from 'react-intl';
 
 type ListViewProps = {
   items?: (ShowResult | PlaylistResult)[];
@@ -34,27 +34,19 @@ const ListView = ({
           let titleCard: React.ReactNode;
 
           switch (title.mediaType) {
-            case "tv":
+            case 'tv':
               titleCard = (
                 <TitleCard
                   title={title.title}
-                  thumb={
-                    title.thumb
-                      ? title.thumb
-                      : noCover.src
-                  }
+                  thumb={title.thumb ? title.thumb : noCover.src}
                 />
               );
               break;
-            case "playlist":
+            case 'playlist':
               titleCard = (
                 <TitleCard
                   title={title.title}
-                  thumb={
-                    title.thumb
-                      ? title.thumb
-                      : noCover.src
-                  }
+                  thumb={title.thumb ? title.thumb : noCover.src}
                 />
               );
               break;

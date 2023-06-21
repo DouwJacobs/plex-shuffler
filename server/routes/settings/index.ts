@@ -1,26 +1,26 @@
-import PlexAPI from "@server/api/plexapi";
-import PlexTvAPI from "@server/api/plextv";
-import { getRepository } from "@server/datasource";
-import { User } from "@server/entity/User";
-import type { PlexConnection } from "@server/interfaces/api/plexInterfaces";
+import PlexAPI from '@server/api/plexapi';
+import PlexTvAPI from '@server/api/plextv';
+import { getRepository } from '@server/datasource';
+import { User } from '@server/entity/User';
+import type { PlexConnection } from '@server/interfaces/api/plexInterfaces';
 import type {
   LogMessage,
   LogsResultsResponse,
-  SettingsAboutResponse
-} from "@server/interfaces/api/settingsInterfaces";
-import { Permission } from "@server/lib/permissions";
-import type { MainSettings } from "@server/lib/settings";
-import { getSettings } from "@server/lib/settings";
-import logger from "@server/logger";
-import { isAuthenticated } from "@server/middleware/auth";
-import { Router } from "express";
-import rateLimit from "express-rate-limit";
-import fs from "fs";
-import { escapeRegExp, merge, omit, set, sortBy } from "lodash";
-import path from "path";
-import { URL } from "url";
+  SettingsAboutResponse,
+} from '@server/interfaces/api/settingsInterfaces';
+import { Permission } from '@server/lib/permissions';
+import type { MainSettings } from '@server/lib/settings';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
+import { isAuthenticated } from '@server/middleware/auth';
 import { appDataPath } from '@server/utils/appDataVolume';
 import { getAppVersion } from '@server/utils/appVersion';
+import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
+import fs from 'fs';
+import { escapeRegExp, merge, omit, set, sortBy } from 'lodash';
+import path from 'path';
+import { URL } from 'url';
 
 const settingsRoutes = Router();
 
@@ -29,23 +29,23 @@ const filteredMainSettings = (
   main: MainSettings
 ): Partial<MainSettings> => {
   if (!user?.hasPermission(Permission.ADMIN)) {
-    return omit(main, "apiKey");
+    return omit(main, 'apiKey');
   }
 
   return main;
 };
 
-settingsRoutes.get("/main", (req, res, next) => {
+settingsRoutes.get('/main', (req, res, next) => {
   const settings = getSettings();
 
   if (!req.user) {
-    return next({ status: 400, message: "User missing from request." });
+    return next({ status: 400, message: 'User missing from request.' });
   }
 
   res.status(200).json(filteredMainSettings(req.user, settings.main));
 });
 
-settingsRoutes.post("/main", (req, res) => {
+settingsRoutes.post('/main', (req, res) => {
   const settings = getSettings();
 
   settings.main = merge(settings.main, req.body);
@@ -54,25 +54,25 @@ settingsRoutes.post("/main", (req, res) => {
   return res.status(200).json(settings.main);
 });
 
-settingsRoutes.post("/main/regenerate", (req, res, next) => {
+settingsRoutes.post('/main/regenerate', (req, res, next) => {
   const settings = getSettings();
 
   const main = settings.regenerateApiKey();
 
   if (!req.user) {
-    return next({ status: 500, message: "User missing from request." });
+    return next({ status: 500, message: 'User missing from request.' });
   }
 
   return res.status(200).json(filteredMainSettings(req.user, main));
 });
 
-settingsRoutes.get("/plex", (_req, res) => {
+settingsRoutes.get('/plex', (_req, res) => {
   const settings = getSettings();
 
   res.status(200).json(settings.plex);
 });
 
-settingsRoutes.post("/plex", async (req, res, next) => {
+settingsRoutes.post('/plex', async (req, res, next) => {
   const userRepository = getRepository(User);
   const settings = getSettings();
   try {
@@ -88,7 +88,7 @@ settingsRoutes.post("/plex", async (req, res, next) => {
     const result = await plexClient.getStatus();
 
     if (!result?.MediaContainer?.machineIdentifier) {
-      throw new Error("Server not found");
+      throw new Error('Server not found');
     }
 
     settings.plex.machineId = result.MediaContainer.machineIdentifier;
@@ -96,20 +96,20 @@ settingsRoutes.post("/plex", async (req, res, next) => {
 
     settings.save();
   } catch (e) {
-    logger.error("Something went wrong testing Plex connection", {
-      label: "API",
+    logger.error('Something went wrong testing Plex connection', {
+      label: 'API',
       errorMessage: e.message,
     });
     return next({
       status: 500,
-      message: "Unable to connect to Plex.",
+      message: 'Unable to connect to Plex.',
     });
   }
 
   return res.status(200).json(settings.plex);
 });
 
-settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
+settingsRoutes.get('/plex/devices/servers', async (req, res, next) => {
   const userRepository = getRepository(User);
   try {
     const admin = await userRepository.findOneOrFail({
@@ -120,7 +120,7 @@ settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
       ? new PlexTvAPI(admin.plexToken)
       : null;
     const devices = (await plexTvClient?.getDevices())?.filter((device) => {
-      return device.provides.includes("server") && device.owned;
+      return device.provides.includes('server') && device.owned;
     });
     const settings = getSettings();
 
@@ -138,7 +138,7 @@ settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
               plexDirectConnections.push(plexDirectConnection);
 
               // Connect to IP addresses over HTTP
-              connection.protocol = "http";
+              connection.protocol = 'http';
             }
           });
 
@@ -152,7 +152,7 @@ settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
                 ...settings.plex,
                 ip: connection.address,
                 port: connection.port,
-                useSsl: connection.protocol === "https",
+                useSsl: connection.protocol === 'https',
               };
               const plexClient = new PlexAPI({
                 plexToken: admin.plexToken,
@@ -163,10 +163,10 @@ settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
               try {
                 await plexClient.getStatus();
                 connection.status = 200;
-                connection.message = "OK";
+                connection.message = 'OK';
               } catch (e) {
                 connection.status = 500;
-                connection.message = e.message.split(":")[0];
+                connection.message = e.message.split(':')[0];
               }
             })
           );
@@ -175,18 +175,18 @@ settingsRoutes.get("/plex/devices/servers", async (req, res, next) => {
     }
     return res.status(200).json(devices);
   } catch (e) {
-    logger.error("Something went wrong retrieving Plex server list", {
-      label: "API",
+    logger.error('Something went wrong retrieving Plex server list', {
+      label: 'API',
       errorMessage: e.message,
     });
     return next({
       status: 500,
-      message: "Unable to retrieve Plex server list.",
+      message: 'Unable to retrieve Plex server list.',
     });
   }
 });
 
-settingsRoutes.get("/plex/library", async (req, res) => {
+settingsRoutes.get('/plex/library', async (req, res) => {
   const settings = getSettings();
 
   if (req.query.sync) {
@@ -201,7 +201,7 @@ settingsRoutes.get("/plex/library", async (req, res) => {
   }
 
   const enabledLibraries = req.query.enable
-    ? (req.query.enable as string).split(",")
+    ? (req.query.enable as string).split(',')
     : [];
   settings.plex.libraries = settings.plex.libraries.map((library) => ({
     ...library,
@@ -212,18 +212,18 @@ settingsRoutes.get("/plex/library", async (req, res) => {
 });
 
 settingsRoutes.get(
-  "/plex/users",
+  '/plex/users',
   isAuthenticated(Permission.MANAGE_USERS),
   async (req, res, next) => {
     const userRepository = getRepository(User);
-    const qb = userRepository.createQueryBuilder("user");
+    const qb = userRepository.createQueryBuilder('user');
 
     try {
       const admin = await userRepository.findOneOrFail({
         select: { id: true, plexToken: true },
         where: { id: 1 },
       });
-      const plexApi = new PlexTvAPI(admin.plexToken ?? "");
+      const plexApi = new PlexTvAPI(admin.plexToken ?? '');
       const plexUsers = (await plexApi.getUsers()).MediaContainer.User.map(
         (user) => user.$
       ).filter((user) => user.email);
@@ -237,10 +237,10 @@ settingsRoutes.get(
       }[] = [];
 
       const existingUsers = await qb
-        .where("user.plexId IN (:...plexIds)", {
+        .where('user.plexId IN (:...plexIds)', {
           plexIds: plexUsers.map((plexUser) => plexUser.id),
         })
-        .orWhere("user.email IN (:...plexEmails)", {
+        .orWhere('user.email IN (:...plexEmails)', {
           plexEmails: plexUsers.map((plexUser) => plexUser.email.toLowerCase()),
         })
         .getMany();
@@ -260,68 +260,68 @@ settingsRoutes.get(
         })
       );
 
-      return res.status(200).json(sortBy(unimportedPlexUsers, "username"));
+      return res.status(200).json(sortBy(unimportedPlexUsers, 'username'));
     } catch (e) {
-      logger.error("Something went wrong getting unimported Plex users", {
-        label: "API",
+      logger.error('Something went wrong getting unimported Plex users', {
+        label: 'API',
         errorMessage: e.message,
       });
       next({
         status: 500,
-        message: "Unable to retrieve unimported Plex users.",
+        message: 'Unable to retrieve unimported Plex users.',
       });
     }
   }
 );
 
 settingsRoutes.get(
-  "/logs",
+  '/logs',
   rateLimit({ windowMs: 60 * 1000, max: 50 }),
   (req, res, next) => {
     const pageSize = req.query.take ? Number(req.query.take) : 25;
     const skip = req.query.skip ? Number(req.query.skip) : 0;
-    const search = (req.query.search as string) ?? "";
-    const searchRegexp = new RegExp(escapeRegExp(search), "i");
+    const search = (req.query.search as string) ?? '';
+    const searchRegexp = new RegExp(escapeRegExp(search), 'i');
 
     let filter: string[] = [];
     switch (req.query.filter) {
-      case "debug":
-        filter.push("debug");
+      case 'debug':
+        filter.push('debug');
       // falls through
-      case "info":
-        filter.push("info");
+      case 'info':
+        filter.push('info');
       // falls through
-      case "warn":
-        filter.push("warn");
+      case 'warn':
+        filter.push('warn');
       // falls through
-      case "error":
-        filter.push("error");
+      case 'error':
+        filter.push('error');
         break;
       default:
-        filter = ["debug", "info", "warn", "error"];
+        filter = ['debug', 'info', 'warn', 'error'];
     }
 
     const logFile = process.env.CONFIG_DIRECTORY
       ? `${process.env.CONFIG_DIRECTORY}/logs/.machinelogs.json`
-      : path.join(__dirname, "../../../config/logs/.machinelogs.json");
+      : path.join(__dirname, '../../../config/logs/.machinelogs.json');
     const logs: LogMessage[] = [];
     const logMessageProperties = [
-      "timestamp",
-      "level",
-      "label",
-      "message",
-      "data",
+      'timestamp',
+      'level',
+      'label',
+      'message',
+      'data',
     ];
 
     const deepValueStrings = (obj: Record<string, unknown>): string[] => {
       const values = [];
 
       for (const val of Object.values(obj)) {
-        if (typeof val === "string") {
+        if (typeof val === 'string') {
           values.push(val);
-        } else if (typeof val === "number") {
+        } else if (typeof val === 'number') {
           values.push(val.toString());
-        } else if (val !== null && typeof val === "object") {
+        } else if (val !== null && typeof val === 'object') {
           values.push(...deepValueStrings(val as Record<string, unknown>));
         }
       }
@@ -330,8 +330,8 @@ settingsRoutes.get(
     };
 
     try {
-      fs.readFileSync(logFile, "utf-8")
-        .split("\n")
+      fs.readFileSync(logFile, 'utf-8')
+        .split('\n')
         .forEach((line) => {
           if (!line.length) return;
 
@@ -356,7 +356,7 @@ settingsRoutes.get(
           if (req.query.search) {
             if (
               // label and data are sometimes undefined
-              !searchRegexp.test(logMessage.label ?? "") &&
+              !searchRegexp.test(logMessage.label ?? '') &&
               !searchRegexp.test(logMessage.message) &&
               !deepValueStrings(logMessage.data ?? {}).some((val) =>
                 searchRegexp.test(val)
@@ -381,20 +381,20 @@ settingsRoutes.get(
         results: displayedLogs,
       } as LogsResultsResponse);
     } catch (error) {
-      logger.error("Something went wrong while retrieving logs", {
-        label: "Logs",
+      logger.error('Something went wrong while retrieving logs', {
+        label: 'Logs',
         errorMessage: error.message,
       });
       return next({
         status: 500,
-        message: "Unable to retrieve logs.",
+        message: 'Unable to retrieve logs.',
       });
     }
   }
 );
 
 settingsRoutes.post(
-  "/initialize",
+  '/initialize',
   isAuthenticated(Permission.ADMIN),
   (_req, res) => {
     const settings = getSettings();
@@ -407,7 +407,6 @@ settingsRoutes.post(
 );
 
 settingsRoutes.get('/about', async (req, res) => {
-
   return res.status(200).json({
     version: getAppVersion(),
     tz: process.env.TZ,
@@ -416,11 +415,10 @@ settingsRoutes.get('/about', async (req, res) => {
 });
 
 settingsRoutes.post(
-  "/title",
+  '/title',
   isAuthenticated(Permission.ADMIN),
   (_req, res) => {
     const settings = getSettings();
-    const body = _req.body as { applicationTitle?: string };
 
     settings.main.applicationTitle = _req.body.applicationTitle;
     settings.save();
@@ -429,15 +427,15 @@ settingsRoutes.post(
   }
 );
 
-settingsRoutes.get("/title", async (req, res, next) => {
+settingsRoutes.get('/title', async (req, res, next) => {
   try {
     const settings = getSettings();
-    
+
     return res
       .status(200)
-      .json({applicationTitle: settings.main.applicationTitle});
+      .json({ applicationTitle: settings.main.applicationTitle });
   } catch (e) {
-    next({ status: 404, message: "Application title not found" });
+    next({ status: 404, message: 'Application title not found' });
   }
 });
 

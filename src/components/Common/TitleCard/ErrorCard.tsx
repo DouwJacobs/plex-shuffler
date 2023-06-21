@@ -1,53 +1,53 @@
-import Button from "@app/components/Common/Button";
-import globalMessages from "@app/i18n/globalMessages";
-import { CheckIcon, TrashIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
-import { mutate } from "swr";
-import { defineMessages, useIntl } from "react-intl";
+import Button from '@app/components/Common/Button';
+import globalMessages from '@app/i18n/globalMessages';
+import { CheckIcon, TrashIcon } from '@heroicons/react/24/solid';
+import axios from 'axios';
+import { defineMessages, useIntl } from 'react-intl';
+import { mutate } from 'swr';
 
 interface ErrorCardProps {
   id: number;
   tmdbId: number;
   tvdbId?: number;
-  type: "movie" | "tv";
+  type: 'movie' | 'tv';
   canExpand?: boolean;
 }
 
 const messages = defineMessages({
-  mediaerror: "{mediaType} Not Found",
-  tmdbid: "TMDB ID",
-  tvdbid: "TheTVDB ID",
-  cleardata: "Clear Data",
+  mediaerror: '{mediaType} Not Found',
+  tmdbid: 'TMDB ID',
+  tvdbid: 'TheTVDB ID',
+  cleardata: 'Clear Data',
 });
 
 const Error = ({ id, tmdbId, tvdbId, type, canExpand }: ErrorCardProps) => {
   const intl = useIntl();
   const deleteMedia = async () => {
     await axios.delete(`/api/v1/media/${id}`);
-    mutate("/api/v1/media?filter=allavailable&take=20&sort=mediaAdded");
-    mutate("/api/v1/request?filter=all&take=10&sort=modified&skip=0");
+    mutate('/api/v1/media?filter=allavailable&take=20&sort=mediaAdded');
+    mutate('/api/v1/request?filter=all&take=10&sort=modified&skip=0');
   };
 
   return (
     <div
-      className={canExpand ? "w-full" : "w-36 sm:w-36 md:w-44"}
+      className={canExpand ? 'w-full' : 'w-36 sm:w-36 md:w-44'}
       data-testid="title-card"
     >
       <div
         className="relative transform-gpu cursor-default overflow-hidden rounded-xl bg-gray-800 bg-cover shadow outline-none ring-1 ring-gray-700  transition duration-300"
         style={{
-          paddingBottom: "150%",
+          paddingBottom: '150%',
         }}
       >
         <div className="absolute inset-0 h-full w-full overflow-hidden">
           <div className="absolute left-0 right-0 flex items-center justify-between p-2">
             <div
               className={`pointer-events-none z-40 rounded-full shadow ${
-                type === "movie" ? "bg-blue-500" : "bg-purple-600"
+                type === 'movie' ? 'bg-blue-500' : 'bg-purple-600'
               }`}
             >
               <div className="flex h-4 items-center px-2 py-2 text-center text-xs font-medium uppercase tracking-wider text-white sm:h-5">
-                {type === "movie"
+                {type === 'movie'
                   ? intl.formatMessage(globalMessages.movie)
                   : intl.formatMessage(globalMessages.tvshow)}
               </div>
@@ -65,14 +65,14 @@ const Error = ({ id, tmdbId, tvdbId, type, canExpand }: ErrorCardProps) => {
                 className="whitespace-normal text-xl font-bold leading-tight"
                 style={{
                   WebkitLineClamp: 3,
-                  display: "-webkit-box",
-                  overflow: "hidden",
-                  WebkitBoxOrient: "vertical",
-                  wordBreak: "break-word",
+                  display: '-webkit-box',
+                  overflow: 'hidden',
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'break-word',
                 }}
                 data-testid="title-card-title"
               >
-                {messages.mediaerror + type === "movie"
+                {messages.mediaerror + type === 'movie'
                   ? intl.formatMessage(globalMessages.movie)
                   : intl.formatMessage(globalMessages.tvshow)}
               </h1>
@@ -80,10 +80,10 @@ const Error = ({ id, tmdbId, tvdbId, type, canExpand }: ErrorCardProps) => {
                 className="whitespace-normal text-xs"
                 style={{
                   WebkitLineClamp: 3,
-                  display: "-webkit-box",
-                  overflow: "hidden",
-                  WebkitBoxOrient: "vertical",
-                  wordBreak: "break-word",
+                  display: '-webkit-box',
+                  overflow: 'hidden',
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'break-word',
                 }}
               >
                 <div className="flex items-center">

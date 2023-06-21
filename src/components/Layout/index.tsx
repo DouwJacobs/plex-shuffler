@@ -1,15 +1,15 @@
-import TopNavigation from "@app/components/Layout/TopNavigation";
-import SideNavigation from "@app/components/Layout/SideNavigation";
-import MobileMenu from "./MobileMenu";
-import { Bars3BottomLeftIcon } from "@heroicons/react/24/solid";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import LogoIcon from "@app/assets/images/plex_shuffle_icon.png";
-import Link from "next/link";
+import LogoIcon from '@app/assets/images/plex_shuffle_icon.png';
+import SideNavigation from '@app/components/Layout/SideNavigation';
+import TopNavigation from '@app/components/Layout/TopNavigation';
 import type { AvailableLocale } from '@app/context/LanguageContext';
 import useLocale from '@app/hooks/useLocale';
 import useSettings from '@app/hooks/useSettings';
 import { useUser } from '@app/hooks/useUser';
+import { Bars3BottomLeftIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import MobileMenu from './MobileMenu';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -42,10 +42,10 @@ const Layout = ({ children }: LayoutProps) => {
       }
     };
 
-    window.addEventListener("scroll", updateScrolled, { passive: true });
+    window.addEventListener('scroll', updateScrolled, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", updateScrolled);
+      window.removeEventListener('scroll', updateScrolled);
     };
   }, []);
 
@@ -71,7 +71,7 @@ const Layout = ({ children }: LayoutProps) => {
             <TopNavigation>
               <button
                 className={`mr-2 hidden text-white sm:block ${
-                  isScrolled ? "opacity-90" : "opacity-70"
+                  isScrolled ? 'opacity-90' : 'opacity-70'
                 } transition duration-300 focus:outline-none lg:hidden`}
                 aria-label="Open sidebar"
                 onClick={() => setSidebarOpen(true)}
@@ -81,14 +81,18 @@ const Layout = ({ children }: LayoutProps) => {
               </button>
               <button
                 className={`mr-2 text-white ${
-                  isScrolled ? "opacity-90" : "opacity-70"
+                  isScrolled ? 'opacity-90' : 'opacity-70'
                 } pwa-only transition duration-300 hover:text-white focus:text-white focus:outline-none`}
                 onClick={() => router.back()}
               ></button>
-              <div className="flex-shrink-0 items-center lg:hidden md:hidden" >
-                <span className="px-4" >
+              <div className="flex-shrink-0 items-center md:hidden lg:hidden">
+                <span className="px-4">
                   <Link href="/">
-                    <img src={LogoIcon.src} alt="Logo" className="h-8 lg:hidden" />
+                    <img
+                      src={LogoIcon.src}
+                      alt="Logo"
+                      className="h-8 lg:hidden"
+                    />
                   </Link>
                 </span>
               </div>
@@ -98,7 +102,7 @@ const Layout = ({ children }: LayoutProps) => {
 
         <main className="relative top-16 z-0 focus:outline-none" tabIndex={0}>
           <div className="mb-6">
-            <div className="max-w-8xl mx-auto px-2 lg:pl-8 lg:pr-4 content-center">
+            <div className="max-w-8xl mx-auto content-center px-2 lg:pl-8 lg:pr-4">
               {children}
             </div>
           </div>

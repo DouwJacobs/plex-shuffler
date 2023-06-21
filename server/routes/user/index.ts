@@ -1,37 +1,37 @@
-import { getRepository } from "@server/datasource";
-import { User } from "@server/entity/User";
-import type { UserResultsResponse } from "@server/interfaces/api/userInterfaces";
-import { hasPermission, Permission } from "@server/lib/permissions";
-import { getSettings } from "@server/lib/settings";
-import logger from "@server/logger";
-import { isAuthenticated } from "@server/middleware/auth";
-import { Router } from "express";
-import gravatarUrl from "gravatar-url";
-import { In } from "typeorm";
-import userSettingsRoutes from "./usersettings";
-import PlexAPI from "@server/api/plexapi";
-import PlexTvAPI from "@server/api/plextv";
+import PlexAPI from '@server/api/plexapi';
+import PlexTvAPI from '@server/api/plextv';
+import { getRepository } from '@server/datasource';
+import { User } from '@server/entity/User';
+import type { UserResultsResponse } from '@server/interfaces/api/userInterfaces';
+import { hasPermission, Permission } from '@server/lib/permissions';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
+import { isAuthenticated } from '@server/middleware/auth';
+import { Router } from 'express';
+import gravatarUrl from 'gravatar-url';
+import { In } from 'typeorm';
+import userSettingsRoutes from './usersettings';
 
 const router = Router();
 
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const pageSize = req.query.take ? Number(req.query.take) : 10;
     const skip = req.query.skip ? Number(req.query.skip) : 0;
-    let query = getRepository(User).createQueryBuilder("user");
+    let query = getRepository(User).createQueryBuilder('user');
 
     switch (req.query.sort) {
-      case "updated":
-        query = query.orderBy("user.updatedAt", "DESC");
+      case 'updated':
+        query = query.orderBy('user.updatedAt', 'DESC');
         break;
-      case "displayname":
+      case 'displayname':
         query = query.orderBy(
           "(CASE WHEN (user.username IS NULL OR user.username = '') THEN (CASE WHEN (user.plexUsername IS NULL OR user.plexUsername = '') THEN user.email ELSE LOWER(user.plexUsername) END) ELSE LOWER(user.username) END)",
-          "ASC"
+          'ASC'
         );
         break;
       default:
-        query = query.orderBy("user.id", "ASC");
+        query = query.orderBy('user.id', 'ASC');
         break;
     }
 
@@ -58,7 +58,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post(
-  "/",
+  '/',
   isAuthenticated(Permission.MANAGE_USERS),
   async (req, res, next) => {
     try {
@@ -68,8 +68,8 @@ router.post(
       const userRepository = getRepository(User);
 
       const existingUser = await userRepository
-        .createQueryBuilder("user")
-        .where("user.email = :email", {
+        .createQueryBuilder('user')
+        .where('user.email = :email', {
           email: body.email.toLowerCase(),
         })
         .getOne();
@@ -77,16 +77,16 @@ router.post(
       if (existingUser) {
         return next({
           status: 409,
-          message: "User already exists with submitted email.",
-          errors: ["USER_EXISTS"],
+          message: 'User already exists with submitted email.',
+          errors: ['USER_EXISTS'],
         });
       }
 
       const passedExplicitPassword = body.password && body.password.length > 0;
-      const avatar = gravatarUrl(body.email, { default: "mm", size: 200 });
+      const avatar = gravatarUrl(body.email, { default: 'mm', size: 200 });
 
       if (!passedExplicitPassword) {
-        throw new Error("Email notifications must be enabled");
+        throw new Error('Email notifications must be enabled');
       }
 
       const user = new User({
@@ -94,7 +94,7 @@ router.post(
         username: body.username,
         email: body.email,
         permissions: settings.main.defaultPermissions,
-        plexToken: "",
+        plexToken: '',
       });
 
       await userRepository.save(user);
@@ -105,7 +105,7 @@ router.post(
   }
 );
 
-router.get<{ id: string }>("/:id", async (req, res, next) => {
+router.get<{ id: string }>('/:id', async (req, res, next) => {
   try {
     const userRepository = getRepository(User);
 
@@ -117,11 +117,11 @@ router.get<{ id: string }>("/:id", async (req, res, next) => {
       .status(200)
       .json(user.filter(req.user?.hasPermission(Permission.MANAGE_USERS)));
   } catch (e) {
-    next({ status: 404, message: "User not found." });
+    next({ status: 404, message: 'User not found.' });
   }
 });
 
-router.get<{ id: string }>("/:id/playlists", async (req, res, next) => {
+router.get<{ id: string }>('/:id/playlists', async (req, res, next) => {
   try {
     const userRepository = getRepository(User);
 
@@ -139,7 +139,7 @@ router.get<{ id: string }>("/:id/playlists", async (req, res, next) => {
     const result = await plexClient.getPlaylists({
       offset,
       size: itemsPerPage,
-      filter: query
+      filter: query,
     });
 
     return res.status(200).json({
@@ -149,17 +149,17 @@ router.get<{ id: string }>("/:id/playlists", async (req, res, next) => {
       results: result.items.map((item) => ({
         ratingKey: item.ratingKey,
         title: item.title,
-        mediaType: "playlist",
+        mediaType: 'playlist',
         thumb: item.thumb,
-        summary: item.summary
+        summary: item.summary,
       })),
     });
   } catch (e) {
-    next({ status: 404, message: "User not found." });
+    next({ status: 404, message: 'User not found.' });
   }
 });
 
-router.use("/:id/settings", userSettingsRoutes);
+router.use('/:id/settings', userSettingsRoutes);
 
 export const canMakePermissionsChange = (
   permissions: number,
@@ -172,14 +172,14 @@ router.put<
   Record<string, never>,
   Partial<User>[],
   { ids: string[]; permissions: number }
->("/", isAuthenticated(Permission.MANAGE_USERS), async (req, res, next) => {
+>('/', isAuthenticated(Permission.MANAGE_USERS), async (req, res, next) => {
   try {
     const isOwner = req.user?.id === 1;
 
     if (!canMakePermissionsChange(req.body.permissions, req.user)) {
       return next({
         status: 403,
-        message: "You do not have permission to grant this level of access",
+        message: 'You do not have permission to grant this level of access',
       });
     }
 
@@ -209,7 +209,7 @@ router.put<
 });
 
 router.put<{ id: string }>(
-  "/:id",
+  '/:id',
   isAuthenticated(Permission.MANAGE_USERS),
   async (req, res, next) => {
     try {
@@ -223,14 +223,14 @@ router.put<{ id: string }>(
       if (user.id === 1 && req.user?.id !== 1) {
         return next({
           status: 403,
-          message: "You do not have permission to modify this user",
+          message: 'You do not have permission to modify this user',
         });
       }
 
       if (!canMakePermissionsChange(req.body.permissions, req.user)) {
         return next({
           status: 403,
-          message: "You do not have permission to grant this level of access",
+          message: 'You do not have permission to grant this level of access',
         });
       }
 
@@ -243,13 +243,13 @@ router.put<{ id: string }>(
 
       return res.status(200).json(user.filter());
     } catch (e) {
-      next({ status: 404, message: "User not found." });
+      next({ status: 404, message: 'User not found.' });
     }
   }
 );
 
 router.delete<{ id: string }>(
-  "/:id",
+  '/:id',
   isAuthenticated(Permission.MANAGE_USERS),
   async (req, res, next) => {
     try {
@@ -260,20 +260,20 @@ router.delete<{ id: string }>(
       });
 
       if (!user) {
-        return next({ status: 404, message: "User not found." });
+        return next({ status: 404, message: 'User not found.' });
       }
 
       if (user.id === 1) {
         return next({
           status: 405,
-          message: "This account cannot be deleted.",
+          message: 'This account cannot be deleted.',
         });
       }
 
       if (user.hasPermission(Permission.ADMIN) && req.user?.id !== 1) {
         return next({
           status: 405,
-          message: "You cannot delete users with administrative privileges.",
+          message: 'You cannot delete users with administrative privileges.',
         });
       }
 
@@ -287,14 +287,14 @@ router.delete<{ id: string }>(
       await userRepository.delete(user.id);
       return res.status(200).json(user.filter());
     } catch (e) {
-      logger.error("Something went wrong deleting a user", {
-        label: "API",
+      logger.error('Something went wrong deleting a user', {
+        label: 'API',
         userId: req.params.id,
         errorMessage: e.message,
       });
       return next({
         status: 500,
-        message: "Something went wrong deleting the user",
+        message: 'Something went wrong deleting the user',
       });
     }
   }
@@ -346,7 +346,7 @@ router.post(
                 permissions: settings.main.defaultPermissions,
                 plexId: parseInt(account.id),
                 plexToken: '',
-                avatar: account.thumb
+                avatar: account.thumb,
               });
               await userRepository.save(newUser);
               createdUsers.push(newUser);

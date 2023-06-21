@@ -1,9 +1,8 @@
-import { getSettings } from "@server/lib/settings";
-import { Router } from "express";
-import { User } from "@server/entity/User";
-import { getRepository } from "@server/datasource";
-import PlexAPI from "@server/api/plexapi";
-import axios from "axios";
+import PlexAPI from '@server/api/plexapi';
+import { getRepository } from '@server/datasource';
+import { User } from '@server/entity/User';
+import { getSettings } from '@server/lib/settings';
+import { Router } from 'express';
 
 const tvRoutes = Router();
 
@@ -11,24 +10,24 @@ const getLibraries = () => {
   const settings = getSettings();
 
   const tvLibraries = settings.plex.libraries.filter(
-    (lib) => lib.type === "show"
+    (lib) => lib.type === 'show'
   );
 
   return tvLibraries;
 };
 
-tvRoutes.get("/libraries", (req, res, next) => {
+tvRoutes.get('/libraries', (req, res) => {
   const tvLibraries = getLibraries();
   res.status(200).json(tvLibraries);
 });
 
-tvRoutes.get("/shows", async (req, res, next) => {
+tvRoutes.get('/shows', async (req, res, next) => {
   try {
     const tvLibraries = getLibraries();
     const libID = tvLibraries[0].id;
 
     const query = req.query.query as string;
-    
+
     const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({
       select: { id: true, plexToken: true },
@@ -54,13 +53,13 @@ tvRoutes.get("/shows", async (req, res, next) => {
       results: result.items.map((item) => ({
         ratingKey: item.ratingKey,
         title: item.title,
-        mediaType: "tv",
+        mediaType: 'tv',
         thumb: item.thumb,
         summary: item.summary,
       })),
     });
   } catch (e) {
-    next({ status: 404, message: "User not found." });
+    next({ status: 404, message: 'User not found.' });
   }
 });
 

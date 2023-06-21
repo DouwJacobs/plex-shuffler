@@ -1,47 +1,46 @@
-import Alert from "@app/components/Common/Alert";
-import Button from "@app/components/Common/Button";
-import PageTitle from "@app/components/Common/PageTitle";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import type { PlexDevice } from "@server/interfaces/api/plexInterfaces";
-import type { PlexSettings } from "@server/lib/settings";
-import axios from "axios";
-import { Field, Formik } from "formik";
-import { orderBy } from "lodash";
-import { useMemo, useState, useEffect } from "react";
-import toast from "react-hot-toast";
-import useSWR from "swr";
-import * as Yup from "yup";
-import { defineMessages, useIntl } from "react-intl";
-import globalMessages from "@app/i18n/globalMessages";
+import Alert from '@app/components/Common/Alert';
+import Button from '@app/components/Common/Button';
+import PageTitle from '@app/components/Common/PageTitle';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/solid';
+import type { PlexDevice } from '@server/interfaces/api/plexInterfaces';
+import type { PlexSettings } from '@server/lib/settings';
+import axios from 'axios';
+import { Field, Formik } from 'formik';
+import { orderBy } from 'lodash';
+import { useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
+import * as Yup from 'yup';
 
 const messages = defineMessages({
-  settings: "Settings",
-  plex: "Plex",
-  plexsettings: "Plex Settings",
-  plexsettingsDescription: "Configure the settings for your Plex server.",
-  serverpreset: "Server",
-  serverLocal: "local",
-  serverRemote: "remote",
-  serverSecure: "secure",
-  serverpresetManualMessage: "Manual configuration",
-  serverpresetRefreshing: "Retrieving servers…",
-  serverpresetLoad: "Press the button to load available servers",
-  toastPlexRefresh: "Retrieving server list from Plex…",
-  toastPlexRefreshSuccess: "Plex server list retrieved successfully!",
-  toastPlexRefreshFailure: "Failed to retrieve Plex server list.",
-  toastPlexConnecting: "Attempting to connect to Plex…",
-  toastPlexConnectingSuccess: "Plex connection established successfully!",
-  toastPlexConnectingFailure: "Failed to connect to Plex.",
+  settings: 'Settings',
+  plex: 'Plex',
+  plexsettings: 'Plex Settings',
+  plexsettingsDescription: 'Configure the settings for your Plex server.',
+  serverpreset: 'Server',
+  serverLocal: 'local',
+  serverRemote: 'remote',
+  serverSecure: 'secure',
+  serverpresetManualMessage: 'Manual configuration',
+  serverpresetRefreshing: 'Retrieving servers…',
+  serverpresetLoad: 'Press the button to load available servers',
+  toastPlexRefresh: 'Retrieving server list from Plex…',
+  toastPlexRefreshSuccess: 'Plex server list retrieved successfully!',
+  toastPlexRefreshFailure: 'Failed to retrieve Plex server list.',
+  toastPlexConnecting: 'Attempting to connect to Plex…',
+  toastPlexConnectingSuccess: 'Plex connection established successfully!',
+  toastPlexConnectingFailure: 'Failed to connect to Plex.',
   settingUpPlexDescription:
-    "To set up Plex, you can either enter the details manually or select a server retrieved from plex.tv. Press the button to the right of the dropdown to fetch the list of available servers.",
-  hostname: "Hostname or IP Address",
-  port: "Port",
-  enablessl: "Use SSL",
-  validationHostnameRequired: "You must provide a valid hostname or IP address",
-  validationPortRequired: "You must provide a valid port number",
-  validationUrl: "You must provide a valid URL",
-  testServerConnection: "Test Server Connection"
+    'To set up Plex, you can either enter the details manually or select a server retrieved from plex.tv. Press the button to the right of the dropdown to fetch the list of available servers.',
+  hostname: 'Hostname or IP Address',
+  port: 'Port',
+  enablessl: 'Use SSL',
+  validationHostnameRequired: 'You must provide a valid hostname or IP address',
+  validationPortRequired: 'You must provide a valid port number',
+  validationUrl: 'You must provide a valid URL',
+  testServerConnection: 'Test Server Connection',
 });
 
 interface PresetServerDisplay {
@@ -59,16 +58,14 @@ interface SettingsPlexProps {
 }
 
 const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [, setIsSyncing] = useState(false);
   const [isRefreshingPresets, setIsRefreshingPresets] = useState(false);
   const [availableServers, setAvailableServers] = useState<PlexDevice[] | null>(
     null
   );
-  const {
-    data,
-    error,
-    mutate: revalidate,
-  } = useSWR<PlexSettings>("/api/v1/settings/plex");
+  const { data, mutate: revalidate } = useSWR<PlexSettings>(
+    '/api/v1/settings/plex'
+  );
   const intl = useIntl();
 
   const PlexSettingsSchema = Yup.object().shape({
@@ -98,7 +95,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
       dev.connection.forEach((conn) =>
         finalPresets.push({
           name: dev.name,
-          ssl: conn.protocol === "https",
+          ssl: conn.protocol === 'https',
           uri: conn.uri,
           address: conn.address,
           port: conn.port,
@@ -109,7 +106,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
       );
     });
 
-    return orderBy(finalPresets, ["status", "ssl"], ["desc", "desc"]);
+    return orderBy(finalPresets, ['status', 'ssl'], ['desc', 'desc']);
   }, [availableServers]);
 
   const syncLibraries = async () => {
@@ -120,10 +117,10 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
     };
 
     if (activeLibraries.length > 0) {
-      params.enable = activeLibraries.join(",");
+      params.enable = activeLibraries.join(',');
     }
 
-    await axios.get("/api/v1/settings/plex/library", {
+    await axios.get('/api/v1/settings/plex/library', {
       params,
     });
     setIsSyncing(false);
@@ -137,7 +134,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
       toastId = toast.loading(intl.formatMessage(messages.toastPlexRefresh));
 
       const response = await axios.get<PlexDevice[]>(
-        "/api/v1/settings/plex/devices/servers"
+        '/api/v1/settings/plex/devices/servers'
       );
       if (response.data) {
         setAvailableServers(response.data);
@@ -210,7 +207,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
               intl.formatMessage(messages.toastPlexConnecting)
             );
 
-            await axios.post("/api/v1/settings/plex", {
+            await axios.post('/api/v1/settings/plex', {
               ip: values.hostname,
               port: Number(values.port),
               useSsl: values.useSsl,
@@ -245,7 +242,6 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
           handleSubmit,
           setFieldValue,
           isSubmitting,
-          isValid,
         }) => {
           return (
             <form className="section" onSubmit={handleSubmit}>
@@ -266,9 +262,9 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                           availablePresets[Number(e.target.value)];
 
                         if (targPreset) {
-                          setFieldValue("hostname", targPreset.address);
-                          setFieldValue("port", targPreset.port);
-                          setFieldValue("useSsl", targPreset.ssl);
+                          setFieldValue('hostname', targPreset.address);
+                          setFieldValue('port', targPreset.port);
+                          setFieldValue('useSsl', targPreset.ssl);
                         }
                       }}
                     >
@@ -300,9 +296,9 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                               ? ` [${intl.formatMessage(
                                   messages.serverSecure
                                 )}]`
-                              : ""
+                              : ''
                           }
-                            ${server.status ? "" : "(" + server.message + ")"}
+                            ${server.status ? '' : '(' + server.message + ')'}
                           `}
                         </option>
                       ))}
@@ -315,8 +311,8 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                       className="input-action"
                     >
                       <ArrowPathIcon
-                        className={isRefreshingPresets ? "animate-spin" : ""}
-                        style={{ animationDirection: "reverse" }}
+                        className={isRefreshingPresets ? 'animate-spin' : ''}
+                        style={{ animationDirection: 'reverse' }}
                       />
                     </button>
                   </div>
@@ -330,7 +326,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                 <div className="form-input-area">
                   <div className="form-input-field h-9">
                     <span className="block inline-flex cursor-default items-center rounded-l-md border border-r-0 border-gray-500 bg-gray-800 px-3 text-gray-100">
-                      {values.useSsl ? "https://" : "http://"}
+                      {values.useSsl ? 'https://' : 'http://'}
                     </span>
                     <Field
                       type="text"
@@ -343,7 +339,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                   </div>
                   {errors.hostname &&
                     touched.hostname &&
-                    typeof errors.hostname === "string" && (
+                    typeof errors.hostname === 'string' && (
                       <div className="error">{errors.hostname}</div>
                     )}
                 </div>
@@ -364,7 +360,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                   />
                   {errors.port &&
                     touched.port &&
-                    typeof errors.port === "string" && (
+                    typeof errors.port === 'string' && (
                       <div className="error">{errors.port}</div>
                     )}
                 </div>
@@ -379,7 +375,7 @@ const SettingsPlex = ({ onComplete }: SettingsPlexProps) => {
                     id="useSsl"
                     name="useSsl"
                     onChange={() => {
-                      setFieldValue("useSsl", !values.useSsl);
+                      setFieldValue('useSsl', !values.useSsl);
                     }}
                   />
                 </div>

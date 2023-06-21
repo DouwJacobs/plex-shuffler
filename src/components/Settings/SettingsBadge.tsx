@@ -19,7 +19,6 @@ const SettingsBadge = ({
   badgeType: 'advanced' | 'experimental' | 'restartRequired';
   className?: string;
 }) => {
-
   const intl = useIntl();
 
   switch (badgeType) {

@@ -1,26 +1,25 @@
-import Badge from "@app/components/Common/Badge";
-import Button from "@app/components/Common/Button";
-import PageTitle from "@app/components/Common/PageTitle";
-import SettingsPlex from "@app/components/Settings/SettingsPlex";
-import LoginWithPlex from "@app/components/Setup/LoginWithPlex";
-import SetupSteps from "@app/components/Setup/SetupSteps";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { mutate } from "swr";
-import SettingsApplicationName from "@app/components/Settings/SettingsApplicationName";
+import Button from '@app/components/Common/Button';
+import PageTitle from '@app/components/Common/PageTitle';
+import SettingsApplicationName from '@app/components/Settings/SettingsApplicationName';
+import SettingsPlex from '@app/components/Settings/SettingsPlex';
+import LoginWithPlex from '@app/components/Setup/LoginWithPlex';
+import SetupSteps from '@app/components/Setup/SetupSteps';
+import useLocale from '@app/hooks/useLocale';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import useLocale from "@app/hooks/useLocale";
+import { mutate } from 'swr';
 
 const messages = defineMessages({
-  setup: "Setup",
-  finish: "Finish Setup",
-  finishing: "Finishing…",
-  continue: "Continue",
-  loginwithplex: "Sign in with Plex",
-  configureplex: "Configure Plex",
-  configurename: "Configure Application Name",
-  tip: "Tip",
+  setup: 'Setup',
+  finish: 'Finish Setup',
+  finishing: 'Finishing…',
+  continue: 'Continue',
+  loginwithplex: 'Sign in with Plex',
+  configureplex: 'Configure Plex',
+  configurename: 'Configure Application Name',
+  tip: 'Tip',
 });
 
 const SetupContent = () => {
@@ -35,7 +34,7 @@ const SetupContent = () => {
   const finishSetup = async () => {
     setIsUpdating(true);
     const response = await axios.post<{ initialized: boolean }>(
-      "/api/v1/settings/initialize"
+      '/api/v1/settings/initialize'
     );
 
     setIsUpdating(false);
@@ -48,13 +47,13 @@ const SetupContent = () => {
   };
 
   return (
-    <div >
+    <div>
       <PageTitle title={intl.formatMessage(messages.setup)} />
       <div className="relative z-40 px-4 sm:mx-auto sm:w-full sm:max-w-4xl">
         <nav className="relative z-50">
           <ul
-            className="divide-y divide-gray-600 rounded-md border plex-border-primary bg-gray-800 bg-opacity-50 md:flex md:divide-y-0"
-            style={{ backdropFilter: "blur(5px)" }}
+            className="plex-border-primary divide-y divide-gray-600 rounded-md border bg-gray-800 bg-opacity-50 md:flex md:divide-y-0"
+            style={{ backdropFilter: 'blur(5px)' }}
           >
             <SetupSteps
               stepNumber={1}
@@ -101,7 +100,9 @@ const SetupContent = () => {
           )}
           {currentStep === 3 && (
             <div>
-              <SettingsApplicationName onComplete={() => setTitleComplete(true)}/>
+              <SettingsApplicationName
+                onComplete={() => setTitleComplete(true)}
+              />
               <div className="actions">
                 <div className="flex justify-end">
                   <span className="ml-3 inline-flex rounded-md shadow-sm">
@@ -126,5 +127,3 @@ const SetupContent = () => {
 };
 
 export default SetupContent;
-
-

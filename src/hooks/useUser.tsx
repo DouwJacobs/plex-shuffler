@@ -1,7 +1,7 @@
-import type { PermissionCheckOptions } from "@server/lib/permissions";
-import { hasPermission, Permission } from "@server/lib/permissions";
-import type { MutatorCallback } from "swr";
-import useSWR from "swr";
+import type { PermissionCheckOptions } from '@server/lib/permissions';
+import { hasPermission, Permission } from '@server/lib/permissions';
+import type { MutatorCallback } from 'swr';
+import useSWR from 'swr';
 
 export { Permission };
 export type { PermissionCheckOptions };

@@ -6,7 +6,9 @@ type TBodyProps = {
 
 const TBody = ({ children }: TBodyProps) => {
   return (
-    <tbody className="divide-y divide-gray-700 plex-bg-secondary">{children}</tbody>
+    <tbody className="plex-bg-secondary divide-y divide-gray-700">
+      {children}
+    </tbody>
   );
 };
 
@@ -78,7 +80,7 @@ type TableProps = {
 const Table = ({ children }: TableProps) => {
   return (
     <div className="flex flex-col">
-      <div className="my-2 -mx-4 overflow-x-auto md:mx-0 lg:mx-0">
+      <div className="-mx-4 my-2 overflow-x-auto md:mx-0 lg:mx-0">
         <div className="inline-block min-w-full py-2 align-middle">
           <div className="overflow-hidden rounded-lg shadow md:mx-0 lg:mx-0">
             <table className="min-w-full">{children}</table>

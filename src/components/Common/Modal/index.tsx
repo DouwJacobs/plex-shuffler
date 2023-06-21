@@ -1,6 +1,5 @@
 import type { ButtonType } from '@app/components/Common/Button';
 import Button from '@app/components/Common/Button';
-import CachedImage from '@app/components/Common/CachedImage';
 import LoadingSpinner from '@app/components/Common/LoadingSpinner';
 import useClickOutside from '@app/hooks/useClickOutside';
 import { useLockBodyScroll } from '@app/hooks/useLockBodyScroll';
@@ -60,7 +59,6 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       tertiaryText,
       loading = false,
       onTertiary,
-      backdrop,
     },
     parentRef
   ) => {
@@ -77,7 +75,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       <Transition.Child
         appear
         as="div"
-        className="fixed top-0 bottom-0 left-0 right-0 z-50 flex h-full w-full items-center justify-center bg-gray-800 bg-opacity-70"
+        className="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-800 bg-opacity-70"
         enter="transition-opacity duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -102,7 +100,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           </div>
         </Transition>
         <Transition
-          className="hide-scrollbar relative inline-block w-full overflow-auto plex-bg-secondary px-4 pt-4 pb-4 text-left align-bottom shadow-xl ring-1 ring-gray-700 transition-all sm:my-8 sm:max-w-3xl sm:rounded-lg sm:align-middle"
+          className="hide-scrollbar plex-bg-secondary relative inline-block w-full overflow-auto px-4 pb-4 pt-4 text-left align-bottom shadow-xl ring-1 ring-gray-700 transition-all sm:my-8 sm:max-w-3xl sm:rounded-lg sm:align-middle"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"

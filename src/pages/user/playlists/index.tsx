@@ -1,7 +1,7 @@
-import UserPlaylists from "@app/components/Playlists/User";
+import UserPlaylists from '@app/components/Playlists/User';
 
 const UserPlaylistsPage = () => {
-    return <UserPlaylists />
+  return <UserPlaylists />;
 };
 
 export default UserPlaylistsPage;

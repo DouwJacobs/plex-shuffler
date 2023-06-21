@@ -1,35 +1,33 @@
 .top-menu-main {
-    z-index: 5;
+  z-index: 5;
 
-    align-items: center;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
-    font-size: 13px;
-    height: 48px;
+  align-items: center;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans,
+    Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-size: 13px;
+  height: 48px;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1000;
+
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.topnav-right {
+  float: right;
+  align-items: flex-end;
+}
+
+@media (min-width: 768px) {
+  .top-header-main {
     justify-content: space-between;
-    position: relative;
-    z-index: 1000;
-
-  
-    /* From https://css.glass */
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-
-    
   }
-
-  .topnav-right {
-    float: right;
-    align-items: flex-end;
-  }
-
-  @media (min-width: 768px) {
-    .top-header-main {
-      justify-content: space-between;
-    }
-  }
+}

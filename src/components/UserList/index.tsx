@@ -1,89 +1,84 @@
-import Badge from "@app/components/Common/Badge";
-import Button from "@app/components/Common/Button";
-import Header from "@app/components/Common/Header";
-import LoadingSpinner from "@app/components/Common/LoadingSpinner";
-import Modal from "@app/components/Common/Modal";
-import PageTitle from "@app/components/Common/PageTitle";
-import Table from "@app/components/Common/Table";
-import BulkEditModal from "@app/components/UserList/BulkEditModal";
-import PlexImportModal from "@app/components/UserList/PlexImportModal";
-import useSettings from "@app/hooks/useSettings";
-import { useUpdateQueryParams } from "@app/hooks/useUpdateQueryParams";
-import type { User } from "@app/hooks/useUser";
-import { Permission, useUser } from "@app/hooks/useUser";
-import globalMessages from "@app/i18n/globalMessages";
-import { Transition } from "@headlessui/react";
+import Badge from '@app/components/Common/Badge';
+import Button from '@app/components/Common/Button';
+import Header from '@app/components/Common/Header';
+import LoadingSpinner from '@app/components/Common/LoadingSpinner';
+import Modal from '@app/components/Common/Modal';
+import PageTitle from '@app/components/Common/PageTitle';
+import Table from '@app/components/Common/Table';
+import BulkEditModal from '@app/components/UserList/BulkEditModal';
+import PlexImportModal from '@app/components/UserList/PlexImportModal';
+import { useUpdateQueryParams } from '@app/hooks/useUpdateQueryParams';
+import type { User } from '@app/hooks/useUser';
+import { Permission, useUser } from '@app/hooks/useUser';
+import globalMessages from '@app/i18n/globalMessages';
+import { Transition } from '@headlessui/react';
 import {
   BarsArrowDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   InboxArrowDownIcon,
   PencilIcon,
-  UserPlusIcon,
-} from "@heroicons/react/24/solid";
-import type { UserResultsResponse } from "@server/interfaces/api/userInterfaces";
-import { hasPermission } from "@server/lib/permissions";
-import axios from "axios";
-import { Field, Form, Formik } from "formik";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
-import useSWR from "swr";
-import * as Yup from "yup";
+} from '@heroicons/react/24/solid';
+import type { UserResultsResponse } from '@server/interfaces/api/userInterfaces';
+import { hasPermission } from '@server/lib/permissions';
+import axios from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
 
 const messages = defineMessages({
-  users: "Users",
-  userlist: "User List",
-  importfromplex: "Import Plex Users",
-  user: "User",
-  totalrequests: "Requests",
-  accounttype: "Type",
-  role: "Role",
-  created: "Joined",
-  bulkedit: "Bulk Edit",
-  owner: "Owner",
-  admin: "Admin",
-  plexuser: "Plex User",
-  deleteuser: "Delete User",
-  userdeleted: "User deleted successfully!",
-  userdeleteerror: "Something went wrong while deleting the user.",
+  users: 'Users',
+  userlist: 'User List',
+  importfromplex: 'Import Plex Users',
+  user: 'User',
+  totalrequests: 'Requests',
+  accounttype: 'Type',
+  role: 'Role',
+  created: 'Joined',
+  bulkedit: 'Bulk Edit',
+  owner: 'Owner',
+  admin: 'Admin',
+  plexuser: 'Plex User',
+  deleteuser: 'Delete User',
+  userdeleted: 'User deleted successfully!',
+  userdeleteerror: 'Something went wrong while deleting the user.',
   deleteconfirm:
-    "Are you sure you want to delete this user? All of their request data will be permanently removed.",
-  localuser: "Local User",
-  createlocaluser: "Create Local User",
-  creating: "Creating…",
-  create: "Create",
+    'Are you sure you want to delete this user? All of their request data will be permanently removed.',
+  localuser: 'Local User',
+  createlocaluser: 'Create Local User',
+  creating: 'Creating…',
+  create: 'Create',
   validationpasswordminchars:
-    "Password is too short; should be a minimum of 8 characters",
-  usercreatedfailed: "Something went wrong while creating the user.",
+    'Password is too short; should be a minimum of 8 characters',
+  usercreatedfailed: 'Something went wrong while creating the user.',
   usercreatedfailedexisting:
-    "The provided email address is already in use by another user.",
-  usercreatedsuccess: "User created successfully!",
-  displayName: "Display Name",
-  email: "Email Address",
-  password: "Password",
+    'The provided email address is already in use by another user.',
+  usercreatedsuccess: 'User created successfully!',
+  displayName: 'Display Name',
+  email: 'Email Address',
+  password: 'Password',
   passwordinfodescription:
-    "Configure an application URL and enable email notifications to allow automatic password generation.",
-  autogeneratepassword: "Automatically Generate Password",
-  autogeneratepasswordTip: "Email a server-generated password to the user",
-  validationEmail: "You must provide a valid email address",
-  sortCreated: "Join Date",
-  sortDisplayName: "Display Name",
-  sortRequests: "Request Count",
+    'Configure an application URL and enable email notifications to allow automatic password generation.',
+  autogeneratepassword: 'Automatically Generate Password',
+  autogeneratepasswordTip: 'Email a server-generated password to the user',
+  validationEmail: 'You must provide a valid email address',
+  sortCreated: 'Join Date',
+  sortDisplayName: 'Display Name',
+  sortRequests: 'Request Count',
   localLoginDisabled:
-    "The <strong>Enable Local Sign-In</strong> setting is currently disabled.",
+    'The <strong>Enable Local Sign-In</strong> setting is currently disabled.',
 });
 
-type Sort = "created" | "updated" | "displayname";
+type Sort = 'created' | 'updated' | 'displayname';
 
 const UserList = () => {
   const intl = useIntl();
   const router = useRouter();
-  const settings = useSettings();
-  const { user: currentUser, hasPermission: currentHasPermission } = useUser();
-  const [currentSort, setCurrentSort] = useState<Sort>("displayname");
+  const { user: currentUser } = useUser();
+  const [currentSort, setCurrentSort] = useState<Sort>('displayname');
   const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
   const page = router.query.page ? Number(router.query.page) : 1;
@@ -112,7 +107,7 @@ const UserList = () => {
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
 
   useEffect(() => {
-    const filterString = window.localStorage.getItem("ul-filter-settings");
+    const filterString = window.localStorage.getItem('ul-filter-settings');
 
     if (filterString) {
       const filterSettings = JSON.parse(filterString);
@@ -124,7 +119,7 @@ const UserList = () => {
 
   useEffect(() => {
     window.localStorage.setItem(
-      "ul-filter-settings",
+      'ul-filter-settings',
       JSON.stringify({
         currentSort,
         currentPageSize,
@@ -185,30 +180,12 @@ const UserList = () => {
     return <LoadingSpinner />;
   }
 
-  const CreateUserSchema = Yup.object().shape({
-    email: Yup.string()
-      .required(intl.formatMessage(messages.validationEmail))
-      .email(intl.formatMessage(messages.validationEmail)),
-    password: Yup.lazy((value) =>
-      !value
-        ? Yup.string()
-        : Yup.string().min(
-            8,
-            intl.formatMessage(messages.validationpasswordminchars)
-          )
-    ),
-  });
-
   if (!data) {
     return <LoadingSpinner />;
   }
 
   const hasNextPage = data.pageInfo.pages > pageIndex + 1;
   const hasPrevPage = pageIndex > 0;
-
-  const passwordGenerationEnabled =
-    settings.currentSettings.applicationUrl &&
-    settings.currentSettings.emailEnabled;
 
   return (
     <>
@@ -241,7 +218,6 @@ const UserList = () => {
           {intl.formatMessage(messages.deleteconfirm)}
         </Modal>
       </Transition>
-
 
       <Transition
         as="div"
@@ -412,9 +388,9 @@ const UserList = () => {
               </Table.TD>
               <Table.TD>
                 {intl.formatDate(user.createdAt, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
                 })}
               </Table.TD>
               <Table.TD alignText="right">
@@ -424,7 +400,7 @@ const UserList = () => {
                   className="mr-2"
                   onClick={() =>
                     router.push(
-                      "/users/[userId]/settings",
+                      '/users/[userId]/settings',
                       `/users/${user.id}/settings`
                     )
                   }
@@ -497,7 +473,7 @@ const UserList = () => {
                   <Button
                     disabled={!hasPrevPage}
                     onClick={() =>
-                      updateQueryParams("page", (page - 1).toString())
+                      updateQueryParams('page', (page - 1).toString())
                     }
                   >
                     <ChevronLeftIcon />
@@ -506,7 +482,7 @@ const UserList = () => {
                   <Button
                     disabled={!hasNextPage}
                     onClick={() =>
-                      updateQueryParams("page", (page + 1).toString())
+                      updateQueryParams('page', (page + 1).toString())
                     }
                   >
                     <span>{intl.formatMessage(globalMessages.next)}</span>

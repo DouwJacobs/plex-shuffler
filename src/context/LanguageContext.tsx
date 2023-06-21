@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export type AvailableLocale = "en" | "af";
+export type AvailableLocale = 'en' | 'af';
 
 type AvailableLanguageObject = Record<
   string,
@@ -9,13 +9,13 @@ type AvailableLanguageObject = Record<
 
 export const availableLanguages: AvailableLanguageObject = {
   en: {
-    code: "en",
-    display: "English",
+    code: 'en',
+    display: 'English',
   },
   af: {
-    code: "af",
-    display: "Afrikaans",
-  }
+    code: 'af',
+    display: 'Afrikaans',
+  },
 };
 
 export interface LanguageContextProps {
@@ -25,7 +25,7 @@ export interface LanguageContextProps {
 }
 
 export const LanguageContext = React.createContext<
-  Omit<LanguageContextProps, "children">
+  Omit<LanguageContextProps, 'children'>
 >({
-  locale: "en",
+  locale: 'en',
 });

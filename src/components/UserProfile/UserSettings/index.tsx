@@ -1,24 +1,23 @@
-import Alert from "@app/components/Common/Alert";
-import LoadingSpinner from "@app/components/Common/LoadingSpinner";
-import PageTitle from "@app/components/Common/PageTitle";
-import type { SettingsRoute } from "@app/components/Common/SettingsTabs";
-import SettingsTabs from "@app/components/Common/SettingsTabs";
-import ProfileHeader from "@app/components/UserProfile/ProfileHeader";
-import useSettings from "@app/hooks/useSettings";
-import { useUser } from "@app/hooks/useUser";
-import globalMessages from "@app/i18n/globalMessages";
-import Error from "@app/pages/_error";
-import { Permission } from "@server/lib/permissions";
-import { useRouter } from "next/router";
-import { defineMessages, useIntl } from "react-intl";
-import Card from "@app/components/Common/Card";
+import Alert from '@app/components/Common/Alert';
+import Card from '@app/components/Common/Card';
+import LoadingSpinner from '@app/components/Common/LoadingSpinner';
+import PageTitle from '@app/components/Common/PageTitle';
+import type { SettingsRoute } from '@app/components/Common/SettingsTabs';
+import SettingsTabs from '@app/components/Common/SettingsTabs';
+import ProfileHeader from '@app/components/UserProfile/ProfileHeader';
+import { useUser } from '@app/hooks/useUser';
+import globalMessages from '@app/i18n/globalMessages';
+import Error from '@app/pages/_error';
+import { Permission } from '@server/lib/permissions';
+import { useRouter } from 'next/router';
+import { defineMessages, useIntl } from 'react-intl';
 
 const messages = defineMessages({
-  menuGeneralSettings: "General",
-  menuPermissions: "Permissions",
+  menuGeneralSettings: 'General',
+  menuPermissions: 'Permissions',
   unauthorizedDescription:
     "You do not have permission to modify this user's settings.",
-  usersettings: "User Settings",
+  usersettings: 'User Settings',
 });
 
 type UserSettingsProps = {
@@ -27,7 +26,6 @@ type UserSettingsProps = {
 
 const UserSettings = ({ children }: UserSettingsProps) => {
   const router = useRouter();
-  const settings = useSettings();
   const { user: currentUser } = useUser();
   const { user, error } = useUser({ id: Number(router.query.userId) });
   const intl = useIntl();
@@ -43,12 +41,12 @@ const UserSettings = ({ children }: UserSettingsProps) => {
   const settingsRoutes: SettingsRoute[] = [
     {
       text: intl.formatMessage(messages.menuGeneralSettings),
-      route: "/settings/main",
+      route: '/settings/main',
       regex: /\/settings(\/main)?$/,
     },
     {
       text: intl.formatMessage(messages.menuPermissions),
-      route: "/settings/permissions",
+      route: '/settings/permissions',
       regex: /\/settings\/permissions/,
       requiredPermission: Permission.MANAGE_USERS,
       hidden: currentUser?.id !== 1 && currentUser?.id === user.id,
@@ -73,7 +71,7 @@ const UserSettings = ({ children }: UserSettingsProps) => {
   }
 
   settingsRoutes.forEach((settingsRoute) => {
-    settingsRoute.route = router.asPath.includes("/profile")
+    settingsRoute.route = router.asPath.includes('/profile')
       ? `/profile${settingsRoute.route}`
       : `/users/${user.id}${settingsRoute.route}`;
   });

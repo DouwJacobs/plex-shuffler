@@ -53,7 +53,6 @@ interface FullPublicSettings extends PublicSettings {
   locale: string;
 }
 
-
 interface AllSettings {
   clientId: string;
   vapidPublic: string;
@@ -110,7 +109,7 @@ class Settings {
       },
       public: {
         initialized: false,
-      }
+      },
     };
     if (initialSettings) {
       this.data = merge(this.data, initialSettings);

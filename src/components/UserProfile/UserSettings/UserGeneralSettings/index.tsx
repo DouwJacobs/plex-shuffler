@@ -1,41 +1,41 @@
-import Badge from "@app/components/Common/Badge";
-import Button from "@app/components/Common/Button";
-import LoadingSpinner from "@app/components/Common/LoadingSpinner";
-import PageTitle from "@app/components/Common/PageTitle";
-import type { AvailableLocale } from "@app/context/LanguageContext";
-import { availableLanguages } from "@app/context/LanguageContext";
-import useLocale from "@app/hooks/useLocale";
-import useSettings from "@app/hooks/useSettings";
-import { Permission, useUser } from "@app/hooks/useUser";
-import Error from "@app/pages/_error";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
-import type { UserSettingsGeneralResponse } from "@server/interfaces/api/userSettingsInterfaces";
-import axios from "axios";
-import { Field, Form, Formik } from "formik";
-import { useRouter } from "next/router";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
-import useSWR from "swr";
-import * as Yup from "yup";
+import Badge from '@app/components/Common/Badge';
+import Button from '@app/components/Common/Button';
+import LoadingSpinner from '@app/components/Common/LoadingSpinner';
+import PageTitle from '@app/components/Common/PageTitle';
+import type { AvailableLocale } from '@app/context/LanguageContext';
+import { availableLanguages } from '@app/context/LanguageContext';
+import useLocale from '@app/hooks/useLocale';
+import useSettings from '@app/hooks/useSettings';
+import { Permission, useUser } from '@app/hooks/useUser';
+import Error from '@app/pages/_error';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import type { UserSettingsGeneralResponse } from '@server/interfaces/api/userSettingsInterfaces';
+import axios from 'axios';
+import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
+import * as Yup from 'yup';
 
 const messages = defineMessages({
-  general: "General",
-  generalsettings: "General Settings",
-  displayName: "Display Name",
-  accounttype: "Account Type",
-  plexuser: "Plex User",
-  localuser: "Local User",
-  role: "Role",
-  owner: "Owner",
-  admin: "Admin",
-  user: "User",
-  toastSettingsSuccess: "Settings saved successfully!",
-  toastSettingsFailure: "Something went wrong while saving settings.",
-  applanguage: "Display Language",
-  languageDefault: "Default ({language})",
-  saving: "Saving...",
-  save: "Save Changes",
-  usersettings: "User Settings"
+  general: 'General',
+  generalsettings: 'General Settings',
+  displayName: 'Display Name',
+  accounttype: 'Account Type',
+  plexuser: 'Plex User',
+  localuser: 'Local User',
+  role: 'Role',
+  owner: 'Owner',
+  admin: 'Admin',
+  user: 'User',
+  toastSettingsSuccess: 'Settings saved successfully!',
+  toastSettingsFailure: 'Something went wrong while saving settings.',
+  applanguage: 'Display Language',
+  languageDefault: 'Default ({language})',
+  saving: 'Saving...',
+  save: 'Save Changes',
+  usersettings: 'User Settings',
 });
 
 const UserGeneralSettings = () => {
@@ -49,7 +49,7 @@ const UserGeneralSettings = () => {
   } = useUser({
     id: Number(router.query.userId),
   });
-  const { user: currentUser, hasPermission: currentHasPermission } = useUser();
+  const { user: currentUser } = useUser();
   const { currentSettings } = useSettings();
   const {
     data,
@@ -85,7 +85,7 @@ const UserGeneralSettings = () => {
       <Formik
         initialValues={{
           displayName: data?.username,
-          locale: data?.locale
+          locale: data?.locale,
         }}
         validationSchema={UserGeneralSettingsSchema}
         enableReinitialize
@@ -93,7 +93,7 @@ const UserGeneralSettings = () => {
           try {
             await axios.post(`/api/v1/user/${user?.id}/settings/main`, {
               username: values.displayName,
-              locale: values.locale
+              locale: values.locale,
             });
 
             if (currentUser?.id === user?.id && setLocale) {
@@ -113,14 +113,7 @@ const UserGeneralSettings = () => {
           }
         }}
       >
-        {({
-          errors,
-          touched,
-          isSubmitting,
-          isValid,
-          values,
-          setFieldValue,
-        }) => {
+        {({ errors, touched, isSubmitting, isValid }) => {
           return (
             <Form className="section">
               <div className="form-row">
@@ -139,7 +132,7 @@ const UserGeneralSettings = () => {
                 <label className="text-label">
                   {intl.formatMessage(messages.role)}
                 </label>
-                <div className="mb-1 text-sm font-medium leading-5 plex-color-primary sm:mt-2">
+                <div className="plex-color-primary mb-1 text-sm font-medium leading-5 sm:mt-2">
                   <div className="flex max-w-lg items-center">
                     {user?.id === 1
                       ? intl.formatMessage(messages.owner)
@@ -166,7 +159,7 @@ const UserGeneralSettings = () => {
                   </div>
                   {errors.displayName &&
                     touched.displayName &&
-                    typeof errors.displayName === "string" && (
+                    typeof errors.displayName === 'string' && (
                       <div className="error">{errors.displayName}</div>
                     )}
                 </div>

@@ -1,12 +1,10 @@
 .logo {
-    margin: 2rem auto;
-    
+  margin: 2rem auto;
 }
 
 @media only screen and (max-width: 768px) {
-    /* For mobile phones: */
-    .logo {
-        padding: 2rem;
-    }
+  /* For mobile phones: */
+  .logo {
+    padding: 2rem;
   }
-
+}

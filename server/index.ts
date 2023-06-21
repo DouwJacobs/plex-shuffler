@@ -1,32 +1,32 @@
-import PlexAPI from "@server/api/plexapi";
-import dataSource, { getRepository } from "@server/datasource";
-import { Session } from "@server/entity/Session";
-import { User } from "@server/entity/User";
-import { getSettings } from "@server/lib/settings";
-import logger from "@server/logger";
-import routes from "@server/routes";
-import { getAppVersion } from "@server/utils/appVersion";
-import restartFlag from "@server/utils/restartFlag";
-import { getClientIp } from "@supercharge/request-ip";
-import { TypeormStore } from "connect-typeorm/out";
-import cookieParser from "cookie-parser";
-import csurf from "csurf";
-import type { NextFunction, Request, Response } from "express";
-import express from "express";
-import * as OpenApiValidator from "express-openapi-validator";
-import type { Store } from "express-session";
-import session from "express-session";
-import next from "next";
-import path from "path";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
-import imageproxy from "@server/routes/imageproxy";
+import PlexAPI from '@server/api/plexapi';
+import dataSource, { getRepository } from '@server/datasource';
+import { Session } from '@server/entity/Session';
+import { User } from '@server/entity/User';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
 import clearCookies from '@server/middleware/clearcookies';
+import routes from '@server/routes';
+import imageproxy from '@server/routes/imageproxy';
+import { getAppVersion } from '@server/utils/appVersion';
+import restartFlag from '@server/utils/restartFlag';
+import { getClientIp } from '@supercharge/request-ip';
+import { TypeormStore } from 'connect-typeorm/out';
+import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
+import type { NextFunction, Request, Response } from 'express';
+import express from 'express';
+import * as OpenApiValidator from 'express-openapi-validator';
+import type { Store } from 'express-session';
+import session from 'express-session';
+import next from 'next';
+import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
-const API_SPEC_PATH = path.join(__dirname, "../plex-shuffler-api.yml");
+const API_SPEC_PATH = path.join(__dirname, '../plex-shuffler-api.yml');
 
 logger.info(`Starting Plex Shuffler version ${getAppVersion()}`);
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -36,10 +36,10 @@ app
     const dbConnection = await dataSource.initialize();
 
     // Run migrations in production
-    if (process.env.NODE_ENV === "production") {
-      await dbConnection.query("PRAGMA foreign_keys=OFF");
+    if (process.env.NODE_ENV === 'production') {
+      await dbConnection.query('PRAGMA foreign_keys=OFF');
       await dbConnection.runMigrations();
-      await dbConnection.query("PRAGMA foreign_keys=ON");
+      await dbConnection.query('PRAGMA foreign_keys=ON');
     }
 
     // Load Settings
@@ -58,8 +58,8 @@ app
       });
 
       if (admin) {
-        logger.info("Migrating Plex libraries to include media type", {
-          label: "Settings",
+        logger.info('Migrating Plex libraries to include media type', {
+          label: 'Settings',
         });
 
         const plexapi = new PlexAPI({ plexToken: admin.plexToken });
@@ -69,20 +69,20 @@ app
 
     const server = express();
     if (settings.main.trustProxy) {
-      server.enable("trust proxy");
+      server.enable('trust proxy');
     }
     server.use(cookieParser());
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
     server.use((req, _res, next) => {
       try {
-        const descriptor = Object.getOwnPropertyDescriptor(req, "ip");
+        const descriptor = Object.getOwnPropertyDescriptor(req, 'ip');
         if (descriptor?.writable === true) {
-          req.ip = getClientIp(req) ?? "";
+          req.ip = getClientIp(req) ?? '';
         }
       } catch (e) {
-        logger.error("Failed to attach the ip to the request", {
-          label: "Middleware",
+        logger.error('Failed to attach the ip to the request', {
+          label: 'Middleware',
           message: e.message,
         });
       } finally {
@@ -100,7 +100,7 @@ app
         })
       );
       server.use((req, res, next) => {
-        res.cookie("XSRF-TOKEN", req.csrfToken(), {
+        res.cookie('XSRF-TOKEN', req.csrfToken(), {
           sameSite: true,
           secure: !dev,
         });
@@ -111,7 +111,7 @@ app
     // Set up sessions
     const sessionRespository = getRepository(Session);
     server.use(
-      "/api",
+      '/api',
       session({
         secret: settings.clientId,
         resave: false,
@@ -120,7 +120,7 @@ app
           maxAge: 1000 * 60 * 60 * 24 * 30,
           httpOnly: true,
           sameSite: true,
-          secure: "auto",
+          secure: 'auto',
         },
         store: new TypeormStore({
           cleanupLimit: 2,
@@ -129,7 +129,7 @@ app
       })
     );
     const apiDocs = YAML.load(API_SPEC_PATH);
-    server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(apiDocs));
+    server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
     server.use(
       OpenApiValidator.middleware({
         apiSpec: API_SPEC_PATH,
@@ -148,11 +148,11 @@ app
       };
       next();
     });
-    server.use("/api/v1", routes);
+    server.use('/api/v1', routes);
 
     server.use('/imageproxy', clearCookies, imageproxy);
 
-    server.get("*", (req, res) => handle(req, res));
+    server.get('*', (req, res) => handle(req, res));
     server.use(
       (
         err: { status: number; message: string; errors: string[] },
@@ -175,13 +175,13 @@ app
     if (host) {
       server.listen(port, host, () => {
         logger.info(`Server ready on ${host} port ${port}`, {
-          label: "Server",
+          label: 'Server',
         });
       });
     } else {
       server.listen(port, () => {
         logger.info(`Server ready on port ${port}`, {
-          label: "Server",
+          label: 'Server',
         });
       });
     }

@@ -1,6 +1,6 @@
-import React from "react";
-import Logo from "@app/components/Common/Logo";
-import Card from "@app/components/Common/Card";
+import Card from '@app/components/Common/Card';
+import Logo from '@app/components/Common/Logo';
+import React from 'react';
 
 const error404 = () => {
   return (

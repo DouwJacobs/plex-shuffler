@@ -1,9 +1,6 @@
 import NodeCache from 'node-cache';
 
-export type AvailableCacheIds =
-  | 'github'
-  | 'plexguid'
-  | 'plextv';
+export type AvailableCacheIds = 'github' | 'plexguid' | 'plextv';
 
 const DEFAULT_TTL = 300;
 const DEFAULT_CHECK_PERIOD = 120;

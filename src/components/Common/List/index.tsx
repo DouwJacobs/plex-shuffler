@@ -10,7 +10,7 @@ const ListItem = ({ title, className, children }: ListItemProps) => {
   return (
     <div>
       <div className="max-w-6xl py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-        <dt className="block text-sm font-bold text-white-400">{title}</dt>
+        <dt className="text-white-400 block text-sm font-bold">{title}</dt>
         <dd className="flex text-sm text-white sm:col-span-2 sm:mt-0">
           <span className={`flex-grow ${className}`}>{children}</span>
         </dd>

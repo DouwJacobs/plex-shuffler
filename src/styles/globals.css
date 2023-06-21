@@ -88,7 +88,7 @@
   }
 
   .slider-header {
-    @apply relative mt-6 mb-4 flex;
+    @apply relative mb-4 mt-6 flex;
   }
 
   .slider-title {
@@ -155,7 +155,7 @@
   }
 
   .media-overview {
-    @apply flex flex-col pt-8 pb-4 text-white lg:flex-row;
+    @apply flex flex-col pb-4 pt-8 text-white lg:flex-row;
   }
 
   .media-overview-left {
@@ -213,7 +213,7 @@
   }
 
   .error-message {
-    @apply relative top-0 bottom-0 left-0 right-0 flex h-screen flex-col items-center justify-center text-center text-gray-300;
+    @apply relative bottom-0 left-0 right-0 top-0 flex h-screen flex-col items-center justify-center text-center text-gray-300;
   }
 
   .heading {
@@ -241,7 +241,7 @@
   }
 
   .section {
-    @apply mt-6 mb-10 text-white;
+    @apply mb-10 mt-6 text-white;
   }
 
   .form-row {
@@ -254,7 +254,7 @@
   }
 
   .form-input-field {
-    @apply flex max-w-xl rounded-md shadow-sm h-9;
+    @apply flex h-9 max-w-xl rounded-md shadow-sm;
   }
 
   .actions {
@@ -267,11 +267,11 @@
   }
 
   label.checkbox-label {
-    @apply sm:mt-1 text-white;
+    @apply text-white sm:mt-1;
   }
 
   label.text-label {
-    @apply sm:mt-2 text-white;
+    @apply text-white sm:mt-2;
   }
 
   label a {
@@ -559,7 +559,7 @@
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #E5A00D #B8C0C2;
+  scrollbar-color: #e5a00d #b8c0c2;
 }
 
 /* Chrome, Edge and Safari */
@@ -569,28 +569,28 @@
 }
 *::-webkit-scrollbar-track {
   border-radius: 5px;
-  background-color: #B8C0C2;
+  background-color: #b8c0c2;
 }
 
 *::-webkit-scrollbar-track:hover {
-  background-color: #B8C0C2;
+  background-color: #b8c0c2;
 }
 
 *::-webkit-scrollbar-track:active {
-  background-color: #B8C0C2;
+  background-color: #b8c0c2;
 }
 
 *::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background-color: #E5A00D;
+  background-color: #e5a00d;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #C1870B;
+  background-color: #c1870b;
 }
 
 *::-webkit-scrollbar-thumb:active {
-  @apply bg-zinc-700
+  @apply bg-zinc-700;
 }
 
 .default-card {
@@ -605,9 +605,9 @@
   margin: 2rem;
 }
 
-.default-card-content h2,p {
-    color: white;
-    
+.default-card-content h2,
+p {
+  color: white;
 }
 
 .plex-bg-transparent {
@@ -649,7 +649,7 @@ h2 {
 
 .plex-bg-secondary {
   /* background-color: #282a2d; */
-  @apply bg-zinc-700
+  @apply bg-zinc-700;
 }
 
 .plex-color-primary {
@@ -658,7 +658,7 @@ h2 {
 
 .plex-color-secondary {
   /* color: #282a2d; */
-  @apply text-zinc-900
+  @apply text-zinc-900;
 }
 
 .grid-container {
@@ -696,9 +696,11 @@ h2 {
 }
 
 .zoom {
-  transition: transform .1s; /* Animation */
+  transition: transform 0.1s; /* Animation */
 }
 
 .zoom:hover {
-  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  transform: scale(
+    1.1
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }

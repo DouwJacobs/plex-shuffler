@@ -1,16 +1,16 @@
-import Button from "@app/components/Common/Button";
-import type { User } from "@app/hooks/useUser";
-import { Permission, useUser } from "@app/hooks/useUser";
-import { CogIcon, UserIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { defineMessages, useIntl } from "react-intl";
-import { Fragment } from "react";
+import Button from '@app/components/Common/Button';
+import type { User } from '@app/hooks/useUser';
+import { Permission, useUser } from '@app/hooks/useUser';
+import { CogIcon, UserIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { Fragment } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 const messages = defineMessages({
-  settings: "Edit Settings",
-  profile: "View Profile",
-  joindate: "Joined {joindate}",
-  userid: "User ID: {userid}",
+  settings: 'Edit Settings',
+  profile: 'View Profile',
+  joindate: 'Joined {joindate}',
+  userid: 'User ID: {userid}',
 });
 
 interface ProfileHeaderProps {
@@ -25,15 +25,15 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
   const subtextItems: React.ReactNode[] = [
     intl.formatMessage(messages.joindate, {
       joindate: intl.formatDate(user.createdAt, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
     }),
   ];
 
   return (
-    <div className="relative z-40 mt-6 mb-12 lg:flex lg:items-end lg:justify-between lg:space-x-5">
+    <div className="relative z-40 mb-12 mt-6 lg:flex lg:items-end lg:justify-between lg:space-x-5">
       <div className="flex items-end justify-items-end space-x-5">
         <div className="flex-shrink-0">
           <div className="relative">
@@ -52,7 +52,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
           <h1 className="mb-1 flex flex-col sm:flex-row sm:items-center">
             <Link
               href={
-                user.id === loggedInUser?.id ? "/profile" : `/users/${user.id}`
+                user.id === loggedInUser?.id ? '/profile' : `/users/${user.id}`
               }
               className="plex-color-primary text-lg font-bold hover:to-purple-200 sm:text-2xl"
             >
@@ -73,7 +73,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
           </p>
         </div>
       </div>
-      <div className="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse lg:flex-row lg:justify-end lg:space-y-0 lg:space-x-3 lg:space-x-reverse">
+      <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse lg:flex-row lg:justify-end lg:space-x-3 lg:space-y-0 lg:space-x-reverse">
         {(loggedInUser?.id === user.id ||
           (user.id !== 1 && hasPermission(Permission.MANAGE_USERS))) &&
         !isSettingsPage ? (

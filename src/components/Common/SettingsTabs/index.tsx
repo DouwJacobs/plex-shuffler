@@ -1,8 +1,8 @@
-import { useUser } from "@app/hooks/useUser";
-import type { Permission } from "@server/lib/permissions";
-import { hasPermission } from "@server/lib/permissions";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { useUser } from '@app/hooks/useUser';
+import type { Permission } from '@server/lib/permissions';
+import { hasPermission } from '@server/lib/permissions';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export interface SettingsRoute {
   text: string;
@@ -10,12 +10,12 @@ export interface SettingsRoute {
   route: string;
   regex: RegExp;
   requiredPermission?: Permission | Permission[];
-  permissionType?: { type: "and" | "or" };
+  permissionType?: { type: 'and' | 'or' };
   hidden?: boolean;
 }
 
 type SettingsLinkProps = {
-  tabType: "default" | "button";
+  tabType: 'default' | 'button';
   currentPath: string;
   route: string;
   regex: RegExp;
@@ -42,16 +42,16 @@ const SettingsLink = ({
   }
 
   let linkClasses =
-    "px-1 py-4 ml-8 text-sm font-medium leading-5 transition duration-300 border-b-2 border-transparent whitespace-nowrap first:ml-0";
-  let activeLinkColor = "plex-color-primary plex-border-primary";
+    'px-1 py-4 ml-8 text-sm font-medium leading-5 transition duration-300 border-b-2 border-transparent whitespace-nowrap first:ml-0';
+  let activeLinkColor = 'plex-color-primary plex-border-primary';
   let inactiveLinkColor =
-    "text-white border-transparent hover:border-white hover:border-white focus:text-white focus:border-white";
+    'text-white border-transparent hover:border-white hover:border-white focus:text-white focus:border-white';
 
-  if (tabType === "button") {
+  if (tabType === 'button') {
     linkClasses =
-      "px-3 py-2 text-sm font-medium transition duration-300 rounded-md whitespace-nowrap mx-2 my-1";
-    activeLinkColor = "bg-indigo-700";
-    inactiveLinkColor = "bg-zinc-800 hover:bg-zinc-700 focus:bg-zinc-700";
+      'px-3 py-2 text-sm font-medium transition duration-300 rounded-md whitespace-nowrap mx-2 my-1';
+    activeLinkColor = 'bg-indigo-700';
+    inactiveLinkColor = 'bg-zinc-800 hover:bg-zinc-700 focus:bg-zinc-700';
   }
 
   return (
@@ -68,10 +68,10 @@ const SettingsLink = ({
 };
 
 const SettingsTabs = ({
-  tabType = "default",
+  tabType = 'default',
   settingsRoutes,
 }: {
-  tabType?: "default" | "button";
+  tabType?: 'default' | 'button';
   settingsRoutes: SettingsRoute[];
 }) => {
   const router = useRouter();
@@ -79,7 +79,7 @@ const SettingsTabs = ({
 
   return (
     <>
-      <div className="sm:hidden h-13">
+      <div className="h-13 sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a Tab
         </label>
@@ -124,7 +124,7 @@ const SettingsTabs = ({
             ))}
         </select>
       </div>
-      {tabType === "button" ? (
+      {tabType === 'button' ? (
         <div className="hidden sm:block">
           <nav className="-mx-2 -my-1 flex flex-wrap" aria-label="Tabs">
             {settingsRoutes.map((route, index) => (

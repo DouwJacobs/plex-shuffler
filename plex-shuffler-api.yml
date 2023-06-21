@@ -1,7 +1,7 @@
-openapi: "3.0.2"
+openapi: '3.0.2'
 info:
-  title: "Plex Shuffler API"
-  version: "1.0.0"
+  title: 'Plex Shuffler API'
+  version: '1.0.0'
   description: |
     This is the documentation for the Plex Shuffler backend.
 
@@ -21,7 +21,7 @@ tags:
   - name: tv
     description: Endpoints related to user TV Show libraries.
 servers:
-  - url: "{server}/api/v1"
+  - url: '{server}/api/v1'
     variables:
       server:
         default: http://localhost:3210
@@ -49,7 +49,7 @@ components:
           readOnly: true
         email:
           type: string
-          example: "hey@itsme.com"
+          example: 'hey@itsme.com'
           readOnly: true
         username:
           type: string
@@ -71,11 +71,11 @@ components:
           readOnly: true
         createdAt:
           type: string
-          example: "2020-09-02T05:02:23.000Z"
+          example: '2020-09-02T05:02:23.000Z'
           readOnly: true
         updatedAt:
           type: string
-          example: "2020-09-02T05:02:23.000Z"
+          example: '2020-09-02T05:02:23.000Z'
           readOnly: true
       required:
         - id
@@ -151,15 +151,15 @@ components:
       properties:
         name:
           type: string
-          example: "Main Server"
+          example: 'Main Server'
           readOnly: true
         machineId:
           type: string
-          example: "1234123412341234"
+          example: '1234123412341234'
           readOnly: true
         ip:
           type: string
-          example: "127.0.0.1"
+          example: '127.0.0.1'
         port:
           type: number
           example: 32400
@@ -170,11 +170,11 @@ components:
           type: array
           readOnly: true
           items:
-            $ref: "#/components/schemas/PlexLibrary"
+            $ref: '#/components/schemas/PlexLibrary'
         webAppUrl:
           type: string
           nullable: true
-          example: "https://app.plex.tv/desktop"
+          example: 'https://app.plex.tv/desktop'
       required:
         - name
         - machineId
@@ -185,16 +185,16 @@ components:
       properties:
         protocol:
           type: string
-          example: "https"
+          example: 'https'
         address:
           type: string
-          example: "127.0.0.1"
+          example: '127.0.0.1'
         port:
           type: number
           example: 32400
         uri:
           type: string
-          example: "https://127-0-0-1.2ab6ce1a093d465e910def96cf4e4799.plex.direct:32400"
+          example: 'https://127-0-0-1.2ab6ce1a093d465e910def96cf4e4799.plex.direct:32400'
         local:
           type: boolean
           example: true
@@ -203,7 +203,7 @@ components:
           example: 200
         message:
           type: string
-          example: "OK"
+          example: 'OK'
       required:
         - protocol
         - address
@@ -215,54 +215,54 @@ components:
       properties:
         name:
           type: string
-          example: "My Plex Server"
+          example: 'My Plex Server'
         product:
           type: string
-          example: "Plex Media Server"
+          example: 'Plex Media Server'
         productVersion:
           type: string
-          example: "1.21"
+          example: '1.21'
         platform:
           type: string
-          example: "Linux"
+          example: 'Linux'
         platformVersion:
           type: string
-          example: "default/linux/amd64/17.1/systemd"
+          example: 'default/linux/amd64/17.1/systemd'
         device:
           type: string
-          example: "PC"
+          example: 'PC'
         clientIdentifier:
           type: string
-          example: "85a943ce-a0cc-4d2a-a4ec-f74f06e40feb"
+          example: '85a943ce-a0cc-4d2a-a4ec-f74f06e40feb'
         createdAt:
           type: string
-          example: "2021-01-01T00:00:00.000Z"
+          example: '2021-01-01T00:00:00.000Z'
         lastSeenAt:
           type: string
-          example: "2021-01-01T00:00:00.000Z"
+          example: '2021-01-01T00:00:00.000Z'
         provides:
           type: array
           items:
             type: string
-            example: "server"
+            example: 'server'
         owned:
           type: boolean
           example: true
         ownerID:
           type: string
-          example: "12345"
+          example: '12345'
         home:
           type: boolean
           example: true
         sourceTitle:
           type: string
-          example: "xyzabc"
+          example: 'xyzabc'
         accessToken:
           type: string
-          example: "supersecretaccesstoken"
+          example: 'supersecretaccesstoken'
         publicAddress:
           type: string
-          example: "127.0.0.1"
+          example: '127.0.0.1'
         httpsRequired:
           type: boolean
           example: true
@@ -287,7 +287,7 @@ components:
         connection:
           type: array
           items:
-            $ref: "#/components/schemas/PlexConnection"
+            $ref: '#/components/schemas/PlexConnection'
       required:
         - name
         - product
@@ -325,7 +325,7 @@ paths:
       tags:
         - public
       responses:
-        "200":
+        '200':
           description: Returned status
           content:
             application/json:
@@ -351,7 +351,7 @@ paths:
       tags:
         - public
       responses:
-        "200":
+        '200':
           description: Application data volume status and path
           content:
             application/json:
@@ -371,12 +371,12 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MainSettings"
+                $ref: '#/components/schemas/MainSettings'
     post:
       summary: Update main settings
       description: Updates main settings with the provided values.
@@ -387,14 +387,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MainSettings"
+              $ref: '#/components/schemas/MainSettings'
       responses:
-        "200":
-          description: "Values were sucessfully updated"
+        '200':
+          description: 'Values were sucessfully updated'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MainSettings"
+                $ref: '#/components/schemas/MainSettings'
   /settings/public:
     get:
       summary: Get public settings
@@ -429,12 +429,12 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MainSettings"
+                $ref: '#/components/schemas/MainSettings'
   /settings/plex:
     get:
       summary: Get Plex settings
@@ -442,12 +442,12 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PlexSettings"
+                $ref: '#/components/schemas/PlexSettings'
     post:
       summary: Update Plex settings
       description: Updates Plex settings with the provided values.
@@ -458,14 +458,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PlexSettings"
+              $ref: '#/components/schemas/PlexSettings'
       responses:
-        "200":
-          description: "Values were successfully updated"
+        '200':
+          description: 'Values were successfully updated'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PlexSettings"
+                $ref: '#/components/schemas/PlexSettings'
   /settings/plex/library:
     get:
       summary: Get Plex libraries
@@ -488,14 +488,14 @@ paths:
             type: string
             nullable: true
       responses:
-        "200":
-          description: "Plex libraries returned"
+        '200':
+          description: 'Plex libraries returned'
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PlexLibrary"
+                  $ref: '#/components/schemas/PlexLibrary'
   /settings/plex/sync:
     get:
       summary: Get status of full Plex library scan
@@ -503,7 +503,7 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: Status of Plex scan
           content:
             application/json:
@@ -520,11 +520,11 @@ paths:
                     type: number
                     example: 100
                   currentLibrary:
-                    $ref: "#/components/schemas/PlexLibrary"
+                    $ref: '#/components/schemas/PlexLibrary'
                   libraries:
                     type: array
                     items:
-                      $ref: "#/components/schemas/PlexLibrary"
+                      $ref: '#/components/schemas/PlexLibrary'
     post:
       summary: Start full Plex library scan
       description: Runs a full Plex library scan and returns the progress in a JSON array.
@@ -543,7 +543,7 @@ paths:
                   type: boolean
                   example: false
       responses:
-        "200":
+        '200':
           description: Status of Plex scan
           content:
             application/json:
@@ -560,11 +560,11 @@ paths:
                     type: number
                     example: 100
                   currentLibrary:
-                    $ref: "#/components/schemas/PlexLibrary"
+                    $ref: '#/components/schemas/PlexLibrary'
                   libraries:
                     type: array
                     items:
-                      $ref: "#/components/schemas/PlexLibrary"
+                      $ref: '#/components/schemas/PlexLibrary'
   /settings/plex/devices/servers:
     get:
       summary: Gets the user's available Plex servers
@@ -572,14 +572,14 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PlexDevice"
+                  $ref: '#/components/schemas/PlexDevice'
   /settings/plex/users:
     get:
       summary: Get Plex users
@@ -591,7 +591,7 @@ paths:
         - settings
         - users
       responses:
-        "200":
+        '200':
           description: Plex users
           content:
             application/json:
@@ -617,12 +617,12 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApplicationTitle"
+                $ref: '#/components/schemas/ApplicationTitle'
     post:
       summary: Update application title
       description: Updates application title with given values
@@ -633,14 +633,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ApplicationTitle"
+              $ref: '#/components/schemas/ApplicationTitle'
       responses:
-        "200":
-          description: "Values were sucessfully updated"
+        '200':
+          description: 'Values were sucessfully updated'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApplicationTitle"
+                $ref: '#/components/schemas/ApplicationTitle'
   /settings/cache:
     get:
       summary: Get a list of active caches
@@ -648,7 +648,7 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: Caches returned
           content:
             application/json:
@@ -704,8 +704,8 @@ paths:
           schema:
             type: string
       responses:
-        "204":
-          description: "Flushed cache"
+        '204':
+          description: 'Flushed cache'
   /settings/logs:
     get:
       summary: Returns logs
@@ -739,7 +739,7 @@ paths:
             nullable: true
             example: plex
       responses:
-        "200":
+        '200':
           description: Server log returned
           content:
             application/json:
@@ -759,7 +759,7 @@ paths:
                       example: Server ready on port 5055
                     timestamp:
                       type: string
-                      example: "2020-12-15T16:20:00.069Z"
+                      example: '2020-12-15T16:20:00.069Z'
   /settings/about:
     get:
       summary: Get server stats
@@ -767,7 +767,7 @@ paths:
       tags:
         - settings
       responses:
-        "200":
+        '200':
           description: Returned about settings
           content:
             application/json:
@@ -776,7 +776,7 @@ paths:
                 properties:
                   version:
                     type: string
-                    example: "1.0.0"
+                    example: '1.0.0'
                   tz:
                     type: string
                     nullable: true
@@ -792,12 +792,12 @@ paths:
         - auth
         - users
       responses:
-        "200":
+        '200':
           description: Object containing the logged-in user in JSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
   /auth/me/token:
     get:
       summary: Get logged-in user's Plex token
@@ -806,12 +806,12 @@ paths:
         - auth
         - users
       responses:
-        "200":
+        '200':
           description: Object containing the logged-in user in JSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserToken"
+                $ref: '#/components/schemas/UserToken'
   /auth/plex:
     post:
       summary: Sign in using a Plex token
@@ -820,12 +820,12 @@ paths:
       tags:
         - auth
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
       requestBody:
         required: true
         content:
@@ -844,7 +844,7 @@ paths:
       tags:
         - auth
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -853,7 +853,7 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "ok"
+                    example: 'ok'
   /user:
     get:
       summary: Get all users
@@ -880,7 +880,7 @@ paths:
             enum: [created, updated, requests, displayname]
             default: created
       responses:
-        "200":
+        '200':
           description: A JSON array of all users
           content:
             application/json:
@@ -888,11 +888,11 @@ paths:
                 type: object
                 properties:
                   pageInfo:
-                    $ref: "#/components/schemas/PageInfo"
+                    $ref: '#/components/schemas/PageInfo'
                   results:
                     type: array
                     items:
-                    $ref: "#/components/schemas/User"
+                    $ref: '#/components/schemas/User'
     post:
       summary: Create new user
       description: |
@@ -908,18 +908,18 @@ paths:
               properties:
                 email:
                   type: string
-                  example: "hey@itsme.com"
+                  example: 'hey@itsme.com'
                 username:
                   type: string
                 permissions:
                   type: number
       responses:
-        "201":
+        '201':
           description: The created user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
     put:
       summary: Update batch of users
       description: |
@@ -942,14 +942,14 @@ paths:
                 permissions:
                   type: integer
       responses:
-        "200":
+        '200':
           description: Successfully updated user details
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: '#/components/schemas/User'
   /user/import-from-plex:
     post:
       summary: Import all users from Plex
@@ -971,14 +971,14 @@ paths:
                   items:
                     type: string
       responses:
-        "201":
+        '201':
           description: A list of the newly created users
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: '#/components/schemas/User'
   /user/{userId}:
     get:
       summary: Get user by ID
@@ -993,12 +993,12 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: Users details in JSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
     put:
       summary: Update a user by user ID
       description: |
@@ -1018,14 +1018,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/User'
       responses:
-        "200":
+        '200':
           description: Successfully updated user details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
     delete:
       summary: Delete user by ID
       description: Deletes the user with the provided userId. Requires the `MANAGE_USERS` permission.
@@ -1038,12 +1038,12 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: User successfully deleted
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
   /user/{userId}/settings/main:
     get:
       summary: Get general settings for a user
@@ -1057,7 +1057,7 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: User general settings returned
           content:
             application/json:
@@ -1066,7 +1066,7 @@ paths:
                 properties:
                   username:
                     type: string
-                    example: "Mr User"
+                    example: 'Mr User'
     post:
       summary: Update general settings for a user
       description: Updates and returns general settings for a specific user. Requires `MANAGE_USERS` permission if editing other users.
@@ -1089,7 +1089,7 @@ paths:
                   type: string
                   nullable: true
       responses:
-        "200":
+        '200':
           description: Updated user general settings returned
           content:
             application/json:
@@ -1098,7 +1098,7 @@ paths:
                 properties:
                   username:
                     type: string
-                    example: "Mr User"
+                    example: 'Mr User'
   /user/{userId}/settings/permissions:
     get:
       summary: Get permission settings for a user
@@ -1112,7 +1112,7 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: User permission settings returned
           content:
             application/json:
@@ -1145,7 +1145,7 @@ paths:
               required:
                 - permissions
       responses:
-        "200":
+        '200':
           description: Updated user general settings returned
           content:
             application/json:
@@ -1180,7 +1180,7 @@ paths:
             type: string
             example: My Playlist
       responses:
-        "200":
+        '200':
           description: User playlists returned
           content:
             application/json:
@@ -1197,12 +1197,12 @@ paths:
       tags:
         - tv
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MainSettings"
+                $ref: '#/components/schemas/MainSettings'
   /tv/shows:
     get:
       summary: Get all shows from TV Library
@@ -1223,12 +1223,12 @@ paths:
             type: string
             example: Big Bang Theory
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MainSettings"
+                $ref: '#/components/schemas/MainSettings'
 security:
   - cookieAuth: []
   - apiKey: []

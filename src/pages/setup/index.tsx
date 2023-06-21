@@ -1,7 +1,7 @@
-import Setup from "@app/components/Setup";
+import Setup from '@app/components/Setup';
 
 const SetupPage = () => {
-    return <Setup />;
+  return <Setup />;
 };
 
 export default SetupPage;
