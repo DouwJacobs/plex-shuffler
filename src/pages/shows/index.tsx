@@ -1,7 +1,7 @@
-import Shows from "@app/components/Shows";
+import Shows from '@app/components/Shows';
 
 const ShowsPage = () => {
-    return <Shows />
+  return <Shows />;
 };
 
 export default ShowsPage;

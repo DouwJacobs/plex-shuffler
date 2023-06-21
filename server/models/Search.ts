@@ -1,7 +1,6 @@
-import { MediaType as MainMediaType } from "@server/constants/media";
-import type Media from "@server/entity/Media";
+import type Media from '@server/entity/Media';
 
-export type MediaType = "tv" | "playlist";
+export type MediaType = 'tv' | 'playlist';
 
 interface SearchResult {
   id: number;
@@ -18,7 +17,7 @@ interface SearchResult {
 }
 
 export interface TvResult extends SearchResult {
-  mediaType: "tv";
+  mediaType: 'tv';
   name: string;
   originalName: string;
   originCountry: string[];
@@ -42,13 +41,13 @@ export interface PlaylistResult {
   leafCount: number;
   addedAt: number;
   updatedAt: number;
-  mediaType: "playlist";
+  mediaType: 'playlist';
 }
 
 export interface ShowResult {
   ratingKey: string;
   title: string;
-  mediaType: "tv";
+  mediaType: 'tv';
   thumb: string;
   summary: string;
 }

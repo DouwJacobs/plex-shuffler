@@ -1,13 +1,12 @@
-import Header from "@app/components/Common/Header";
-import ListView from "@app/components/Common/ListView";
-import PageTitle from "@app/components/Common/PageTitle";
-import useDiscover from "@app/hooks/useListLoading";
-import Error from "@app/pages/_error";
-import globalMessages from "@app/i18n/globalMessages";
-import type { ShowResult } from "@server/models/Search";
-import SearchInput from "../Common/SearchInput";
-import {messages} from "./SearchShows";
-import { useIntl } from "react-intl";
+import Header from '@app/components/Common/Header';
+import ListView from '@app/components/Common/ListView';
+import PageTitle from '@app/components/Common/PageTitle';
+import SearchInput from '@app/components/Common/SearchInput';
+import { messages } from '@app/components/Shows/SearchShows';
+import useDiscover from '@app/hooks/useListLoading';
+import Error from '@app/pages/_error';
+import type { ShowResult } from '@server/models/Search';
+import { useIntl } from 'react-intl';
 
 const Shows = () => {
   const intl = useIntl();
@@ -20,7 +19,7 @@ const Shows = () => {
     titles,
     fetchMore,
     error,
-  } = useDiscover<ShowResult>("/api/v1/tv/shows");
+  } = useDiscover<ShowResult>('/api/v1/tv/shows');
 
   if (error) {
     return <Error statusCode={500} />;
@@ -29,10 +28,13 @@ const Shows = () => {
   return (
     <>
       <PageTitle title={intl.formatMessage(messages.search)} />
-      <div className="mt-1 mb-5">
+      <div className="mb-5 mt-1">
         <Header>{intl.formatMessage(messages.searchresults)}</Header>
       </div>
-      <SearchInput searchPlaceholder={intl.formatMessage(messages.showPlaceholder)} endPoint="shows"/>
+      <SearchInput
+        searchPlaceholder={intl.formatMessage(messages.showPlaceholder)}
+        endPoint="shows"
+      />
       <ListView
         items={titles}
         isEmpty={isEmpty}

@@ -1,20 +1,20 @@
-import PageTitle from "@app/components/Common/PageTitle";
-import type { Undefinable } from "@app/utils/typeHelpers";
-import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
-import type { NextPage } from "next";
-import Link from "next/link";
+import PageTitle from '@app/components/Common/PageTitle';
+import type { Undefinable } from '@app/utils/typeHelpers';
+import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
+import type { NextPage } from 'next';
+import Link from 'next/link';
 
 interface ErrorProps {
   statusCode?: number;
 }
 
 const messages = {
-  errormessagewithcode: "{statusCode} - {error}",
-  internalservererror: "Internal Server Error",
-  serviceunavailable: "Service Unavailable",
-  somethingwentwrong: "Something Went Wrong",
-  oops: "Oops",
-  returnHome: "Return Home",
+  errormessagewithcode: '{statusCode} - {error}',
+  internalservererror: 'Internal Server Error',
+  serviceunavailable: 'Service Unavailable',
+  somethingwentwrong: 'Something Went Wrong',
+  oops: 'Oops',
+  returnHome: 'Return Home',
 };
 
 const Error: NextPage<ErrorProps> = ({ statusCode }) => {
@@ -33,7 +33,7 @@ const Error: NextPage<ErrorProps> = ({ statusCode }) => {
       <PageTitle title={getErrorMessage(statusCode)} />
       <div className="text-4xl">
         {statusCode
-          ? statusCode + " - " + getErrorMessage(statusCode)
+          ? statusCode + ' - ' + getErrorMessage(statusCode)
           : getErrorMessage(statusCode)}
       </div>
       <Link href="/" className="mt-2 flex">

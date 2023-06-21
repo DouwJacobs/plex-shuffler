@@ -1,12 +1,12 @@
-import PlexLoginButton from "@app/components/PlexLoginButton";
-import { useUser } from "@app/hooks/useUser";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { defineMessages, useIntl } from "react-intl";
+import PlexLoginButton from '@app/components/PlexLoginButton';
+import { useUser } from '@app/hooks/useUser';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 const messages = defineMessages({
-  welcome: "Welcome to Plex Shuffler",
-  signinMessage: "Get started by signing in with your Plex account",
+  welcome: 'Welcome to Plex Shuffler',
+  signinMessage: 'Get started by signing in with your Plex account',
 });
 
 interface LoginWithPlexProps {
@@ -24,7 +24,7 @@ const LoginWithPlex = ({ onComplete }: LoginWithPlexProps) => {
 
   useEffect(() => {
     const login = async () => {
-      const response = await axios.post("/api/v1/auth/plex", { authToken });
+      const response = await axios.post('/api/v1/auth/plex', { authToken });
 
       if (response.data?.id) {
         revalidate();

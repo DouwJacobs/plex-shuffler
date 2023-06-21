@@ -1,14 +1,14 @@
 // import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
-import PlexOAuth from "@app/utils/plex";
-import { useState } from "react";
+import globalMessages from '@app/i18n/globalMessages';
+import PlexOAuth from '@app/utils/plex';
+import { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import globalMessages from "@app/i18n/globalMessages";
 
-import styles from "./PlexLoginButton.module.css";
+import styles from './PlexLoginButton.module.css';
 
 const messages = defineMessages({
-  signinwithplex: "Sign In",
-  signingin: "Signing In…",
+  signinwithplex: 'Sign In',
+  signingin: 'Signing In…',
 });
 
 const plexOAuth = new PlexOAuth();
@@ -42,23 +42,23 @@ const PlexLoginButton = ({
   };
 
   return (
-    <span className={styles["plex-button-shell"]}>
+    <span className={styles['plex-button-shell']}>
       <button
         type="button"
-        className={styles["plex-button"]}
+        className={styles['plex-button']}
         onClick={() => {
           plexOAuth.preparePopup();
           setTimeout(() => getPlexLogin(), 1500);
         }}
         disabled={loading}
       >
-        <div className={styles["button-text"]}>
-          <span className={styles["plex-login-text"]}>
-          {loading
-            ? intl.formatMessage(globalMessages.loading)
-            : isProcessing
-            ? intl.formatMessage(messages.signingin)
-            : intl.formatMessage(messages.signinwithplex)}
+        <div className={styles['button-text']}>
+          <span className={styles['plex-login-text']}>
+            {loading
+              ? intl.formatMessage(globalMessages.loading)
+              : isProcessing
+              ? intl.formatMessage(messages.signingin)
+              : intl.formatMessage(messages.signinwithplex)}
           </span>
         </div>
       </button>

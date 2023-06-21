@@ -1,6 +1,6 @@
-import useSearchInput from "@app/hooks/useSearchInput";
-import { XCircleIcon } from "@heroicons/react/24/outline";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import useSearchInput from '@app/hooks/useSearchInput';
+import { XCircleIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 const SearchInput = ({
   searchPlaceholder,
@@ -12,7 +12,7 @@ const SearchInput = ({
   const { searchValue, setSearchValue, setIsOpen, clear } =
     useSearchInput(endPoint);
   return (
-    <div className="flex flex-1 mb-5">
+    <div className="mb-5 flex flex-1">
       <div className="flex w-full">
         <label htmlFor="search_field" className="sr-only">
           Search
@@ -23,8 +23,8 @@ const SearchInput = ({
           </div>
           <input
             id="search_field"
-            style={{ paddingRight: searchValue.length > 0 ? "1.75rem" : "" }}
-            className="block w-full rounded border border-gray-600 plex-bg-transparent bg-opacity-80 py-2 pl-10 text-white placeholder-gray-300 sm:text-base plex-search-bar"
+            style={{ paddingRight: searchValue.length > 0 ? '1.75rem' : '' }}
+            className="plex-bg-transparent plex-search-bar block w-full rounded border border-gray-600 bg-opacity-80 py-2 pl-10 text-white placeholder-gray-300 sm:text-base"
             placeholder={searchPlaceholder}
             type="search"
             autoComplete="off"
@@ -32,12 +32,12 @@ const SearchInput = ({
             onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => setIsOpen(true)}
             onBlur={() => {
-              if (searchValue === "") {
+              if (searchValue === '') {
                 setIsOpen(false);
               }
             }}
             onKeyUp={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === 'Enter') {
                 e.preventDefault();
                 (e.target as HTMLInputElement).blur();
               }

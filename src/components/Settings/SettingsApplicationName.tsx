@@ -1,21 +1,20 @@
-import * as Yup from "yup";
-import { Field, Formik } from "formik";
-import { useState } from "react";
-import useSWR from "swr";
-import toast from "react-hot-toast";
-import axios from "axios";
-import Button from "@app/components/Common/Button";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
-import { defineMessages, useIntl } from "react-intl";
+import Button from '@app/components/Common/Button';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import { Field, Formik } from 'formik';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
+import * as Yup from 'yup';
 
 const messages = defineMessages({
-  applicationName: "Application Name",
-  applicationNameDescription: "Choose a name for your application",
-  applicationNameRequired: "Please set valid application name",
-  applicationTitleFailed: "Error setting application title",
-  applicationTitleSuccess: "Application title set successfully",
-  applicationTitle: "Application Title",
-  applicationTitleSave: "Save Application Title",
+  applicationName: 'Application Name',
+  applicationNameDescription: 'Choose a name for your application',
+  applicationNameRequired: 'Please set valid application name',
+  applicationTitleFailed: 'Error setting application title',
+  applicationTitleSuccess: 'Application title set successfully',
+  applicationTitle: 'Application Title',
+  applicationTitleSave: 'Save Application Title',
 });
 
 type ApplicationTitle = {
@@ -27,11 +26,7 @@ interface SettingsApplicationProps {
 }
 
 const SettingsApplicationName = ({ onComplete }: SettingsApplicationProps) => {
-  const {
-    data,
-    error,
-    mutate: revalidate,
-  } = useSWR<ApplicationTitle>("/api/v1/settings/title");
+  const { data } = useSWR<ApplicationTitle>('/api/v1/settings/title');
   const intl = useIntl();
 
   const ApplicationNameSchema = Yup.object().shape({
@@ -57,9 +52,9 @@ const SettingsApplicationName = ({ onComplete }: SettingsApplicationProps) => {
         validationSchema={ApplicationNameSchema}
         onSubmit={async (values) => {
           let toastId: string | null = null;
-          toastId = toast.loading("Setting Application Title");
+          toastId = toast.loading('Setting Application Title');
           try {
-            await axios.post("/api/v1/settings/title", {
+            await axios.post('/api/v1/settings/title', {
               applicationTitle: values.applicationTitle,
             });
 
@@ -81,15 +76,7 @@ const SettingsApplicationName = ({ onComplete }: SettingsApplicationProps) => {
           }
         }}
       >
-        {({
-          errors,
-          touched,
-          values,
-          handleSubmit,
-          setFieldValue,
-          isSubmitting,
-          isValid,
-        }) => {
+        {({ errors, touched, values, handleSubmit, isSubmitting }) => {
           return (
             <form className="section" onSubmit={handleSubmit}>
               <div className="form-row">
@@ -108,12 +95,12 @@ const SettingsApplicationName = ({ onComplete }: SettingsApplicationProps) => {
                   />
                   {errors.applicationTitle &&
                     touched.applicationTitle &&
-                    typeof errors.applicationTitle === "string" && (
+                    typeof errors.applicationTitle === 'string' && (
                       <div className="error">{errors.applicationTitle}</div>
                     )}
                 </div>
               </div>
-              <div className="flex justify-end mt-2">
+              <div className="mt-2 flex justify-end">
                 <label htmlFor="saveTitle" className="text-label">
                   {intl.formatMessage(messages.applicationTitleSave)}
                 </label>

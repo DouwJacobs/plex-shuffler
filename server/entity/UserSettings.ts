@@ -28,5 +28,4 @@ export class UserSettings {
 
   @Column({ nullable: true })
   public originalLanguage?: string;
-
 }

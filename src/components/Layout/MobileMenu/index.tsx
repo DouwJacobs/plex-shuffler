@@ -1,25 +1,25 @@
-import { menuMessages } from "@app/components/Layout/SideNavigation";
-import useClickOutside from "@app/hooks/useClickOutside";
-import { Permission, useUser } from "@app/hooks/useUser";
-import { Transition } from "@headlessui/react";
+import { menuMessages } from '@app/components/Layout/SideNavigation';
+import useClickOutside from '@app/hooks/useClickOutside';
+import { Permission, useUser } from '@app/hooks/useUser';
+import { Transition } from '@headlessui/react';
 import {
   CogIcon,
   EllipsisHorizontalIcon,
-  UsersIcon,
+  HomeIcon,
   QueueListIcon,
   TvIcon,
-  HomeIcon
-} from "@heroicons/react/24/outline";
+  UsersIcon,
+} from '@heroicons/react/24/outline';
 import {
   CogIcon as FilledCogIcon,
   UsersIcon as FilledUsersIcon,
   HomeIcon as HomeIconFilled,
   TvIcon as TvIconFilled,
   XMarkIcon,
-} from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { cloneElement, useRef, useState } from "react";
+} from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { cloneElement, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 interface MenuLink {
@@ -30,7 +30,7 @@ interface MenuLink {
   activeRegExp: RegExp;
   as?: string;
   requiredPermission?: Permission | Permission[];
-  permissionType?: "and" | "or";
+  permissionType?: 'and' | 'or';
   dataTestId?: string;
 }
 
@@ -52,48 +52,56 @@ const MobileMenu = () => {
 
   const menuLinks: MenuLink[] = [
     {
-      href: "/",
+      href: '/',
       content: intl.formatMessage(menuMessages.home),
-      svgIcon: <HomeIcon className="mr-3 h-6 w-6 plex-color-primary" />,
-      svgIconSelected: <HomeIconFilled className="mr-3 h-6 w-6 plex-color-primary" />,
+      svgIcon: <HomeIcon className="plex-color-primary mr-3 h-6 w-6" />,
+      svgIconSelected: (
+        <HomeIconFilled className="plex-color-primary mr-3 h-6 w-6" />
+      ),
       activeRegExp: /^\/(home\/?)?$/,
-      dataTestId: "sidebar-menu-users",
+      dataTestId: 'sidebar-menu-users',
     },
     {
-      href: "/user/playlists",
+      href: '/user/playlists',
       content: intl.formatMessage(menuMessages.playlists),
       svgIcon: <QueueListIcon className="mr-3 h-6 w-6" />,
       svgIconSelected: (
-        <QueueListIcon className="mr-3 h-6 w-6 plex-color-primary" />
+        <QueueListIcon className="plex-color-primary mr-3 h-6 w-6" />
       ),
       activeRegExp: /^\/user\/playlists$/,
-      dataTestId: "sidebar-menu-users",
+      dataTestId: 'sidebar-menu-users',
     },
     {
-      href: "/shows",
+      href: '/shows',
       content: intl.formatMessage(menuMessages.shows),
-      svgIcon: <TvIcon className="mr-3 h-6 w-6 plex-color-primary" />,
-      svgIconSelected: <TvIconFilled className="mr-3 h-6 w-6 plex-color-primary" />,
+      svgIcon: <TvIcon className="plex-color-primary mr-3 h-6 w-6" />,
+      svgIconSelected: (
+        <TvIconFilled className="plex-color-primary mr-3 h-6 w-6" />
+      ),
       activeRegExp: /^\/shows/,
-      dataTestId: "sidebar-menu-users",
+      dataTestId: 'sidebar-menu-users',
     },
     {
-      href: "/users",
+      href: '/users',
       content: intl.formatMessage(menuMessages.users),
       svgIcon: <UsersIcon className="mr-3 h-6 w-6" />,
-      svgIconSelected: <FilledUsersIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+      svgIconSelected: (
+        <FilledUsersIcon className="plex-color-primary mr-3 h-6 w-6" />
+      ),
       activeRegExp: /^\/users/,
       requiredPermission: Permission.MANAGE_USERS,
-      dataTestId: "sidebar-menu-users",
+      dataTestId: 'sidebar-menu-users',
     },
     {
-      href: "/settings",
+      href: '/settings',
       content: intl.formatMessage(menuMessages.settings),
       svgIcon: <CogIcon className="mr-3 h-6 w-6" />,
-      svgIconSelected: <FilledCogIcon className="mr-3 h-6 w-6 plex-color-primary" />,
+      svgIconSelected: (
+        <FilledCogIcon className="plex-color-primary mr-3 h-6 w-6" />
+      ),
       activeRegExp: /^\/settings/,
       requiredPermission: Permission.ADMIN,
-      dataTestId: "sidebar-menu-settings",
+      dataTestId: 'sidebar-menu-settings',
     },
   ];
 
@@ -101,7 +109,7 @@ const MobileMenu = () => {
     (link) =>
       !link.requiredPermission ||
       hasPermission(link.requiredPermission, {
-        type: link.permissionType ?? "and",
+        type: link.permissionType ?? 'and',
       })
   );
 
@@ -117,7 +125,7 @@ const MobileMenu = () => {
         leave="transition duration-500"
         leaveFrom="opacity-100 -translate-y-full"
         leaveTo="opacity-0 translate-y-0"
-        className="absolute top-0 left-0 right-0 flex w-full -translate-y-full flex-col space-y-6 border-t border-gray-600 bg-gray-900 bg-opacity-90 px-6 py-6 font-semibold text-gray-100 plex-bg-secondary"
+        className="plex-bg-secondary absolute left-0 right-0 top-0 flex w-full -translate-y-full flex-col space-y-6 border-t border-gray-600 bg-gray-900 bg-opacity-90 px-6 py-6 font-semibold text-gray-100"
       >
         {filteredLinks.map((link) => {
           const isActive = router.pathname.match(link.activeRegExp);
@@ -126,10 +134,10 @@ const MobileMenu = () => {
               key={`mobile-menu-link-${link.href}`}
               href={link.href}
               className={`flex items-center space-x-2 ${
-                isActive ? "plex-color-primary" : ""
+                isActive ? 'plex-color-primary' : ''
               }`}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   setIsOpen(false);
                 }
               }}
@@ -138,14 +146,14 @@ const MobileMenu = () => {
               tabIndex={0}
             >
               {cloneElement(isActive ? link.svgIconSelected : link.svgIcon, {
-                className: "h-5 w-5",
+                className: 'h-5 w-5',
               })}
               <span>{link.content}</span>
             </Link>
           );
         })}
       </Transition>
-      <div className="padding-bottom-safe border-t border-gray-600 plex-bg-secondary bg-opacity-90 backdrop-blur">
+      <div className="padding-bottom-safe plex-bg-secondary border-t border-gray-600 bg-opacity-90 backdrop-blur">
         <div className="flex h-full items-center justify-between px-6 py-4 text-gray-100">
           {filteredLinks
             .slice(0, filteredLinks.length === 5 ? 5 : 4)
@@ -157,13 +165,13 @@ const MobileMenu = () => {
                   key={`mobile-menu-link-${link.href}`}
                   href={link.href}
                   className={`flex flex-col items-center space-y-1 ${
-                    isActive ? "plex-color-primary" : ""
+                    isActive ? 'plex-color-primary' : ''
                   }`}
                 >
                   {cloneElement(
                     isActive ? link.svgIconSelected : link.svgIcon,
                     {
-                      className: "h-6 w-6",
+                      className: 'h-6 w-6',
                     }
                   )}
                 </Link>
@@ -172,7 +180,7 @@ const MobileMenu = () => {
           {filteredLinks.length > 2 && filteredLinks.length !== 5 && (
             <button
               className={`flex flex-col items-center space-y-1 ${
-                isOpen ? "plex-color-primary" : ""
+                isOpen ? 'plex-color-primary' : ''
               }`}
               onClick={() => toggle()}
             >

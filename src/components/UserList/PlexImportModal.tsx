@@ -1,12 +1,12 @@
-import Alert from "@app/components/Common/Alert";
-import Modal from "@app/components/Common/Modal";
-import useSettings from "@app/hooks/useSettings";
-import globalMessages from "@app/i18n/globalMessages";
-import axios from "axios";
-import { useState } from "react";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
-import useSWR from "swr";
+import Alert from '@app/components/Common/Alert';
+import Modal from '@app/components/Common/Modal';
+import useSettings from '@app/hooks/useSettings';
+import globalMessages from '@app/i18n/globalMessages';
+import axios from 'axios';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
 
 interface PlexImportProps {
   onCancel?: () => void;
@@ -14,14 +14,14 @@ interface PlexImportProps {
 }
 
 const messages = defineMessages({
-  importfromplex: "Import Plex Users",
-  importfromplexerror: "Something went wrong while importing Plex users.",
+  importfromplex: 'Import Plex Users',
+  importfromplexerror: 'Something went wrong while importing Plex users.',
   importedfromplex:
-    "<strong>{userCount}</strong> Plex {userCount, plural, one {user} other {users}} imported successfully!",
-  user: "User",
-  nouserstoimport: "There are no Plex users to import.",
+    '<strong>{userCount}</strong> Plex {userCount, plural, one {user} other {users}} imported successfully!',
+  user: 'User',
+  nouserstoimport: 'There are no Plex users to import.',
   newplexsigninenabled:
-    "The <strong>Enable New Plex Sign-In</strong> setting is currently enabled. Plex users with library access do not need to be imported in order to sign in.",
+    'The <strong>Enable New Plex Sign-In</strong> setting is currently enabled. Plex users with library access do not need to be imported in order to sign in.',
 });
 
 const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
@@ -46,12 +46,12 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
 
     try {
       const { data: createdUsers } = await axios.post(
-        "/api/v1/user/import-from-plex",
+        '/api/v1/user/import-from-plex',
         { plexIds: selectedUsers }
       );
 
       if (!createdUsers.length) {
-        throw new Error("No users were imported from Plex.");
+        throw new Error('No users were imported from Plex.');
       }
 
       toast.success(
@@ -123,14 +123,14 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                   <table className="min-w-full">
                     <thead>
                       <tr>
-                        <th className="w-16 plex-bg-primary px-4 py-3">
+                        <th className="plex-bg-primary w-16 px-4 py-3">
                           <span
                             role="checkbox"
                             tabIndex={0}
                             aria-checked={isAllUsers()}
                             onClick={() => toggleAllUsers()}
                             onKeyDown={(e) => {
-                              if (e.key === "Enter" || e.key === "Space") {
+                              if (e.key === 'Enter' || e.key === 'Space') {
                                 toggleAllUsers();
                               }
                             }}
@@ -139,13 +139,13 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                             <span
                               aria-hidden="true"
                               className={`${
-                                isAllUsers() ? "bg-indigo-500" : "bg-gray-800"
+                                isAllUsers() ? 'bg-indigo-500' : 'bg-gray-800'
                               } absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out`}
                             ></span>
                             <span
                               aria-hidden="true"
                               className={`${
-                                isAllUsers() ? "translate-x-5" : "translate-x-0"
+                                isAllUsers() ? 'translate-x-5' : 'translate-x-0'
                               } absolute left-0 inline-block h-5 w-5 rounded-full border border-gray-200 bg-white shadow transition-transform duration-200 ease-in-out group-focus:border-blue-300 group-focus:ring`}
                             ></span>
                           </span>
@@ -155,7 +155,7 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-700 plex-bg-transparent-10">
+                    <tbody className="plex-bg-transparent-10 divide-y divide-gray-700">
                       {data?.map((user) => (
                         <tr key={`user-${user.id}`}>
                           <td className="whitespace-nowrap px-4 py-4 text-sm font-medium leading-5 text-gray-100">
@@ -165,7 +165,7 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                               aria-checked={isSelectedUser(user.id)}
                               onClick={() => toggleUser(user.id)}
                               onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === "Space") {
+                                if (e.key === 'Enter' || e.key === 'Space') {
                                   toggleUser(user.id);
                                 }
                               }}
@@ -175,16 +175,16 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                                 aria-hidden="true"
                                 className={`${
                                   isSelectedUser(user.id)
-                                    ? "bg-indigo-500"
-                                    : "bg-gray-800"
+                                    ? 'bg-indigo-500'
+                                    : 'bg-gray-800'
                                 } absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out`}
                               ></span>
                               <span
                                 aria-hidden="true"
                                 className={`${
                                   isSelectedUser(user.id)
-                                    ? "translate-x-5"
-                                    : "translate-x-0"
+                                    ? 'translate-x-5'
+                                    : 'translate-x-0'
                                 } absolute left-0 inline-block h-5 w-5 rounded-full border border-gray-200 bg-white shadow transition-transform duration-200 ease-in-out group-focus:border-blue-300 group-focus:ring`}
                               ></span>
                             </span>

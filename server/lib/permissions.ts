@@ -2,7 +2,7 @@ export enum Permission {
   NONE = 0,
   ADMIN = 2,
   MANAGE_USERS = 8,
-  STANDARD_USER = 16
+  STANDARD_USER = 16,
 }
 
 export interface PermissionCheckOptions {

@@ -1,9 +1,8 @@
-import { loadFull } from "tsparticles";
-import Particles from "react-tsparticles";
-import type { Engine, ISourceOptions } from "tsparticles-engine";
+import Particles from 'react-tsparticles';
+import { loadFull } from 'tsparticles';
+import type { Engine, ISourceOptions } from 'tsparticles-engine';
 
-
-import options from "@app/assets/particlesjs-config.json";
+import options from '@app/assets/particlesjs-config.json';
 
 const typeOptions = options;
 
@@ -15,8 +14,13 @@ const ParticlesTS = () => {
     await loadFull(main);
   };
 
-  return <Particles id='tsparticles' init={particlesInit} options={typeOptions as ISourceOptions} />;
+  return (
+    <Particles
+      id="tsparticles"
+      init={particlesInit}
+      options={typeOptions as ISourceOptions}
+    />
+  );
 };
 
 export default ParticlesTS;
-

@@ -1,7 +1,7 @@
-import type { Library, PlexSettings } from "@server/lib/settings";
-import { getSettings } from "@server/lib/settings";
-import logger from "@server/logger";
-import NodePlexAPI from "plex-api";
+import type { Library, PlexSettings } from '@server/lib/settings';
+import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
+import NodePlexAPI from 'plex-api';
 
 export interface PlexLibraryItem {
   ratingKey: string;
@@ -18,7 +18,7 @@ export interface PlexLibraryItem {
   Guid?: {
     id: string;
   }[];
-  type: "movie" | "show" | "season" | "episode";
+  type: 'movie' | 'show' | 'season' | 'episode';
   Media: Media[];
 }
 
@@ -30,7 +30,7 @@ interface PlexLibraryResponse {
 }
 
 export interface PlexLibrary {
-  type: "show" | "movie";
+  type: 'show' | 'movie';
   key: string;
   title: string;
   agent: string;
@@ -46,7 +46,7 @@ export interface PlexMetadata {
   ratingKey: string;
   parentRatingKey?: string;
   guid: string;
-  type: "movie" | "show" | "season";
+  type: 'movie' | 'show' | 'season';
   title: string;
   Guid: {
     id: string;
@@ -63,20 +63,12 @@ export interface PlexMetadata {
   updatedAt: number;
   Media: Media[];
 }
-
-interface PlexError {
-  page: number;
-  results: [];
-  total_pages: number;
-  total_results: number;
-}
-
 interface PlexPlaylistItem {
   ratingKey: string;
   title: string;
   thumb?: string;
   summary?: string;
-  type: "playlist";
+  type: 'playlist';
 }
 
 interface PlexPlaylistResponse {
@@ -138,7 +130,7 @@ class PlexAPI {
           cb: (err?: string, token?: string) => void
         ) => {
           if (!plexToken) {
-            return cb("Plex Token not found!");
+            return cb('Plex Token not found!');
           }
           cb(undefined, plexToken);
         },
@@ -148,20 +140,20 @@ class PlexAPI {
       // },
       options: {
         identifier: settings.clientId,
-        product: "Plex Shuffler",
-        deviceName: "Plex Shuffler",
-        platform: "Plex Shuffler",
+        product: 'Plex Shuffler',
+        deviceName: 'Plex Shuffler',
+        platform: 'Plex Shuffler',
       },
     });
   }
 
   public async getStatus() {
-    return await this.plexClient.query("/");
+    return await this.plexClient.query('/');
   }
 
   public async getLibraries(): Promise<PlexLibrary[]> {
     const response = await this.plexClient.query<PlexLibrariesResponse>(
-      "/library/sections"
+      '/library/sections'
     );
 
     return response.MediaContainer.Directory;
@@ -176,10 +168,10 @@ class PlexAPI {
       const newLibraries: Library[] = libraries
         // Remove libraries that are not movie or show
         .filter(
-          (library) => library.type === "movie" || library.type === "show"
+          (library) => library.type === 'movie' || library.type === 'show'
         )
         // Remove libraries that do not have a metadata agent set (usually personal video libraries)
-        .filter((library) => library.agent !== "com.plexapp.agents.none")
+        .filter((library) => library.agent !== 'com.plexapp.agents.none')
         .map((library) => {
           const existing = settings.plex.libraries.find(
             (l) => l.id === library.key && l.name === library.title
@@ -196,8 +188,8 @@ class PlexAPI {
 
       settings.plex.libraries = newLibraries;
     } catch (e) {
-      logger.error("Failed to fetch Plex libraries", {
-        label: "Plex API",
+      logger.error('Failed to fetch Plex libraries', {
+        label: 'Plex API',
         message: e.message,
       });
 
@@ -217,11 +209,13 @@ class PlexAPI {
   ): Promise<{ totalSize: number; items: PlexLibraryItem[] }> {
     try {
       const response = await this.plexClient.query<PlexLibraryResponse>({
-        uri: `/library/sections/${id}/all?includeGuids=1${filter && "&title=" + filter}`,
+        uri: `/library/sections/${id}/all?includeGuids=1${
+          filter && '&title=' + filter
+        }`,
         extraHeaders: {
-            "X-Plex-Container-Start": `${offset}`,
-            "X-Plex-Container-Size": `${size}`,
-          },
+          'X-Plex-Container-Start': `${offset}`,
+          'X-Plex-Container-Size': `${size}`,
+        },
       });
 
       return {
@@ -242,7 +236,7 @@ class PlexAPI {
   ): Promise<PlexMetadata> {
     const response = await this.plexClient.query<PlexMetadataResponse>(
       `/library/metadata/${key}${
-        options.includeChildren ? "?includeChildren=1" : ""
+        options.includeChildren ? '?includeChildren=1' : ''
       }`
     );
 
@@ -262,15 +256,15 @@ class PlexAPI {
     options: { addedAt: number } = {
       addedAt: Date.now() - 1000 * 60 * 60,
     },
-    mediaType: "movie" | "show"
+    mediaType: 'movie' | 'show'
   ): Promise<PlexLibraryItem[]> {
     const response = await this.plexClient.query<PlexLibraryResponse>({
       uri: `/library/sections/${id}/all?type=${
-        mediaType === "show" ? "4" : "1"
+        mediaType === 'show' ? '4' : '1'
       }&sort=addedAt%3Adesc&addedAt>>=${Math.floor(options.addedAt / 1000)}`,
       extraHeaders: {
-        "X-Plex-Container-Start": `0`,
-        "X-Plex-Container-Size": `500`,
+        'X-Plex-Container-Start': `0`,
+        'X-Plex-Container-Size': `500`,
       },
     });
 
@@ -280,7 +274,7 @@ class PlexAPI {
   public async getPlaylists({
     offset = 0,
     size = 5,
-    filter
+    filter,
   }: { offset?: number; size?: number; filter?: string } = {}): Promise<{
     offset: number;
     size: number;
@@ -289,10 +283,10 @@ class PlexAPI {
   }> {
     try {
       const response = await this.plexClient.query<PlexPlaylistResponse>({
-        uri: `/playlists${filter ? "?title="+filter : ""}`,
+        uri: `/playlists${filter ? '?title=' + filter : ''}`,
         extraHeaders: {
-          "X-Plex-Container-Start": `${offset}`,
-          "X-Plex-Container-Size": `${size}`
+          'X-Plex-Container-Start': `${offset}`,
+          'X-Plex-Container-Size': `${size}`,
         },
       });
 

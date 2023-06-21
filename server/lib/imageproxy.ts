@@ -1,9 +1,9 @@
-import logger from "@server/logger";
-import axios from "axios";
-import rateLimit, { type rateLimitOptions } from "axios-rate-limit";
-import { createHash } from "crypto";
-import { promises } from "fs";
-import path, { join } from "path";
+import logger from '@server/logger';
+import axios from 'axios';
+import rateLimit, { type rateLimitOptions } from 'axios-rate-limit';
+import { createHash } from 'crypto';
+import { promises } from 'fs';
+import path, { join } from 'path';
 
 type ImageResponse = {
   meta: {
@@ -20,7 +20,7 @@ type ImageResponse = {
 
 const baseCacheDirectory = process.env.CONFIG_DIRECTORY
   ? `${process.env.CONFIG_DIRECTORY}/cache/images`
-  : path.join(__dirname, "../../config/cache/images");
+  : path.join(__dirname, '../../config/cache/images');
 
 class ImageProxy {
   plexToken: string | undefined;
@@ -38,7 +38,7 @@ class ImageProxy {
         const imageFiles = await promises.readdir(filePath);
 
         for (const imageFile of imageFiles) {
-          const [, expireAtSt] = imageFile.split(".");
+          const [, expireAtSt] = imageFile.split('.');
           const expireAt = Number(expireAtSt);
           const now = Date.now();
 
@@ -51,7 +51,7 @@ class ImageProxy {
     }
 
     logger.info(`Cleared ${deletedImages} stale image(s) from cache`, {
-      label: "Image Cache",
+      label: 'Image Cache',
     });
   }
 
@@ -133,7 +133,7 @@ class ImageProxy {
       const newImage = await this.set(path, cacheKey);
 
       if (!newImage) {
-        throw new Error("Failed to load image");
+        throw new Error('Failed to load image');
       }
 
       return newImage;
@@ -154,7 +154,7 @@ class ImageProxy {
       const now = Date.now();
 
       for (const file of files) {
-        const [maxAgeSt, expireAtSt, etag, extension] = file.split(".");
+        const [maxAgeSt, expireAtSt, etag, extension] = file.split('.');
         const buffer = await promises.readFile(join(directory, file));
         const expireAt = Number(expireAtSt);
         const maxAge = Number(maxAgeSt);
@@ -186,18 +186,18 @@ class ImageProxy {
     try {
       const directory = join(this.getCacheDirectory(), cacheKey);
       const response = await this.axios.get(path, {
-        responseType: "arraybuffer",
-        headers: { "X-Plex-Token": this.plexToken },
+        responseType: 'arraybuffer',
+        headers: { 'X-Plex-Token': this.plexToken },
       });
 
-      const buffer = Buffer.from(response.data, "binary");
-      const extension = "jpg";
+      const buffer = Buffer.from(response.data, 'binary');
+      const extension = 'jpg';
       const maxAge = Number(
-        (response.headers["cache-control"] ?? "0").split("=")[1]
+        (response.headers['cache-control'] ?? '0').split('=')[1]
       );
       const expireAt =
         Date.now() + (maxAge ? maxAge * 100 : 7 * 24 * 60 * 60 * 1000);
-      const etag = (response.headers.etag ?? "").replace(/"/g, "");
+      const etag = (response.headers.etag ?? '').replace(/"/g, '');
 
       await this.writeToCacheDir(
         directory,
@@ -205,7 +205,7 @@ class ImageProxy {
         maxAge || 7 * 24 * 60 * 60 * 1000,
         expireAt,
         buffer,
-        etag || "0000"
+        etag || '0000'
       );
 
       return {
@@ -213,7 +213,7 @@ class ImageProxy {
           curRevalidate: maxAge || 7 * 24 * 60 * 60 * 1000,
           revalidateAfter: expireAt,
           isStale: false,
-          etag: etag || "0000",
+          etag: etag || '0000',
           extension,
           cacheKey,
           cacheMiss: true,
@@ -221,8 +221,8 @@ class ImageProxy {
         imageBuffer: buffer,
       };
     } catch (e) {
-      logger.debug("Something went wrong caching image.", {
-        label: "Image Cache",
+      logger.debug('Something went wrong caching image.', {
+        label: 'Image Cache',
         errorMessage: e.message,
       });
       return null;
@@ -239,7 +239,7 @@ class ImageProxy {
   ) {
     const filename = join(dir, `${maxAge}.${expireAt}.${etag}.${extension}`);
 
-    await promises.rm(dir, { force: true, recursive: true }).catch((e) => {
+    await promises.rm(dir, { force: true, recursive: true }).catch(() => {
       // do nothing
     });
 
@@ -252,15 +252,15 @@ class ImageProxy {
   }
 
   private getHash(items: (string | number | Buffer)[]) {
-    const hash = createHash("sha256");
+    const hash = createHash('sha256');
     for (const item of items) {
-      if (typeof item === "number") hash.update(String(item));
+      if (typeof item === 'number') hash.update(String(item));
       else {
         hash.update(item);
       }
     }
     // See https://en.wikipedia.org/wiki/Base64#Filenames
-    return hash.digest("base64").replace(/\//g, "-");
+    return hash.digest('base64').replace(/\//g, '-');
   }
 
   private getCacheDirectory() {

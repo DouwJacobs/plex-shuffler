@@ -27,8 +27,8 @@ import type {
 import copy from 'copy-to-clipboard';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { defineMessages, useIntl } from 'react-intl';
-import toast from "react-hot-toast";
 import useSWR from 'swr';
 
 const messages = defineMessages({
@@ -247,7 +247,7 @@ const SettingsLogs = () => {
         </p>
         <div className="mt-2 flex flex-grow flex-col sm:flex-grow-0 sm:flex-row sm:justify-end">
           <div className="mb-2 flex flex-grow sm:mb-0 sm:mr-2 md:flex-grow-0">
-            <span className="inline-flex cursor-default items-center rounded-l-md border border-r-0 border-gray-500 plex-bg-transparent px-3 text-sm text-gray-100">
+            <span className="plex-bg-transparent inline-flex cursor-default items-center rounded-l-md border border-r-0 border-gray-500 px-3 text-sm text-gray-100">
               <MagnifyingGlassIcon className="h-6 w-6" />
             </span>
             <input
@@ -259,7 +259,7 @@ const SettingsLogs = () => {
           </div>
           <div className="mb-2 flex flex-1 flex-row justify-between sm:mb-0 sm:flex-none">
             <Button
-              className="mr-2 flex flex-grow plex-bg-transparent"
+              className="plex-bg-transparent mr-2 flex flex-grow"
               buttonType={refreshInterval ? 'default' : 'primary'}
               onClick={() => toggleLogs()}
             >
@@ -271,7 +271,7 @@ const SettingsLogs = () => {
               </span>
             </Button>
             <div className="flex flex-grow">
-              <span className="inline-flex cursor-default items-center rounded-l-md border border-r-0 border-gray-500 plex-bg-transparent px-3 text-sm">
+              <span className="plex-bg-transparent inline-flex cursor-default items-center rounded-l-md border border-r-0 border-gray-500 px-3 text-sm">
                 <FunnelIcon className="h-6 w-6" />
               </span>
               <select

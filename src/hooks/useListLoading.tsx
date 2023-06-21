@@ -1,5 +1,4 @@
 import useSWRInfinite from 'swr/infinite';
-import useSettings from './useSettings';
 
 export interface BaseSearchResult<T> {
   page: number;
@@ -48,7 +47,6 @@ const useListLoading = <
   endpoint: string,
   options?: O
 ): LoadingResult<T, S> => {
-  const settings = useSettings();
   const { data, error, size, setSize, isValidating } = useSWRInfinite<
     BaseSearchResult<T> & S
   >(
@@ -88,7 +86,7 @@ const useListLoading = <
     setSize(size + 1);
   };
 
-  let titles = (data ?? []).reduce((a, v) => [...a, ...v.results], [] as T[]);
+  const titles = (data ?? []).reduce((a, v) => [...a, ...v.results], [] as T[]);
 
   const isEmpty = !isLoadingInitialData && titles?.length === 0;
   const isReachingEnd =

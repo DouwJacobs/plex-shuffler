@@ -1,4 +1,4 @@
-import PlexLoading from "@app/components/Login/PlexLoading"
+import PlexLoading from '@app/components/Login/PlexLoading';
 
 const Loading = () => {
   return (

@@ -18,7 +18,7 @@ interface SearchObject {
 const useSearchInput = (endpoint: string): SearchObject => {
   const router = useRouter();
   const [searchOpen, setIsOpen] = useState(false);
-  const [lastRoute, setLastRoute] = useState<Nullable<Url>>(null);
+  const [, setLastRoute] = useState<Nullable<Url>>(null);
   const [searchValue, debouncedValue, setSearchValue] = useDebouncedState(
     (router.query.query as string) ?? ''
   );
@@ -50,7 +50,7 @@ const useSearchInput = (endpoint: string): SearchObject => {
           .then(() => window.scrollTo(0, 0));
       }
     }
-  }, [debouncedValue]);
+  }, [debouncedValue, endpoint, router, searchOpen]);
 
   /**
    * This effect is handling behavior when the search input is closed.
@@ -82,7 +82,10 @@ const useSearchInput = (endpoint: string): SearchObject => {
           : ''
       );
 
-      if (!router.pathname.startsWith(`/${endpoint}/search`) && !router.query.query) {
+      if (
+        !router.pathname.startsWith(`/${endpoint}/search`) &&
+        !router.query.query
+      ) {
         setIsOpen(false);
       }
     }
@@ -90,7 +93,7 @@ const useSearchInput = (endpoint: string): SearchObject => {
     if (router.pathname.startsWith(`/${endpoint}/search`)) {
       setIsOpen(true);
     }
-  }, [router, setSearchValue]);
+  }, [router, setSearchValue, endpoint, debouncedValue]);
 
   const clear = () => {
     setIsOpen(false);

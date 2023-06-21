@@ -21,17 +21,17 @@ const SetupSteps = ({
         <div
           className={`flex h-10 w-10 flex-shrink-0 items-center justify-center border-2 
           ${active ? 'plex-border-primary ' : 'border-white '}
-          ${completed ? 'plex-border-white plex-bg-primary ' : ''} rounded-full`}
+          ${
+            completed ? 'plex-border-white plex-bg-primary ' : ''
+          } rounded-full`}
         >
           {completed && <CheckIcon className="h-6 w-6 text-white" />}
           {!completed && (
-            <p className={active ? 'text-white' : 'text-white'}>
-              {stepNumber}
-            </p>
+            <p className={active ? 'text-white' : 'text-white'}>{stepNumber}</p>
           )}
         </div>
         <p
-          className={`text-sm font-medium leading-5 plex-border-primary ${
+          className={`plex-border-primary text-sm font-medium leading-5 ${
             active ? 'text-white' : 'text-white'
           }`}
         >
@@ -40,9 +40,9 @@ const SetupSteps = ({
       </div>
 
       {!isLastStep && (
-        <div className="absolute top-0 right-0 hidden h-full w-5 md:block">
+        <div className="absolute right-0 top-0 hidden h-full w-5 md:block">
           <svg
-            className="h-full w-full plex-color-primary"
+            className="plex-color-primary h-full w-full"
             viewBox="0 0 22 80"
             fill="none"
             preserveAspectRatio="none"

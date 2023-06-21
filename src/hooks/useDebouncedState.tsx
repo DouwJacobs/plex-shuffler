@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
  * @param initialValue Initial state value
  * @param debounceTime Debounce time in ms
  */
-function useDebouncedState <S>(
+function useDebouncedState<S>(
   initialValue: S,
   debounceTime = 300
 ): [S, S, Dispatch<SetStateAction<S>>] {
@@ -29,6 +29,6 @@ function useDebouncedState <S>(
   }, [value, debounceTime]);
 
   return [value, finalValue, setValue];
-};
+}
 
 export default useDebouncedState;

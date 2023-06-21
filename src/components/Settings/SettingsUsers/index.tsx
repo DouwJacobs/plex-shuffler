@@ -1,31 +1,31 @@
-import Button from "@app/components/Common/Button";
-import LoadingSpinner from "@app/components/Common/LoadingSpinner";
-import PageTitle from "@app/components/Common/PageTitle";
-import PermissionEdit from "@app/components/PermissionEdit";
-import globalMessages from "@app/i18n/globalMessages";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
-import type { MainSettings } from "@server/lib/settings";
-import axios from "axios";
-import { Field, Form, Formik } from "formik";
-import { defineMessages, useIntl } from "react-intl";
-import toast from "react-hot-toast";
-import useSWR, { mutate } from "swr";
+import Button from '@app/components/Common/Button';
+import LoadingSpinner from '@app/components/Common/LoadingSpinner';
+import PageTitle from '@app/components/Common/PageTitle';
+import PermissionEdit from '@app/components/PermissionEdit';
+import globalMessages from '@app/i18n/globalMessages';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import type { MainSettings } from '@server/lib/settings';
+import axios from 'axios';
+import { Field, Form, Formik } from 'formik';
+import toast from 'react-hot-toast';
+import { defineMessages, useIntl } from 'react-intl';
+import useSWR, { mutate } from 'swr';
 
 const messages = defineMessages({
-  users: "Users",
-  userSettings: "User Settings",
-  userSettingsDescription: "Configure global and default user settings.",
-  toastSettingsSuccess: "User settings saved successfully!",
-  toastSettingsFailure: "Something went wrong while saving settings.",
-  localLogin: "Enable Local Sign-In",
+  users: 'Users',
+  userSettings: 'User Settings',
+  userSettingsDescription: 'Configure global and default user settings.',
+  toastSettingsSuccess: 'User settings saved successfully!',
+  toastSettingsFailure: 'Something went wrong while saving settings.',
+  localLogin: 'Enable Local Sign-In',
   localLoginTip:
-    "Allow users to sign in using their email address and password, instead of Plex OAuth",
-  newPlexLogin: "Enable New Plex Sign-In",
-  newPlexLoginTip: "Allow Plex users to sign in without first being imported",
-  movieRequestLimitLabel: "Global Movie Request Limit",
-  tvRequestLimitLabel: "Global Series Request Limit",
-  defaultPermissions: "Default Permissions",
-  defaultPermissionsTip: "Initial permissions assigned to new users",
+    'Allow users to sign in using their email address and password, instead of Plex OAuth',
+  newPlexLogin: 'Enable New Plex Sign-In',
+  newPlexLoginTip: 'Allow Plex users to sign in without first being imported',
+  movieRequestLimitLabel: 'Global Movie Request Limit',
+  tvRequestLimitLabel: 'Global Series Request Limit',
+  defaultPermissions: 'Default Permissions',
+  defaultPermissionsTip: 'Initial permissions assigned to new users',
 });
 
 const SettingsUsers = () => {
@@ -34,7 +34,7 @@ const SettingsUsers = () => {
     data,
     error,
     mutate: revalidate,
-  } = useSWR<MainSettings>("/api/v1/settings/main");
+  } = useSWR<MainSettings>('/api/v1/settings/main');
 
   if (!data && !error) {
     return <LoadingSpinner />;
@@ -63,11 +63,11 @@ const SettingsUsers = () => {
           enableReinitialize
           onSubmit={async (values) => {
             try {
-              await axios.post("/api/v1/settings/main", {
+              await axios.post('/api/v1/settings/main', {
                 newPlexLogin: values.newPlexLogin,
                 defaultPermissions: values.defaultPermissions,
               });
-              mutate("/api/v1/settings/public");
+              mutate('/api/v1/settings/public');
 
               toast.success(intl.formatMessage(messages.toastSettingsSuccess));
             } catch (e) {
@@ -93,7 +93,7 @@ const SettingsUsers = () => {
                       id="newPlexLogin"
                       name="newPlexLogin"
                       onChange={() => {
-                        setFieldValue("newPlexLogin", !values.newPlexLogin);
+                        setFieldValue('newPlexLogin', !values.newPlexLogin);
                       }}
                     />
                   </div>
@@ -115,7 +115,7 @@ const SettingsUsers = () => {
                         <PermissionEdit
                           currentPermission={values.defaultPermissions}
                           onUpdate={(newPermissions) =>
-                            setFieldValue("defaultPermissions", newPermissions)
+                            setFieldValue('defaultPermissions', newPermissions)
                           }
                         />
                       </div>

@@ -1,7 +1,7 @@
-import SearchPlaylists from "@app/components/Playlists/Search";
+import SearchPlaylists from '@app/components/Playlists/Search';
 
 const SearchPlaylistsPage = () => {
-    return <SearchPlaylists />
-}
+  return <SearchPlaylists />;
+};
 
 export default SearchPlaylistsPage;

@@ -17,7 +17,8 @@
     "find:unused": "next-unused",
     "cypress:open": "cypress open",
     "cypress:prepare": "ts-node -r tsconfig-paths/register --files --project server/tsconfig.json server/scripts/prepareTestDb.ts",
-    "cypress:build": "yarn build && yarn cypress:prepare"
+    "cypress:build": "yarn build && yarn cypress:prepare",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -50,7 +51,7 @@
     "copy-to-clipboard": "^3.3.3",
     "country-flag-icons": "^1.5.7",
     "csurf": "^1.11.0",
-    "eslint": "8.42.0",
+    "eslint": "^8.0.1",
     "eslint-config-next": "13.4.5",
     "express": "4.18.2",
     "express-openapi-validator": "^5.0.4",
@@ -79,7 +80,7 @@
     "tailwindcss": "3.3.2",
     "tsparticles": "^2.10.1",
     "typeorm": "^0.3.16",
-    "typescript": "^5.1.3",
+    "typescript": "*",
     "web-push": "^3.6.2",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
@@ -93,17 +94,27 @@
     "@semantic-release/git": "^10.0.1",
     "@types/lodash": "^4.14.195",
     "@types/web-push": "^3.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@zeit/next-css": "^1.0.1",
     "commitizen": "^4.3.0",
     "copyfiles": "^2.4.1",
     "cypress": "^12.15.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-formatjs": "^4.10.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.2",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.3",
     "i": "^0.3.7",
     "next-purgecss": "^4.0.0",
     "npm": "^9.7.1",
     "postcss": "^8.4.24",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^8.5.1",
-    "prettier": "^2.8.8",
+    "prettier": "2.8.8",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "semantic-release": "^21.0.5",
@@ -134,13 +145,19 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
       [
         "@semantic-release/changelog",
         {
           "changelogFile": "CHANGELOG.md"
         }
       ],
-      "@semantic-release/npm",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
       [
         "@semantic-release/git",
         {
@@ -162,7 +179,6 @@
     "branches": [
       "master"
     ],
-    "npmPublish": false,
     "publish": [
       {
         "path": "semantic-release-docker-buildx",

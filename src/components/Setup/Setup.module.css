@@ -1,16 +1,16 @@
 .setup-card {
-    width: 60%;
-    margin: auto;
-    max-height: calc(100vh - 21rem);
-    text-align: center;
-    overflow: auto;
-  }
-  
-  .setup-content {
-    margin: 2rem;
-  }
-  
-  .setup-content h2 {
-      color: white;
-      font-size: 1.875rem;
-  }
+  width: 60%;
+  margin: auto;
+  max-height: calc(100vh - 21rem);
+  text-align: center;
+  overflow: auto;
+}
+
+.setup-content {
+  margin: 2rem;
+}
+
+.setup-content h2 {
+  color: white;
+  font-size: 1.875rem;
+}

@@ -1,13 +1,11 @@
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
-import type {
-  UserSettingsGeneralResponse
-} from '@server/interfaces/api/userSettingsInterfaces';
+import { UserSettings } from '@server/entity/UserSettings';
+import type { UserSettingsGeneralResponse } from '@server/interfaces/api/userSettingsInterfaces';
 import { Permission } from '@server/lib/permissions';
 import { isAuthenticated } from '@server/middleware/auth';
 import { Router } from 'express';
 import { canMakePermissionsChange } from '.';
-import { UserSettings } from '@server/entity/UserSettings';
 
 const isOwnProfileOrAdmin = (): Middleware => {
   const authMiddleware: Middleware = (req, res, next) => {
@@ -60,7 +58,6 @@ userSettingsRoutes.post<
   UserSettingsGeneralResponse,
   UserSettingsGeneralResponse
 >('/main', isOwnProfileOrAdmin(), async (req, res, next) => {
-
   const userRepository = getRepository(User);
 
   try {
@@ -87,7 +84,7 @@ userSettingsRoutes.post<
         user: req.user,
         locale: req.body.locale,
         region: req.body.region,
-        originalLanguage: req.body.originalLanguage
+        originalLanguage: req.body.originalLanguage,
       });
     } else {
       user.settings.locale = req.body.locale;
@@ -101,7 +98,7 @@ userSettingsRoutes.post<
       username: user.username,
       locale: user.settings.locale,
       region: user.settings.region,
-      originalLanguage: user.settings.originalLanguage
+      originalLanguage: user.settings.originalLanguage,
     });
   } catch (e) {
     next({ status: 500, message: e.message });

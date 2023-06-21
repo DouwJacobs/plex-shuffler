@@ -1,12 +1,11 @@
 import useSettings from '@app/hooks/useSettings';
-import type { ImageLoader, ImageProps } from 'next/image';
-import Image from 'next/image';
+import type { ImageProps } from 'next/image';
 
 /**
  * The CachedImage component should be used wherever
  * we want to offer the option to locally cache images.
  **/
-const CachedImage = ({ src, ...props }: ImageProps) => {
+const CachedImage = ({ src, alt, ...props }: ImageProps) => {
   const { currentSettings } = useSettings();
 
   let imageUrl = src as string;
@@ -19,11 +18,11 @@ const CachedImage = ({ src, ...props }: ImageProps) => {
     }
   }
 
-  if (imageUrl.toString().startsWith("/library")){
-    imageUrl = "/imageproxy/image" + imageUrl
+  if (imageUrl.toString().startsWith('/library')) {
+    imageUrl = '/imageproxy/image' + imageUrl;
   }
 
-  return <img src={imageUrl} {...props} />;
+  return <img src={imageUrl} {...props} alt={alt} />;
 };
 
 export default CachedImage;

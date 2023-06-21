@@ -27,4 +27,3 @@ jobs:
         run: yarn format:check
       - name: Build
         run: yarn build
-
