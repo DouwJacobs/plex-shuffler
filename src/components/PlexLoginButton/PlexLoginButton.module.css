@@ -1,0 +1,38 @@
+.plex-button {
+  @apply w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white transition duration-150 ease-in-out disabled:opacity-50;
+  background-color: #e5a00d;
+  margin: 1rem auto;
+  width: 70%;
+  position: relative;
+  text-align: center;
+}
+
+.plex-button-shell {
+  display: block;
+}
+
+.plex-button:hover {
+  background: #f19a30;
+}
+
+.button-text {
+  display: flex;
+  justify-content: center;
+}
+
+.button-logo {
+  position: relative;
+  top: 2px;
+  margin: 0;
+}
+
+.plex-login-text {
+  vertical-align: middle;
+}
+
+.loginArrow {
+  position: absolute;
+  top: 2px;
+  margin-left: 6rem;
+  padding-right: 0.5rem;
+}

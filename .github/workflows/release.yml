@@ -1,0 +1,26 @@
+name: Plex Shuffler Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  semantic-release:
+    name: Tag and release latest version
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release

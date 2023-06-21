@@ -1,0 +1,21 @@
+.login-card {
+  width: 90%;
+  max-width: 30rem;
+  margin: 10rem auto;
+  height: 10rem;
+  text-align: center;
+}
+
+.login-content {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+}
+
+.login-content h2 {
+    color: white;
+    font-size: 1.875rem;
+}
