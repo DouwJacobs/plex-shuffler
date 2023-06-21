@@ -1,4 +1,4 @@
-name: CI
+name: Plex Shuffler CI
 
 on:
   pull_request:
