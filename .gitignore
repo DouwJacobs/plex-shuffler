@@ -40,3 +40,6 @@ config/
 
 # locale
 *Temp.json
+
+# Cache
+.eslintcache

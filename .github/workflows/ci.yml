@@ -27,7 +27,7 @@ jobs:
         run: yarn format:check
       - name: Build
         run: yarn build
-  
+
   build_and_push:
     name: Build & Publish Docker Images
     if: github.ref == 'refs/heads/develop' && !contains(github.event.head_commit.message, '[skip ci]')
