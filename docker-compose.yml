@@ -1,0 +1,12 @@
+version: '3'
+services:
+  plex-shuffler:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - 3210:3210
+    volumes:
+      - .:/app:rw,cached
+      - /app/node_modules
+      - /app/.next
