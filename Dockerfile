@@ -1,4 +1,4 @@
-FROM node:16.17-alpine AS BUILD_IMAGE
+FROM node:18.16.1-alpine3.17 AS BUILD_IMAGE
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN \
   esac
 
 COPY package.json yarn.lock ./
-RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile --network-timeout 1000000
+# RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY . ./
 
@@ -33,7 +33,7 @@ RUN touch config/DOCKER
 RUN echo "{\"commitTag\": \"${COMMIT_TAG}\"}" > committag.json
 
 
-FROM node:16.17-alpine
+FROM node:18.16.1-alpine3.17
 
 WORKDIR /app
 
