@@ -126,7 +126,7 @@
     "tsc-alias": "^1.8.6"
   },
   "resolutions": {
-    "sqlite3/node-gyp": "8.4.1"
+    "sqlite3/node-gyp": "9.4.0"
   },
   "next-unused": {
     "entrypoints": [
