@@ -27,6 +27,7 @@ RUN yarn install --production --ignore-scripts --prefer-offline
 
 RUN rm -rf src server .next/cache
 
+RUN ls -l
 RUN touch config/DOCKER
 
 RUN echo "{\"commitTag\": \"${COMMIT_TAG}\"}" > committag.json
