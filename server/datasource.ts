@@ -13,7 +13,6 @@ const devConfig: DataSourceOptions = {
   enableWAL: true,
   entities: ['server/entity/**/*.ts'],
   migrations: ['server/migration/**/*.ts'],
-  driver: require('sqlite3'),
 };
 
 const prodConfig: DataSourceOptions = {

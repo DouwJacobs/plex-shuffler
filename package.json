@@ -74,7 +74,7 @@
     "react-select": "^5.7.3",
     "react-tsparticles": "^2.10.1",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "5.1.4",
+    "sqlite3": "^5.1.6",
     "swagger-ui-express": "^4.6.3",
     "swr": "^2.0.4",
     "tailwindcss": "3.3.2",
@@ -124,9 +124,6 @@
     "semantic-release-docker-buildx": "^1.0.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.6"
-  },
-  "resolutions": {
-    "sqlite3/node-gyp": "8.4.1"
   },
   "next-unused": {
     "entrypoints": [
