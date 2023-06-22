@@ -35,11 +35,28 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# config
-config/
-
 # locale
 *Temp.json
 
 # Cache
 .eslintcache
+
+# database
+config/db/*.sqlite3*
+config/settings.json
+
+# logs
+config/logs/*.log*
+config/logs/*.json
+config/logs/*.log.gz
+config/logs/*.json.gz
+config/logs/*-audit.json
+
+# anidb mapping file
+config/anime-list.xml
+
+# sqlite journal
+config/db/db.sqlite3-journal
+
+# Config Cache Directory
+config/cache
