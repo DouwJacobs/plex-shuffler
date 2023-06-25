@@ -50,14 +50,7 @@ const useSearchInput = (endpoint: string): SearchObject => {
           .then(() => window.scrollTo(0, 0));
       }
     }
-  }, [debouncedValue, endpoint, router, searchOpen]);
-
-  /**
-   * This effect is handling behavior when the search input is closed.
-   *
-   * If we have a lastRoute, we will route back to it. If we don't
-   * (in the case of a deeplink) we take the user back to the index route
-   */
+  }, [debouncedValue, endpoint, searchOpen]);
 
   /**
    * This effect handles behavior for when the route is changed.
