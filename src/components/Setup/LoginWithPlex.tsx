@@ -2,11 +2,14 @@ import PlexLoginButton from '@app/components/PlexLoginButton';
 import { useUser } from '@app/hooks/useUser';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { defineMessages, useIntl } from 'react-intl';
 
 const messages = defineMessages({
   welcome: 'Welcome to Plex Shuffler',
   signinMessage: 'Get started by signing in with your Plex account',
+  siginingloading: 'Login Loading...',
+  signinsuccessful: 'Login Successful!',
 });
 
 interface LoginWithPlexProps {
@@ -24,10 +27,19 @@ const LoginWithPlex = ({ onComplete }: LoginWithPlexProps) => {
 
   useEffect(() => {
     const login = async () => {
+      const toastId = toast.loading(
+        intl.formatMessage(messages.siginingloading)
+      );
       const response = await axios.post('/api/v1/auth/plex', { authToken });
 
       if (response.data?.id) {
         revalidate();
+
+        if (toastId) {
+          toast.remove(toastId);
+        }
+
+        toast.success(intl.formatMessage(messages.signinsuccessful));
       }
     };
     if (authToken) {
