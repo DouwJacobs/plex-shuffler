@@ -1,5 +1,3 @@
-import type Media from '@server/entity/Media';
-
 export type MediaType = 'tv' | 'playlist';
 
 interface SearchResult {
@@ -13,7 +11,6 @@ interface SearchResult {
   genreIds: number[];
   overview: string;
   originalLanguage: string;
-  mediaInfo?: Media;
 }
 
 export interface TvResult extends SearchResult {
