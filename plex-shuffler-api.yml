@@ -1190,6 +1190,32 @@ paths:
                   permissions:
                     type: number
                     example: 2
+  /user/shuffled-playlist:
+    post:
+      summary: Create shuffled playlist
+      description: |
+        Creates a shuffled playlist based on the user's selected playlists
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playlistTitle:
+                  type: string
+                  example: Comedy Playlist
+                playlists:
+                  type: array
+                  items:
+                    type: string
+                    example: 1
+                  example: [12345, 86562, 78569]
+      responses:
+        '200':
+          description: Created shuffled playlist
   /tv/libraries:
     get:
       summary: Get all tv libraries

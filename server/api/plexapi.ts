@@ -78,6 +78,19 @@ interface PlexPlaylistResponse {
   };
 }
 
+interface PlexIdentityRepsonse {
+  MediaContainer: {
+    size: string;
+    claimed: string;
+    machineIdentifier: string;
+    version: string;
+  };
+}
+
+interface PlexIdentity {
+  machineIdentifier: string;
+}
+
 interface Media {
   id: number;
   duration: number;
@@ -315,6 +328,34 @@ class PlexAPI {
         totalSize: 0,
         items: [],
       };
+    }
+  }
+
+  public async getIdentity(): Promise<PlexIdentity> {
+    const response = await this.plexClient.query<PlexIdentityRepsonse>(
+      `/identity`
+    );
+    return response.MediaContainer;
+  }
+
+  public async createPlaylist(
+    title: string,
+    ratingKeys: string[]
+  ): Promise<PlexLibraryItem[] | undefined> {
+    try {
+      const plexIdentity = await this.getIdentity();
+      const machineId = plexIdentity.machineIdentifier;
+
+      const response = await this.plexClient.postQuery<PlexLibraryResponse>({
+        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys}`,
+      });
+
+      return response.MediaContainer.Metadata;
+    } catch (e) {
+      logger.error('Failed to create Plex Playlist', {
+        label: 'Plex API',
+        message: e.message,
+      });
     }
   }
 }

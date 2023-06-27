@@ -5,7 +5,7 @@ interface PlaceholderProps {
 const Placeholder = ({ canExpand = false }: PlaceholderProps) => {
   return (
     <div
-      className={`plex-bg-transparent relative animate-pulse rounded-xl ${
+      className={`plex-bg-transparent relative m-2 animate-pulse rounded-xl pt-2 ${
         canExpand ? 'w-full' : 'w-36 sm:w-36 md:w-44'
       }`}
     >

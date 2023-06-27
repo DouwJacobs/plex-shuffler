@@ -11,6 +11,8 @@ type ListViewProps = {
   isLoading?: boolean;
   isReachingEnd?: boolean;
   onScrollBottom: () => void;
+  handleOnChange?: (key: string) => void;
+  selected?: string[];
 };
 
 const ListView = ({
@@ -19,9 +21,12 @@ const ListView = ({
   isLoading,
   onScrollBottom,
   isReachingEnd,
+  handleOnChange,
+  selected,
 }: ListViewProps) => {
   const intl = useIntl();
   useVerticalScroll(onScrollBottom, !isLoading && !isEmpty && !isReachingEnd);
+
   return (
     <>
       {isEmpty && (
@@ -39,6 +44,13 @@ const ListView = ({
                 <TitleCard
                   title={title.title}
                   thumb={title.thumb ? title.thumb : noCover.src}
+                  handleOnchange={
+                    handleOnChange
+                      ? () => handleOnChange?.(title.ratingKey)
+                      : undefined
+                  }
+                  selected={selected?.includes(title.ratingKey)}
+                  ratingKey={title.ratingKey}
                 />
               );
               break;

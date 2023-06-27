@@ -1,5 +1,7 @@
+import ShuffledPlaylist from '@app/components/ShuffledPlaylist';
+
 const HomePage = () => {
-  return <></>;
+  return <ShuffledPlaylist />;
 };
 
 export default HomePage;
