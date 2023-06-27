@@ -2,7 +2,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-export default withBundleAnalyzer({
+module.exports = withBundleAnalyzer({
   webpack: (config) => {
     config.resolve.extensions.push('.ts', '.tsx');
     return config;
