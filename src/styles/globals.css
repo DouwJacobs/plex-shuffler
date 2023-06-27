@@ -31,7 +31,7 @@
 }
 
 @layer components {
-  .searchbar {
+  .topbar {
     padding-top: env(safe-area-inset-top);
     height: calc(4rem + env(safe-area-inset-top));
   }
@@ -248,8 +248,12 @@
     @apply mt-6 max-w-6xl sm:mt-5 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4;
   }
 
+  .shuffled-playlist-form-row {
+    @apply text-center sm:flex sm:justify-center;
+  }
+
   .form-input-area {
-    @apply text-sm text-white sm:col-span-2;
+    @apply text-sm text-white sm:w-full;
     text-align: left;
   }
 
@@ -696,11 +700,24 @@ h2 {
 }
 
 .zoom {
-  transition: transform 0.1s; /* Animation */
+  @apply duration-150;
 }
 
 .zoom:hover {
   transform: scale(
     1.1
   ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.checkbox-card {
+  position: relative;
+}
+.checkbox-card img {
+  display: block;
+}
+.checkbox-card input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0.5rem;
 }

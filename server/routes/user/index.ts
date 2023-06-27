@@ -4,6 +4,9 @@ import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
 import type { UserResultsResponse } from '@server/interfaces/api/userInterfaces';
 import { hasPermission, Permission } from '@server/lib/permissions';
+import plexShuffle from '@server/lib/plexShuffle';
+import type { TVShow } from '@server/lib/scanners/plexScanner';
+import { plexShowScanner } from '@server/lib/scanners/plexScanner';
 import { getSettings } from '@server/lib/settings';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
@@ -361,5 +364,37 @@ router.post(
     }
   }
 );
+
+router.post('/shuffled-playlist', async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    if (!req.user) {
+      return res.status(500).json({
+        status: 500,
+        error: 'Please sign in.',
+      });
+    }
+
+    const user = await userRepository.findOneOrFail({
+      select: { id: true, plexToken: true },
+      where: { id: req.user.id },
+    });
+
+    const plexClient = new PlexAPI({ plexToken: user.plexToken });
+
+    const allEpisodes: TVShow[] = await plexShowScanner.run(req.body.playlists);
+
+    const shuffledEpisodes = plexShuffle(allEpisodes);
+
+    const response = await plexClient.createPlaylist(
+      req.body.playlistTitle,
+      shuffledEpisodes
+    );
+
+    return res.status(200).json(response);
+  } catch (e) {
+    next({ status: 404, message: 'User not found.' });
+  }
+});
 
 export default router;

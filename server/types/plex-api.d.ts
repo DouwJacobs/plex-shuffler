@@ -1,6 +1,6 @@
 declare module 'plex-api' {
   export default class PlexAPI {
-    constructor(intiialOptions: {
+    constructor(initialOptions: {
       hostname: string;
       port: number;
       token?: string;
@@ -27,6 +27,16 @@ declare module 'plex-api' {
         | {
             uri: string;
             extraHeaders?: Record<string, string | number>;
+          }
+    ) => Promise<T>;
+
+    postQuery: <T extends Record<string, any>>(
+      endpoint:
+        | string
+        | {
+            uri: string;
+            extraHeaders?: Record<string, string | number>;
+            requestOptions?: { method?: string };
           }
     ) => Promise<T>;
   }
