@@ -73,7 +73,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/arm64,linux/arm/v7
+          platforms: linux/arm/v7
           push: true
           build-args: |
             COMMIT_TAG=${{ github.sha }}
