@@ -9,6 +9,8 @@ import { getAppVersion, getCommitTag } from '@server/utils/appVersion';
 import restartFlag from '@server/utils/restartFlag';
 import { Router } from 'express';
 import authRoutes from './auth';
+import matchflixRoutes from './matchflix';
+import movieRoutes from './movies';
 import tvRoutes from './tv';
 import user from './user';
 
@@ -81,6 +83,8 @@ router.get('/settings/public', async (req, res) => {
 router.use('/settings', isAuthenticated(Permission.ADMIN), settingsRoutes);
 router.use('/auth', authRoutes);
 router.use('/tv', isAuthenticated(), tvRoutes);
+router.use('/movies', isAuthenticated(), movieRoutes);
+router.use('/matchflix', isAuthenticated(), matchflixRoutes);
 
 router.get('/', (_req, res) => {
   return res.status(200).json({

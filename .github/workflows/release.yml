@@ -8,7 +8,7 @@ on:
 jobs:
   semantic-release:
     name: Tag and release latest version
-    runs-on: self-hosted
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3

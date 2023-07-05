@@ -5,28 +5,28 @@ import { getSettings } from '@server/lib/settings';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
-const tvRoutes = Router();
+const movieRoutes = Router();
 
 const getLibraries = () => {
   const settings = getSettings();
 
-  const tvLibraries = settings.plex.libraries.filter(
-    (lib) => lib.type === 'show'
+  const movieLibraries = settings.plex.libraries.filter(
+    (lib) => lib.type === 'movie'
   );
 
-  return tvLibraries;
+  return movieLibraries;
 };
 
-tvRoutes.get('/libraries', (req, res) => {
-  const tvLibraries = getLibraries();
-  res.status(200).json(tvLibraries);
+movieRoutes.get('/libraries', (req, res) => {
+  const movieLibraries = getLibraries();
+  res.status(200).json(movieLibraries);
 });
 
-tvRoutes.get('/shows', async (req, res, next) => {
+movieRoutes.get('/newest', async (req, res, next) => {
   const plexUrl = getPlexUrl();
   try {
-    const tvLibraries = getLibraries();
-    const libID = tvLibraries[0].id;
+    const movieLibraries = getLibraries();
+    const libID = movieLibraries[0].id;
 
     const query = req.query.query as string;
 
@@ -46,6 +46,7 @@ tvRoutes.get('/shows', async (req, res, next) => {
       offset,
       size: itemsPerPage,
       filter: query,
+      latest: true,
     });
     const machineID = await plexapi.getIdentity();
 
@@ -57,7 +58,7 @@ tvRoutes.get('/shows', async (req, res, next) => {
         ratingKey: item.ratingKey,
         url: `${plexUrl}/web/index.html#!/server/${machineID.machineIdentifier}/details?key=/library/metadata/${item.ratingKey}`,
         title: item.title,
-        mediaType: 'tv',
+        mediaType: 'movie',
         thumb: item.thumb,
         summary: item.summary,
       })),
@@ -67,4 +68,4 @@ tvRoutes.get('/shows', async (req, res, next) => {
   }
 });
 
-export default tvRoutes;
+export default movieRoutes;

@@ -19,6 +19,7 @@
     @apply bg-gray-900;
     background-color: #282a2d;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
   }
 
   code {
@@ -255,6 +256,11 @@
   .form-input-area {
     @apply text-sm text-white sm:w-full;
     text-align: left;
+  }
+
+  .form-input-area-matches {
+    @apply w-full text-sm text-white;
+    text-align: center;
   }
 
   .form-input-field {
@@ -624,6 +630,7 @@ p {
 
 h2 {
   font-size: 1.875rem;
+  color: white;
 }
 
 .plex-color {
@@ -720,4 +727,88 @@ h2 {
   left: 0;
   top: 0;
   margin: 0.5rem;
+}
+
+/* .swipe {
+  position: absolute;
+  @apply w-full h-full text-center;
+}
+
+.cardContainer {
+  @apply w-full m-auto mt-5 text-center h-screen overflow-hidden;
+}
+
+.card {
+  @apply mx-auto object-contain h-full;
+  position: relative;
+  width: 80%;
+  border-radius: 20px;
+}
+
+.swipe:last-of-type {
+
+}
+
+.card h3 {
+  position: absolute;
+  bottom: 0;
+  margin: 10px;
+  color: #fff;
+}
+
+.infoText {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  color: #fff;
+  animation-name: popup;
+  animation-duration: 800ms;
+} */
+
+.swipe {
+  @apply h-full w-full text-center;
+  position: absolute;
+}
+
+.cardContainer {
+  @apply m-auto mt-5 overflow-hidden text-center;
+  width: 90vw;
+  max-width: 20rem;
+  height: 28rem;
+}
+
+.card {
+  @apply m-auto mt-5 h-full object-contain;
+  position: relative;
+  background-color: #fff;
+  width: 80%;
+  max-width: 260px;
+  height: 90%;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+}
+
+.cardContent {
+  width: 100%;
+  height: 100%;
+}
+
+.swipe:last-of-type {
+}
+
+.card h3 {
+  position: absolute;
+  bottom: 0;
+  margin: 10px;
+  color: #fff;
+}
+
+.infoText {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  color: #fff;
+  animation-name: popup;
+  animation-duration: 800ms;
 }

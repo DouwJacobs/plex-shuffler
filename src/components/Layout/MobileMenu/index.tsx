@@ -5,6 +5,7 @@ import { Transition } from '@headlessui/react';
 import {
   CogIcon,
   EllipsisHorizontalIcon,
+  FilmIcon,
   HomeIcon,
   QueueListIcon,
   TvIcon,
@@ -13,6 +14,7 @@ import {
 import {
   CogIcon as FilledCogIcon,
   UsersIcon as FilledUsersIcon,
+  FilmIcon as FilmIconFilled,
   HomeIcon as HomeIconFilled,
   TvIcon as TvIconFilled,
   XMarkIcon,
@@ -59,6 +61,16 @@ const MobileMenu = () => {
         <HomeIconFilled className="plex-color-primary mr-3 h-6 w-6" />
       ),
       activeRegExp: /^\/(home\/?)?$/,
+      dataTestId: 'sidebar-menu-users',
+    },
+    {
+      href: '/match',
+      content: intl.formatMessage(menuMessages.match),
+      svgIcon: <FilmIcon className="plex-color-primary mr-3 h-6 w-6" />,
+      svgIconSelected: (
+        <FilmIconFilled className="plex-color-primary mr-3 h-6 w-6" />
+      ),
+      activeRegExp: /^\/match/,
       dataTestId: 'sidebar-menu-users',
     },
     {

@@ -87,7 +87,6 @@ const SettingsApplicationName = ({ onComplete }: SettingsApplicationProps) => {
                 <div className="form-input-area">
                   <Field
                     type="text"
-                    inputMode="numeric"
                     id="applicationTitleInput"
                     name="applicationTitle"
                     className="block h-9"

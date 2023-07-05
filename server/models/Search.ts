@@ -39,6 +39,7 @@ export interface PlaylistResult {
   addedAt: number;
   updatedAt: number;
   mediaType: 'playlist';
+  url: string;
 }
 
 export interface ShowResult {
@@ -47,4 +48,5 @@ export interface ShowResult {
   mediaType: 'tv';
   thumb: string;
   summary: string;
+  url?: string;
 }

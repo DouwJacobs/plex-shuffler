@@ -49,6 +49,7 @@ const ListView = ({
                       ? () => handleOnChange?.(title.ratingKey)
                       : undefined
                   }
+                  url={title.url}
                   selected={selected?.includes(title.ratingKey)}
                   ratingKey={title.ratingKey}
                 />
@@ -57,6 +58,7 @@ const ListView = ({
             case 'playlist':
               titleCard = (
                 <TitleCard
+                  url={title.url}
                   title={title.title}
                   thumb={title.thumb ? title.thumb : noCover.src}
                 />

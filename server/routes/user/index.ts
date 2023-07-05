@@ -10,6 +10,7 @@ import { plexShowScanner } from '@server/lib/scanners/plexScanner';
 import { getSettings } from '@server/lib/settings';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
+import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 import gravatarUrl from 'gravatar-url';
 import { In } from 'typeorm';
@@ -125,6 +126,7 @@ router.get<{ id: string }>('/:id', async (req, res, next) => {
 });
 
 router.get<{ id: string }>('/:id/playlists', async (req, res, next) => {
+  const plexUrl = getPlexUrl();
   try {
     const userRepository = getRepository(User);
 
@@ -132,6 +134,7 @@ router.get<{ id: string }>('/:id/playlists', async (req, res, next) => {
       select: { id: true, plexToken: true },
       where: { id: Number(req.params.id) },
     });
+
     const query = req.query.query as string;
 
     const itemsPerPage = 20;
@@ -143,7 +146,9 @@ router.get<{ id: string }>('/:id/playlists', async (req, res, next) => {
       offset,
       size: itemsPerPage,
       filter: query,
+      userToken: user.plexToken,
     });
+    const machineID = await plexClient.getIdentity();
 
     return res.status(200).json({
       page,
@@ -151,6 +156,7 @@ router.get<{ id: string }>('/:id/playlists', async (req, res, next) => {
       totalResults: result.totalSize,
       results: result.items.map((item) => ({
         ratingKey: item.ratingKey,
+        url: `${plexUrl}/web/index.html#!/server/${machineID.machineIdentifier}/playlist?key=/playlists/${item.ratingKey}`,
         title: item.title,
         mediaType: 'playlist',
         thumb: item.thumb,
@@ -388,7 +394,8 @@ router.post('/shuffled-playlist', async (req, res, next) => {
 
     const response = await plexClient.createPlaylist(
       req.body.playlistTitle,
-      shuffledEpisodes
+      shuffledEpisodes,
+      user.plexToken
     );
 
     return res.status(200).json(response);
