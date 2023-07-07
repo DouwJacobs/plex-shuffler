@@ -13,7 +13,7 @@ RUN \
   esac
 
 COPY package.json yarn.lock ./
-RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile --network-timeout 1000000
+RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY . ./
 
