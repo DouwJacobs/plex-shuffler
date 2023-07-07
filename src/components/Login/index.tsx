@@ -64,7 +64,11 @@ const Login = () => {
   // valid user, we redirect the user to the home page as the login was successful.
   useEffect(() => {
     if (user) {
-      router.push('/');
+      if (router.query.callbackURL) {
+        router.push(router.query.callbackURL as string);
+      } else {
+        router.push('/');
+      }
     }
   }, [user, router]);
 

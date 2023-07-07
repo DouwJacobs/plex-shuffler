@@ -378,7 +378,9 @@ class PlexAPI {
       const machineId = plexIdentity.machineIdentifier;
 
       const response = await this.plexClient.postQuery<PlexLibraryResponse>({
-        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys}&X-Plex-Token=${userToken}`,
+        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys.join(
+          ','
+        )}&X-Plex-Token=${userToken}`,
       });
 
       return response.MediaContainer.Metadata;

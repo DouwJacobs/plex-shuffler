@@ -4,6 +4,7 @@ import {
   addChoice,
   addUser,
   checkUserChoice,
+  getUser,
   getUsersInRoom,
   removeUser,
 } from './utils';
@@ -40,7 +41,11 @@ const socketIO = (server: http.Server) => {
     );
 
     socket.on('disconnect', () => {
+      const user = getUser(socket.id);
       removeUser(socket.id);
+      if (user) {
+        io.to(user.room).emit('session_users', getUsersInRoom(user.room));
+      }
     });
   });
 };

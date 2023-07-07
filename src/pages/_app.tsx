@@ -166,8 +166,9 @@ CoreApp.getInitialProps = async (initialProps) => {
         // _AND_ we are not already on the login or setup route, redirect to /login with a 307
         // before anything actually renders
         if (!router.pathname.match(/(login|setup)/)) {
+          const callbackURL = router.asPath;
           ctx.res.writeHead(307, {
-            Location: '/login',
+            Location: `/login?callbackURL=${callbackURL}`,
           });
           ctx.res.end();
         }

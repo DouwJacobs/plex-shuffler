@@ -36,7 +36,7 @@ tvRoutes.get('/shows', async (req, res, next) => {
       where: { id: 1 },
     });
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 20;
     const page = Number(req.query.page) ?? 1;
     const offset = (page - 1) * itemsPerPage;
 

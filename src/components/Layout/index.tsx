@@ -100,7 +100,7 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
         </div>
 
-        <main className="z-5 relative top-16 focus:outline-none" tabIndex={0}>
+        <main className="relative top-16 z-0 focus:outline-none" tabIndex={0}>
           <div className="mb-6">
             <div className="max-w-8xl mx-auto content-center px-2 lg:pl-8 lg:pr-4">
               {children}
