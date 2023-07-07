@@ -90,7 +90,7 @@ const CoreApp: Omit<NextAppComponentType, 'origGetInitialProps'> = ({
               <link rel="icon" href={favicon.src} sizes="any" />
               <meta
                 name="viewport"
-                content="initial-scale=1, viewport-fit=cover, width=device-width"
+                content="initial-scale=1, width=device-width"
               ></meta>
             </Head>
 

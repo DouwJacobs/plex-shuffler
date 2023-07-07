@@ -50,3 +50,12 @@ export interface ShowResult {
   summary: string;
   url?: string;
 }
+
+export interface MovieResult {
+  ratingKey: string;
+  title: string;
+  mediaType: 'movie';
+  thumb: string;
+  summary: string;
+  url?: string;
+}

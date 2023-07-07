@@ -33,7 +33,7 @@ const MatchFilter = ({
           okText={'Close'}
           onOk={() => setModalOpen(false)}
         >
-          <div className="flex flex-grow">
+          <div className="flex">
             <span className="plex-bg-transparent inline-flex h-11 cursor-default items-center rounded-l-md border border-r-0 border-gray-500 px-3 text-sm">
               <FunnelIcon className="h-6 w-6" />
             </span>

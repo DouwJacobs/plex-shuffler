@@ -49,7 +49,7 @@ const Match = () => {
       const currentUser = data.filter((dataItem: SocketUser) => {
         return user?.displayName === dataItem.name;
       });
-      setFirst(currentUser[0].first);
+      setFirst(currentUser[0]?.first);
     });
 
     return () => {
@@ -110,7 +110,7 @@ const Match = () => {
   };
 
   return (
-    <div className="z-10">
+    <>
       <PageTitle title={intl.formatMessage(messages.match)} />
       <div className="mb-5 mt-1">
         <Header>{intl.formatMessage(messages.match)}</Header>
@@ -159,7 +159,7 @@ const Match = () => {
           setCurrentPage((page) => page + 1);
         }}
       />
-    </div>
+    </>
   );
 };
 
