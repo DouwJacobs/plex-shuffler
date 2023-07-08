@@ -1,34 +1,15 @@
 import PlexAPI from '@server/api/plexapi';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
-import { getSettings } from '@server/lib/settings';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
-const tvRoutes = Router();
+const matchflixRoutes = Router();
 
-const getLibraries = () => {
-  const settings = getSettings();
-
-  const tvLibraries = settings.plex.libraries.filter(
-    (lib) => lib.type === 'show'
-  );
-
-  return tvLibraries;
-};
-
-tvRoutes.get('/libraries', (req, res) => {
-  const tvLibraries = getLibraries();
-  res.status(200).json(tvLibraries);
-});
-
-tvRoutes.get('/shows', async (req, res, next) => {
+matchflixRoutes.get('/matches', async (req, res, next) => {
   const plexUrl = getPlexUrl();
   try {
-    const tvLibraries = getLibraries();
-    const libID = tvLibraries[0].id;
-
-    const query = req.query.query as string;
+    const ratingKeys = decodeURIComponent(req.query.ratingKeys as string);
 
     const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({
@@ -36,28 +17,22 @@ tvRoutes.get('/shows', async (req, res, next) => {
       where: { id: 1 },
     });
 
-    const itemsPerPage = 20;
     const page = Number(req.query.page) ?? 1;
-    const offset = (page - 1) * itemsPerPage;
 
     const plexapi = new PlexAPI({ plexToken: admin.plexToken });
 
-    const result = await plexapi.getLibraryContents(libID, {
-      offset,
-      size: itemsPerPage,
-      filter: query,
-    });
+    const result = await plexapi.getMultipleMetadata(ratingKeys);
     const machineID = await plexapi.getIdentity();
 
     return res.status(200).json({
       page,
-      totalPages: Math.ceil(result.totalSize / itemsPerPage),
-      totalResults: result.totalSize,
-      results: result.items.map((item) => ({
+      totalPages: 1,
+      totalResults: result.size,
+      results: result.Metadata.map((item) => ({
         ratingKey: item.ratingKey,
         url: `${plexUrl}/web/index.html#!/server/${machineID.machineIdentifier}/details?key=/library/metadata/${item.ratingKey}`,
         title: item.title,
-        mediaType: 'tv',
+        mediaType: item.type === 'show' ? 'tv' : item.type,
         thumb: item.thumb,
         summary: item.summary,
       })),
@@ -67,4 +42,4 @@ tvRoutes.get('/shows', async (req, res, next) => {
   }
 });
 
-export default tvRoutes;
+export default matchflixRoutes;

@@ -7,21 +7,53 @@
 <p align="center">
 <img alt="GitHub" src="https://img.shields.io/badge/License-MIT-yellow.svg">
 
-**Plex Shuffler** is a free and open source software application for creating shuffled playlists on Plex. It integrates with **[Plex](https://www.plex.tv/)** and allows the user to shuffle different TV shows but keep a single TV show episodes in order. The idea is to create a TV channel-like experience by shuffling your favorite TV shows.
+**Plex Shuffler** is a free and open source software application for creating shuffled playlists on Plex. It integrates with **[Plex](https://www.plex.tv/)** and allows the user to shuffle different TV shows but keep a single TV show's episodes in order. The idea is to create a TV channel-like experience by shuffling your favorite TV shows.
 
 <br>
 
 ## Current Features
 
+- Create shuffled playlists from shows on your Plex server.
 - Full Plex integration. Authenticate and manage user access with Plex!
 - Can view available Plex playlists.
 - Browse available TV shows.
 
 <br>
 
+## Getting Started
+
+Check out our documentation for instructions on how to install and run Plex Shuffler:
+
+https://plex-shuffler.gitbook.io/plex-shuffler/getting-started/installation
+
+<br>
+
+## What does Plex Shuffler do?
+
+Plex Shuffler creates shuffled playlists based on TV shows that the user selects. The shuffled playlist gives the user a TV channel-like experience. This is useful if you don't know what to watch but still want to follow the episodes sequentially.
+
+**So how does this work?**
+
+If the user selects three different TV shows the playlist will look something like this
+
+```
+    TV Show 1 - Episode 1
+    TV Show 2 - Episode 1
+    TV Show 1 - Episode 2
+    TV Show 3 - Episode 1
+    TV Show 2 - Episode 2
+    TV Show 3 - Episode 2
+    TV Show 1 - Episode 3
+```
+
+You will have a shuffled playlist of your (favorite) shows but the episode ordering for each show will follow sequentially!
+
+No more nights of deciding what to watch or getting bored of the same old show!
+
+<br>
+
 ## Planned Features
 
-- Create shuffled playlists.
 - Easily manage all playlists from one place.
 - Create a "marketplace" where users can share their shuffled playlists with other users on the server.
 

@@ -2,11 +2,15 @@ import noCover from '@app/assets/images/playlist-no-cover.png';
 import TitleCard from '@app/components/Common/TitleCard';
 import useVerticalScroll from '@app/hooks/useVerticalScroll';
 import globalMessages from '@app/i18n/globalMessages';
-import type { PlaylistResult, ShowResult } from '@server/models/Search';
+import type {
+  MovieResult,
+  PlaylistResult,
+  ShowResult,
+} from '@server/models/Search';
 import { useIntl } from 'react-intl';
 
 type ListViewProps = {
-  items?: (ShowResult | PlaylistResult)[];
+  items?: (ShowResult | PlaylistResult | MovieResult)[];
   isEmpty?: boolean;
   isLoading?: boolean;
   isReachingEnd?: boolean;
@@ -49,6 +53,23 @@ const ListView = ({
                       ? () => handleOnChange?.(title.ratingKey)
                       : undefined
                   }
+                  url={title.url}
+                  selected={selected?.includes(title.ratingKey)}
+                  ratingKey={title.ratingKey}
+                />
+              );
+              break;
+            case 'movie':
+              titleCard = (
+                <TitleCard
+                  title={title.title}
+                  thumb={title.thumb ? title.thumb : noCover.src}
+                  handleOnchange={
+                    handleOnChange
+                      ? () => handleOnChange?.(title.ratingKey)
+                      : undefined
+                  }
+                  url={title.url}
                   selected={selected?.includes(title.ratingKey)}
                   ratingKey={title.ratingKey}
                 />
@@ -57,6 +78,7 @@ const ListView = ({
             case 'playlist':
               titleCard = (
                 <TitleCard
+                  url={title.url}
                   title={title.title}
                   thumb={title.thumb ? title.thumb : noCover.src}
                 />

@@ -110,7 +110,6 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                   <div className="form-input-area">
                     <Field
                       type="text"
-                      inputMode="numeric"
                       id="playlistTitle"
                       name="playlistTitle"
                       className="block h-9"

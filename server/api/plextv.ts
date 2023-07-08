@@ -19,6 +19,7 @@ interface PlexUser {
   thumb: string;
   hasPassword: boolean;
   authToken: string;
+  accessToken?: string;
   subscription: {
     active: boolean;
     status: string;
@@ -131,6 +132,43 @@ interface MetadataResponse {
         id: `imdb://tt${number}` | `tmdb://${number}` | `tvdb://${number}`;
       }[];
     }[];
+  };
+}
+
+interface SharedServer {
+  $: {
+    id: string;
+    username: string;
+    email: string;
+    userID: string;
+    accessToken: string;
+    name: string;
+    acceptedAt: string;
+    invitedAt: string;
+    allowSync: string;
+    allowCameraUpload: string;
+    allowChannels: string;
+    allowTuners: string;
+    allowSubtitleAdmin: string;
+    owned: string;
+    allLibraries: string;
+    filterAll: string;
+    filterMovies: string;
+    filterMusic: string;
+    filterPhotos: string;
+    filterTelevision: string;
+  };
+}
+
+interface SharedServerResponse {
+  MediaContainer: {
+    $: {
+      friendlyName: string;
+      identifier: string;
+      machineIdentifier: string;
+      size: string;
+    };
+    SharedServer: SharedServer[];
   };
 }
 
@@ -286,6 +324,33 @@ class PlexTvAPI extends ExternalAPI {
       response.data
     )) as UsersResponse;
     return parsedXml;
+  }
+
+  public async getUserAccessToken(userID: number): Promise<string | undefined> {
+    const settings = getSettings();
+
+    try {
+      if (!settings.plex.machineId) {
+        throw new Error('Plex is not configured!');
+      }
+
+      const response = await this.axios.get(
+        `/api/servers/${settings.plex.machineId}/shared_servers`
+      );
+
+      const parsedXml = (await xml2js.parseStringPromise(
+        response.data
+      )) as SharedServerResponse;
+
+      const user = parsedXml.MediaContainer.SharedServer.find((u) => {
+        return parseInt(u.$.userID) === userID;
+      });
+
+      return user?.$.accessToken;
+    } catch (e) {
+      logger.error(`Error checking user access: ${e.message}`);
+      return;
+    }
   }
 
   public async getWatchlist({

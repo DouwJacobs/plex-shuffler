@@ -13,7 +13,7 @@ RUN \
   esac
 
 COPY package.json yarn.lock ./
-RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile --network-timeout 1000000
+RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY . ./
 
@@ -27,7 +27,6 @@ RUN yarn install --production --ignore-scripts --prefer-offline
 
 RUN rm -rf src server .next/cache
 
-RUN ls -l
 RUN touch config/DOCKER
 
 RUN echo "{\"commitTag\": \"${COMMIT_TAG}\"}" > committag.json

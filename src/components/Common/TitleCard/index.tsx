@@ -13,6 +13,7 @@ type PlaylistCardProps = {
   handleOnchange?: () => void;
   selected?: boolean;
   ratingKey?: string;
+  url?: string;
 };
 
 const TitleCard = (props: PlaylistCardProps) => {
@@ -39,13 +40,25 @@ const TitleCard = (props: PlaylistCardProps) => {
             />
           ) : null}
           <label htmlFor={props.ratingKey}>
-            <CachedImage
-              alt={props.title}
-              src={props.thumb}
-              onLoad={() => {
-                setIsLoading(false);
-              }}
-            />
+            {props.handleOnchange ? (
+              <CachedImage
+                alt={props.title}
+                src={props.thumb}
+                onLoad={() => {
+                  setIsLoading(false);
+                }}
+              />
+            ) : (
+              <a href={props.url} target="_blank" rel="noreferrer">
+                <CachedImage
+                  alt={props.title}
+                  src={props.thumb}
+                  onLoad={() => {
+                    setIsLoading(false);
+                  }}
+                />
+              </a>
+            )}
           </label>
         </div>
       </div>

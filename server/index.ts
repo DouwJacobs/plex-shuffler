@@ -18,10 +18,12 @@ import express from 'express';
 import * as OpenApiValidator from 'express-openapi-validator';
 import type { Store } from 'express-session';
 import session from 'express-session';
+import http from 'http';
 import next from 'next';
 import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+import socketIO from './socketio';
 
 const API_SPEC_PATH = path.join(__dirname, '../plex-shuffler-api.yml');
 
@@ -68,6 +70,9 @@ app
     }
 
     const server = express();
+    const httpServer: http.Server = http.createServer(server);
+    socketIO(httpServer);
+
     if (settings.main.trustProxy) {
       server.enable('trust proxy');
     }
@@ -173,13 +178,13 @@ app
     const port = Number(process.env.PORT) || 3210;
     const host = process.env.HOST;
     if (host) {
-      server.listen(port, host, () => {
+      httpServer.listen(port, host, () => {
         logger.info(`Server ready on ${host} port ${port}`, {
           label: 'Server',
         });
       });
     } else {
-      server.listen(port, () => {
+      httpServer.listen(port, () => {
         logger.info(`Server ready on port ${port}`, {
           label: 'Server',
         });

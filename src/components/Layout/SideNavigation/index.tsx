@@ -4,6 +4,7 @@ import { Permission, useUser } from '@app/hooks/useUser';
 import { Transition } from '@headlessui/react';
 import {
   CogIcon,
+  FilmIcon,
   HomeIcon,
   QueueListIcon,
   TvIcon,
@@ -21,6 +22,7 @@ export const menuMessages = defineMessages({
   users: 'Users',
   settings: 'Settings',
   shows: 'TV Shows',
+  match: 'Matchflix',
 });
 
 interface SidebarProps {
@@ -49,6 +51,12 @@ const SidebarLinks: SidebarLinkProps[] = [
     messagesKey: 'home',
     svgIcon: <HomeIcon className="plex-color-primary mr-3 h-6 w-6" />,
     activeRegExp: /^\/(home\/?)?$/,
+  },
+  {
+    href: '/match',
+    messagesKey: 'match',
+    svgIcon: <FilmIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    activeRegExp: /^\/match/,
   },
   {
     href: '/user/playlists',

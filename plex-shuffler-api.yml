@@ -20,6 +20,10 @@ tags:
     description: Endpoints related to user management.
   - name: tv
     description: Endpoints related to user TV Show libraries.
+  - name: movie
+    description: Endpoints related to user movie libraries.
+  - name: matchflix
+    description: Endpoints related to Matchflix sessions
 servers:
   - url: '{server}/api/v1'
     variables:
@@ -1248,6 +1252,63 @@ paths:
           schema:
             type: string
             example: Big Bang Theory
+        - in: query
+          name: ratingKeys
+          required: false
+          schema:
+            type: string
+            example: 35625
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MainSettings'
+  /movies/newest:
+    get:
+      summary: Get movies ordered by release data
+      description: Get movies ordered by release data
+      tags:
+        - movie
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: number
+            example: 1
+            default: 1
+        - in: query
+          name: query
+          required: false
+          schema:
+            type: string
+            example: Big Bang Theory
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MainSettings'
+  /matchflix/matches:
+    get:
+      summary: Gets matches for Matchflix session
+      description: Gets Plex metadata items for specific ratingKeys on which users matched
+      tags:
+        - matchflix
+      parameters:
+        - in: query
+          name: ratingKeys
+          schema:
+            type: string
+            example: 56263,56235
+        - in: query
+          name: page
+          schema:
+            type: number
+            example: 1
+            default: 1
       responses:
         '200':
           description: OK

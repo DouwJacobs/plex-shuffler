@@ -60,3 +60,6 @@ config/db/db.sqlite3-journal
 
 # Config Cache Directory
 config/cache
+
+# act
+act.exe

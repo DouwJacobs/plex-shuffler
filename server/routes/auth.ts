@@ -117,7 +117,11 @@ authRoutes.post('/plex', async (req, res, next) => {
             );
           }
 
-          user.plexToken = body.authToken;
+          const userServerToken = await mainPlexTv.getUserAccessToken(
+            account.id
+          );
+
+          user.plexToken = userServerToken;
           user.plexId = account.id;
           user.avatar = account.thumb;
           user.email = account.email;
@@ -150,11 +154,14 @@ authRoutes.post('/plex', async (req, res, next) => {
               plexUsername: account.username,
             }
           );
+          const userServerToken = await mainPlexTv.getUserAccessToken(
+            account.id
+          );
           user = new User({
             email: account.email,
             plexUsername: account.username,
             plexId: account.id,
-            plexToken: account.authToken,
+            plexToken: userServerToken,
             permissions: settings.main.defaultPermissions,
             avatar: account.thumb,
           });

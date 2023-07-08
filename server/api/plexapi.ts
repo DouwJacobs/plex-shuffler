@@ -62,6 +62,8 @@ export interface PlexMetadata {
   addedAt: number;
   updatedAt: number;
   Media: Media[];
+  thumb?: string;
+  summary?: string;
 }
 interface PlexPlaylistItem {
   ratingKey: string;
@@ -110,6 +112,7 @@ interface Media {
 interface PlexMetadataResponse {
   MediaContainer: {
     Metadata: PlexMetadata[];
+    size?: number;
   };
 }
 
@@ -218,13 +221,19 @@ class PlexAPI {
       offset = 0,
       size = 50,
       filter,
-    }: { offset?: number; size?: number; filter?: string } = {}
+      latest,
+    }: {
+      offset?: number;
+      size?: number;
+      filter?: string;
+      latest?: boolean;
+    } = {}
   ): Promise<{ totalSize: number; items: PlexLibraryItem[] }> {
     try {
       const response = await this.plexClient.query<PlexLibraryResponse>({
-        uri: `/library/sections/${id}/all?includeGuids=1${
-          filter && '&title=' + filter
-        }`,
+        uri: `/library/sections/${id}/${
+          latest ? 'newest' : 'all'
+        }?includeGuids=1${filter && '&title=' + filter}`,
         extraHeaders: {
           'X-Plex-Container-Start': `${offset}`,
           'X-Plex-Container-Size': `${size}`,
@@ -254,6 +263,19 @@ class PlexAPI {
     );
 
     return response.MediaContainer.Metadata[0];
+  }
+
+  public async getMultipleMetadata(
+    key: string,
+    options: { includeChildren?: boolean } = {}
+  ): Promise<{ Metadata: PlexMetadata[]; size?: number }> {
+    const response = await this.plexClient.query<PlexMetadataResponse>(
+      `/library/metadata/${key}${
+        options.includeChildren ? '?includeChildren=1' : ''
+      }`
+    );
+
+    return response.MediaContainer;
   }
 
   public async getChildrenMetadata(key: string): Promise<PlexMetadata[]> {
@@ -288,7 +310,13 @@ class PlexAPI {
     offset = 0,
     size = 5,
     filter,
-  }: { offset?: number; size?: number; filter?: string } = {}): Promise<{
+    userToken,
+  }: {
+    offset?: number;
+    size?: number;
+    filter?: string;
+    userToken?: string;
+  } = {}): Promise<{
     offset: number;
     size: number;
     totalSize: number;
@@ -296,7 +324,9 @@ class PlexAPI {
   }> {
     try {
       const response = await this.plexClient.query<PlexPlaylistResponse>({
-        uri: `/playlists${filter ? '?title=' + filter : ''}`,
+        uri: `/playlists/all?X-Plex-Token=${userToken}${
+          filter ? '&title=' + filter : ''
+        }`,
         extraHeaders: {
           'X-Plex-Container-Start': `${offset}`,
           'X-Plex-Container-Size': `${size}`,
@@ -340,14 +370,17 @@ class PlexAPI {
 
   public async createPlaylist(
     title: string,
-    ratingKeys: string[]
+    ratingKeys: string[],
+    userToken: string | undefined
   ): Promise<PlexLibraryItem[] | undefined> {
     try {
       const plexIdentity = await this.getIdentity();
       const machineId = plexIdentity.machineIdentifier;
 
       const response = await this.plexClient.postQuery<PlexLibraryResponse>({
-        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys}`,
+        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys.join(
+          ','
+        )}&X-Plex-Token=${userToken}`,
       });
 
       return response.MediaContainer.Metadata;
