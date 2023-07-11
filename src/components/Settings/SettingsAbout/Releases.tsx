@@ -7,7 +7,7 @@ import { Transition } from '@headlessui/react';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
 import { Fragment, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedRelativeTime, defineMessages, useIntl } from 'react-intl';
 import useSWR from 'swr';
 
 // dyanmic is having trouble extracting the props for react-markdown here so we are just ignoring it since its really
@@ -60,7 +60,7 @@ const Release = ({ currentVersion, release, isLatest }: ReleaseProps) => {
   const intl = useIntl();
 
   return (
-    <div className="flex w-full flex-col space-y-3 rounded-md bg-gray-800 px-4 py-2 shadow-md ring-1 ring-gray-700 sm:flex-row sm:space-x-3 sm:space-y-0">
+    <div className="flex w-full flex-col space-y-3 rounded-md bg-zinc-800 px-4 py-2 shadow-md ring-1 ring-zinc-700 sm:flex-row sm:space-x-3 sm:space-y-0">
       <Transition
         as={Fragment}
         enter="transition-opacity duration-300"
@@ -73,7 +73,9 @@ const Release = ({ currentVersion, release, isLatest }: ReleaseProps) => {
       >
         <Modal
           onCancel={() => setModalOpen(false)}
-          title={messages.versionChangelog + release.name}
+          title={intl.formatMessage(messages.versionChangelog, {
+            version: release.name,
+          })}
           cancelText={intl.formatMessage(globalMessages.close)}
           okText={intl.formatMessage(messages.viewongithub)}
           onOk={() => {
@@ -88,9 +90,13 @@ const Release = ({ currentVersion, release, isLatest }: ReleaseProps) => {
       <div className="flex w-full flex-grow items-center justify-center space-x-2 truncate sm:justify-start">
         <span className="truncate text-lg font-bold">
           <span className="mr-2 whitespace-nowrap text-xs font-normal">
-            {Math.floor(
-              (new Date(release.created_at).getTime() - Date.now()) / 1000
-            )}
+            <FormattedRelativeTime
+              value={Math.floor(
+                (new Date(release.created_at).getTime() - Date.now()) / 1000
+              )}
+              updateIntervalInSeconds={1}
+              numeric="auto"
+            />
           </span>
           {release.name}
         </span>
