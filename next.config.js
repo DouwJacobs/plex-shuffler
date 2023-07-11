@@ -1,10 +1,21 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+module.exports = {
+  env: {
+    commitTag: process.env.COMMIT_TAG || 'local',
+  },
+  images: {
+    domains: ['image.tmdb.org'],
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.(js|ts)x?$/,
+      use: ['@svgr/webpack'],
+    });
 
-module.exports = withBundleAnalyzer({
-  webpack: (config) => {
-    config.resolve.extensions.push('.ts', '.tsx');
     return config;
   },
-});
+  experimental: {
+    scrollRestoration: true,
+    largePageDataBytes: 256000,
+  },
+};
