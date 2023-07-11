@@ -26,7 +26,7 @@ router.get<unknown, StatusResponse>('/status', async (req, res) => {
   let updateAvailable = false;
   let commitsBehind = 0;
 
-  if (currentVersion.startsWith('develop-') && commitTag !== 'local') {
+  if (currentVersion.startsWith('development-') && commitTag !== 'local') {
     const commits = await githubApi.getPlexShufflerCommits();
 
     if (commits.length) {

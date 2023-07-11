@@ -10,7 +10,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import useSWR from 'swr';
 
 const messages = defineMessages({
-  streamdevelop: 'Plex Shuffler Develop',
+  streamdevelop: 'Plex Shuffler Development',
   streamstable: 'Plex Shuffler Stable',
   outofdate: 'Out of Date',
   commitsbehind:
@@ -34,7 +34,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
   const versionStream =
     data.commitTag === 'local'
       ? 'Keep it up! 👍'
-      : data.version.startsWith('develop-')
+      : data.version.startsWith('development-')
       ? intl.formatMessage(messages.streamdevelop)
       : intl.formatMessage(messages.streamstable);
 
@@ -57,7 +57,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
     >
       {data.commitTag === 'local' ? (
         <CodeBracketIcon className="h-6 w-6" />
-      ) : data.version.startsWith('develop-') ? (
+      ) : data.version.startsWith('development-') ? (
         <BeakerIcon className="h-6 w-6" />
       ) : (
         <ServerIcon className="h-6 w-6" />
@@ -75,7 +75,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
             intl.formatMessage(messages.outofdate)
           ) : (
             <code className="bg-transparent p-0">
-              {data.version.replace('develop-', '')}
+              {data.version.replace('development-', '')}
             </code>
           )}
         </span>
