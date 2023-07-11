@@ -103,7 +103,7 @@ class GithubAPI extends ExternalAPI {
 
   public async getPlexShufflerCommits({
     take = 20,
-    branch = 'develop',
+    branch = 'development',
   }: {
     take?: number;
     branch?: string;

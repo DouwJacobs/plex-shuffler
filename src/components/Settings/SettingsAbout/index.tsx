@@ -31,7 +31,7 @@ const messages = defineMessages({
   betawarning:
     'This is BETA software. Features may be broken and/or unstable. Please report any issues on GitHub!',
   runningDevelop:
-    'You are running the <code>develop</code> branch of Plex Shuffler, which is only recommended for those contributing to development or assisting with bleeding-edge testing.',
+    'You are running the <code>development</code> branch of Plex Shuffler, which is only recommended for those contributing to development or assisting with bleeding-edge testing.',
 });
 
 const SettingsAbout = () => {
@@ -82,7 +82,7 @@ const SettingsAbout = () => {
       </div>
       <div className="section">
         <List title={intl.formatMessage(messages.plexshufflerinformation)}>
-          {data.version.startsWith('develop-') && (
+          {data.version.startsWith('development-') && (
             <Alert
               title={intl.formatMessage(messages.runningDevelop, {
                 code: (msg: React.ReactNode) => (
@@ -96,14 +96,14 @@ const SettingsAbout = () => {
             className="flex flex-row items-center truncate"
           >
             <code className="truncate">
-              {data.version.replace('develop-', '')}
+              {data.version.replace('development-', '')}
             </code>
             {status?.commitTag !== 'local' &&
               (status?.updateAvailable ? (
                 <a
                   href={
-                    data.version.startsWith('develop-')
-                      ? `https://github.com/DouwJacobs/plex-shuffler/compare/${status.commitTag}...develop`
+                    data.version.startsWith('development-')
+                      ? `https://github.com/DouwJacobs/plex-shuffler/compare/${status.commitTag}...development`
                       : 'https://github.com/DouwJacobs/plex-shuffler/releases'
                   }
                   target="_blank"
@@ -119,8 +119,8 @@ const SettingsAbout = () => {
               ) : (
                 <a
                   href={
-                    data.version.startsWith('develop-')
-                      ? 'https://github.com/DouwJacobs/plex-shuffler/commits/develop'
+                    data.version.startsWith('development-')
+                      ? 'https://github.com/DouwJacobs/plex-shuffler/commits/development'
                       : 'https://github.com/DouwJacobs/plex-shuffler/releases'
                   }
                   target="_blank"
