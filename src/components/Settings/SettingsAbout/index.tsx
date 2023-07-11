@@ -149,12 +149,12 @@ const SettingsAbout = () => {
         <List title={intl.formatMessage(messages.gettingsupport)}>
           <List.Item title={intl.formatMessage(messages.documentation)}>
             <a
-              href="https://docs.plex-shuffler.dev"
+              href="https://plex-shuffler.gitbook.io/plex-shuffler/"
               target="_blank"
               rel="noreferrer"
               className="plex-color-primary transition duration-300 hover:underline"
             >
-              https://docs.plex-shuffler.dev
+              https://plex-shuffler.gitbook.io/plex-shuffler/
             </a>
           </List.Item>
           <List.Item title={intl.formatMessage(messages.githubdiscussions)}>
