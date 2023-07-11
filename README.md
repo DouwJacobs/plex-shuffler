@@ -28,6 +28,12 @@ https://plex-shuffler.gitbook.io/plex-shuffler/getting-started/installation
 
 <br>
 
+## Preview
+
+<img src="./public/preview.png">
+
+<br>
+
 ## What does Plex Shuffler do?
 
 Plex Shuffler creates shuffled playlists based on TV shows that the user selects. The shuffled playlist gives the user a TV channel-like experience. This is useful if you don't know what to watch but still want to follow the episodes sequentially.
@@ -49,6 +55,22 @@ If the user selects three different TV shows the playlist will look something li
 You will have a shuffled playlist of your (favorite) shows but the episode ordering for each show will follow sequentially!
 
 No more nights of deciding what to watch or getting bored of the same old show!
+
+<br>
+
+## Matchflix
+
+Matchflix is a component of Plex Shuffler. Its like Tinder for movies or TV shows.
+
+Matchflix can be used to facilitate group decision-making when it comes to choosing a movie or TV show to watch.
+
+- Group Creation: Users have the option to create or join groups within the Matchflix component. These groups can be comprised of anyone on the Plex server who want to make collective decisions on what to watch.
+
+- Swiping and Voting: Within the group, a designated organizer user can initiate the decision-making process. They can create a "group session" where members can participate by swiping left or right on movie or TV show options. Each member of the group will have the opportunity to vote on their preferences.
+
+- Matching and Filtering: Once there are more than 2 users in the session users can start swiping left or right on content. When all users swipe right on a specific movie or TV show a "matches" button will appear. Users can then decide to either continue swiping or click the "matches" button to see movies or TV shows that all users selected.
+
+- Group Recommendations: Matchflix generates a list of recommended movies or TV shows based on the initial user's filters.
 
 <br>
 
