@@ -6,3 +6,6 @@ config/
 # assets
 src/assets/
 public/
+
+#semantic
+CHANGELOG.md
