@@ -23,7 +23,7 @@
   }
 
   code {
-    @apply rounded-md bg-gray-800 px-2 py-1;
+    @apply rounded-md bg-zinc-800 px-2 py-1;
   }
 
   input[type='search']::-webkit-search-cancel-button {

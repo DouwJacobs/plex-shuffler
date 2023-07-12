@@ -1,10 +1,11 @@
 import ListView from '@app/components/Common/ListView';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import SearchInput from '@app/components/Common/SearchInput';
 import Button from '@app/components/Common/Button';
 import Card from '@app/components/Common/Card';
 import useDiscover from '@app/hooks/useListLoading';
 import Error from '@app/pages/_error';
+import { Disclosure } from '@headlessui/react';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import type { ShowResult } from '@server/models/Search';
 import axios from 'axios';
@@ -20,6 +21,9 @@ const messages = defineMessages({
   playlistFailed: 'Error occured while creating shuffled playlist.',
   playlistCreating: 'Creating shuffled playlist...',
   playlistCreate: 'Create Playlist',
+  playlistCoverUrl: 'Playlist Cover URL',
+  playlistValidUrl: 'Playlist Cover URL should be a valid url',
+  playlistDescription: 'Playlist Description',
 });
 
 interface CreatePlaylistProps {
@@ -28,10 +32,28 @@ interface CreatePlaylistProps {
 
 const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
   const intl = useIntl();
+  const [optionsOpen, setOptionsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const [playlists, setPlaylists] = useState<{ selections: string[] }>({
     selections: [],
   });
+
+  useEffect(() => {
+    const updateScrolled = () => {
+      if (window.pageYOffset > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', updateScrolled, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', updateScrolled);
+    };
+  }, []);
 
   function handleCheckboxChange(key: string) {
     const sel = playlists.selections;
@@ -65,12 +87,18 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
     playlistTitle: Yup.string()
       .nullable()
       .required(intl.formatMessage(messages.playlistNameRequired)),
+    playlistCoverUrl: Yup.string()
+      .url(intl.formatMessage(messages.playlistValidUrl))
+      .nullable(),
+    playlistDescription: Yup.string().nullable(),
   });
 
   return (
     <Formik
       initialValues={{
         playlistTitle: '',
+        playlistCoverUrl: '',
+        playlistDescription: '',
       }}
       enableReinitialize={true}
       validationSchema={CreatePlaylistSchema}
@@ -83,6 +111,8 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
           await axios.post('/api/v1/user/shuffled-playlist', {
             playlistTitle: values.playlistTitle,
             playlists: playlists.selections,
+            playlistDescription: values.playlistDescription,
+            playlistCoverUrl: values.playlistCoverUrl,
           });
 
           if (toastId) {
@@ -97,15 +127,23 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
           if (toastId) {
             toast.dismiss(toastId);
           }
-          toast.error(intl.formatMessage(messages.playlistFailed));
+          if (e.response.data.message) {
+            toast.error(e.response.data.message);
+          } else {
+            toast.error(intl.formatMessage(messages.playlistFailed));
+          }
         }
       }}
     >
       {({ errors, touched, values, handleSubmit, isSubmitting }) => {
         return (
           <form className="section" onSubmit={handleSubmit}>
-            <div className="sticky top-16 z-10">
-              <Card className="p-2">
+            <div
+              className={`sticky top-16 z-10 ${
+                isScrolled && 'plex-bg-secondary'
+              }`}
+            >
+              <Card className={`p-2`}>
                 <div className="shuffled-playlist-form-row">
                   <div className="form-input-area">
                     <Field
@@ -138,6 +176,61 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                     </span>
                   </div>
                 </div>
+                <Disclosure>
+                  <Disclosure.Button
+                    onClick={() => setOptionsOpen(!optionsOpen)}
+                    className="mt-2 inline-flex cursor-pointer items-center justify-center whitespace-nowrap font-medium leading-5 transition duration-150 ease-in-out focus:outline-none disabled:opacity-50"
+                  >
+                    {optionsOpen ? '-' : '+'} Options
+                  </Disclosure.Button>
+                  <Disclosure.Panel>
+                    <div className="form-row">
+                      <label htmlFor="hostname" className="text-label">
+                        {intl.formatMessage(messages.playlistCoverUrl)}
+                      </label>
+                      <div className="form-input-area">
+                        <div className="form-input-field h-9">
+                          <Field
+                            type="text"
+                            id="playlistCoverUrl"
+                            name="playlistCoverUrl"
+                            value={values.playlistCoverUrl}
+                            className="rounded"
+                          />
+                        </div>
+                        {errors.playlistCoverUrl &&
+                          typeof errors.playlistCoverUrl === 'string' && (
+                            <div className="error">
+                              {errors.playlistCoverUrl}
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <label htmlFor="hostname" className="text-label">
+                        {intl.formatMessage(messages.playlistDescription)}
+                      </label>
+                      <div className="form-input-area">
+                        <div className="form-input-field h-9">
+                          <Field
+                            component="textarea"
+                            id="playlistDescription"
+                            name="playlistDescription"
+                            value={values.playlistDescription}
+                            className="rounded"
+                            rows="3"
+                          />
+                        </div>
+                        {errors.playlistDescription &&
+                          typeof errors.playlistDescription === 'string' && (
+                            <div className="error">
+                              {errors.playlistDescription}
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  </Disclosure.Panel>
+                </Disclosure>
               </Card>
             </div>
 

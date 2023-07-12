@@ -2,7 +2,9 @@
 <img src="./src/assets/images/plex_shuffler_logo_long.png" alt="Plex Shuffler" style="margin: 20px 0;">
 </p>
 <p align="center">
+<img src="https://github.com/DouwJacobs/plex-shuffler/actions/workflows/release.yml/badge.svg?branch=master" alt="Plex Shuffler Release" />
 <img src="https://github.com/DouwJacobs/plex-shuffler/actions/workflows/ci.yml/badge.svg?branch=development" alt="Plex Shuffler CI" />
+<img src="https://img.shields.io/docker/pulls/douwjacobs/plex-shuffler" alt="Docker Pulls">
 </p>
 <p align="center">
 <img alt="GitHub" src="https://img.shields.io/badge/License-MIT-yellow.svg">
