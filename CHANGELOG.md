@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.0.0...v1.1.0) (2023-07-12)
+
+
+### Bug Fixes
+
+* **release data:** release data fix ([5d0c3d8](https://github.com/DouwJacobs/plex-shuffler/commit/5d0c3d8a7f998cb5f91489c1f01aaf81c72d5dba))
+
+
+### Features
+
+* **playlist options:** added playlist options ([75f16b0](https://github.com/DouwJacobs/plex-shuffler/commit/75f16b0612eb3ed5dd8faa007ced45d197f0d46f))
+
 # 1.0.0 (2023-07-11)
 
 
