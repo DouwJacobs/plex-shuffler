@@ -80,6 +80,13 @@ interface PlexPlaylistResponse {
   };
 }
 
+interface PlexCreatePlaylistResponse {
+  MediaContainer: {
+    size: number;
+    Metadata: PlexPlaylistItem[];
+  };
+}
+
 interface PlexIdentityRepsonse {
   MediaContainer: {
     size: string;
@@ -372,16 +379,17 @@ class PlexAPI {
     title: string,
     ratingKeys: string[],
     userToken: string | undefined
-  ): Promise<PlexLibraryItem[] | undefined> {
+  ): Promise<PlexPlaylistItem[] | undefined> {
     try {
       const plexIdentity = await this.getIdentity();
       const machineId = plexIdentity.machineIdentifier;
 
-      const response = await this.plexClient.postQuery<PlexLibraryResponse>({
-        uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys.join(
-          ','
-        )}&X-Plex-Token=${userToken}`,
-      });
+      const response =
+        await this.plexClient.postQuery<PlexCreatePlaylistResponse>({
+          uri: `/playlists?type=video&title=${title}&smart=0&uri=server://${machineId}/com.plexapp.plugins.library/library/metadata/${ratingKeys.join(
+            ','
+          )}&X-Plex-Token=${userToken}`,
+        });
 
       return response.MediaContainer.Metadata;
     } catch (e) {
@@ -389,6 +397,41 @@ class PlexAPI {
         label: 'Plex API',
         message: e.message,
       });
+    }
+  }
+
+  public async editPlaylist({
+    ratingKey,
+    userToken,
+    title,
+    summary,
+    thumb,
+  }: {
+    ratingKey: string | undefined;
+    userToken: string | undefined;
+    title?: string;
+    summary?: string;
+    thumb?: string;
+  }): Promise<{ status: number; message: string } | undefined> {
+    try {
+      await this.plexClient.putQuery<PlexCreatePlaylistResponse>({
+        uri: `/playlists/${ratingKey}?X-Plex-Token=${userToken}${
+          title && `&title=${title}`
+        }${summary && `&summary=${summary}`}`,
+      });
+
+      if (thumb) {
+        await this.plexClient.postQuery<PlexCreatePlaylistResponse>({
+          uri: `/library/metadata/${ratingKey}/posters?X-Plex-Token=${userToken}&url=${thumb}`,
+        });
+      }
+    } catch (e) {
+      logger.error('Failed to edit Plex Playlist', {
+        label: 'Plex API',
+        message: e.message,
+      });
+
+      return { status: 406, message: 'Unable to upload playlist cover url' };
     }
   }
 }

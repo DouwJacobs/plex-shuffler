@@ -398,6 +398,21 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       user.plexToken
     );
 
+    if (req.body.playlistDescription) {
+      if (response) {
+        const editResponse = await plexClient.editPlaylist({
+          ratingKey: response[0].ratingKey,
+          userToken: user.plexToken,
+          summary: req.body.playlistDescription,
+          thumb: req.body.playlistCoverUrl,
+        });
+
+        if (editResponse) {
+          return res.status(editResponse.status).json(editResponse);
+        }
+      }
+    }
+
     return res.status(200).json(response);
   } catch (e) {
     next({ status: 404, message: 'User not found.' });

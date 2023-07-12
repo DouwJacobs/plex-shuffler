@@ -39,5 +39,15 @@ declare module 'plex-api' {
             requestOptions?: { method?: string };
           }
     ) => Promise<T>;
+
+    putQuery: <T extends Record<string, any>>(
+      endpoint:
+        | string
+        | {
+            uri: string;
+            extraHeaders?: Record<string, string | number>;
+            requestOptions?: { method?: string };
+          }
+    ) => Promise<T>;
   }
 }
