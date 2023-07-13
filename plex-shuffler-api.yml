@@ -445,6 +445,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MainSettings'
+  /settings/public:
+    get:
+      summary: Get public settings
+      security: []
+      description: Returns settings that are not protected or sensitive. Mainly used to determine if the application has been configured for the first time.
+      tags:
+        - settings
+      responses:
+        '200':
+          description: Public settings returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSettings'
   /settings/initialize:
     post:
       summary: Initialize application
