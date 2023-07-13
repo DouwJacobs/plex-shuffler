@@ -28,4 +28,10 @@ export class UserSettings {
 
   @Column({ nullable: true })
   public originalLanguage?: string;
+
+  @Column({ default: true })
+  public appendToTitle?: boolean;
+
+  @Column({ default: true })
+  public appendToSummary?: boolean;
 }

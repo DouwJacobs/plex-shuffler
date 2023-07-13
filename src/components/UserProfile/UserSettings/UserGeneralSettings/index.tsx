@@ -11,7 +11,7 @@ import Error from '@app/pages/_error';
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
 import type { UserSettingsGeneralResponse } from '@server/interfaces/api/userSettingsInterfaces';
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { defineMessages, useIntl } from 'react-intl';
@@ -113,9 +113,9 @@ const UserGeneralSettings = () => {
           }
         }}
       >
-        {({ errors, touched, isSubmitting, isValid }) => {
+        {({ errors, touched, handleSubmit, isSubmitting, isValid }) => {
           return (
-            <Form className="section">
+            <form className="section" onSubmit={handleSubmit}>
               <div className="form-row">
                 <label className="text-label">
                   {intl.formatMessage(messages.accounttype)}
@@ -213,7 +213,7 @@ const UserGeneralSettings = () => {
                   </span>
                 </div>
               </div>
-            </Form>
+            </form>
           );
         }}
       </Formik>

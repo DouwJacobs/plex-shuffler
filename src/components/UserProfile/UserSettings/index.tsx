@@ -18,6 +18,7 @@ const messages = defineMessages({
   unauthorizedDescription:
     "You do not have permission to modify this user's settings.",
   usersettings: 'User Settings',
+  menuPlaylistSettings: 'Playlists',
 });
 
 type UserSettingsProps = {
@@ -43,6 +44,11 @@ const UserSettings = ({ children }: UserSettingsProps) => {
       text: intl.formatMessage(messages.menuGeneralSettings),
       route: '/settings/main',
       regex: /\/settings(\/main)?$/,
+    },
+    {
+      text: intl.formatMessage(messages.menuPlaylistSettings),
+      route: '/settings/playlists',
+      regex: /\/settings\/playlists/,
     },
     {
       text: intl.formatMessage(messages.menuPermissions),

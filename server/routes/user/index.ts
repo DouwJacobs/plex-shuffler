@@ -381,6 +381,8 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       });
     }
 
+    const settings = getSettings();
+
     const user = await userRepository.findOneOrFail({
       select: { id: true, plexToken: true },
       where: { id: req.user.id },
@@ -392,24 +394,31 @@ router.post('/shuffled-playlist', async (req, res, next) => {
 
     const shuffledEpisodes = plexShuffle(allEpisodes);
 
+    const playlistTitle = user.settings?.appendToTitle
+      ? req.body.playlistTitle + ` (${settings.main.applicationTitle})`
+      : req.body.playlistTitle;
+
+    const summary = user.settings?.appendToSummary
+      ? req.body.playlistDescription +
+        ` [Created with ${settings.main.applicationTitle}]`
+      : req.body.playlistDescription;
+
     const response = await plexClient.createPlaylist(
-      req.body.playlistTitle,
+      playlistTitle,
       shuffledEpisodes,
       user.plexToken
     );
 
-    if (req.body.playlistDescription) {
-      if (response) {
-        const editResponse = await plexClient.editPlaylist({
-          ratingKey: response[0].ratingKey,
-          userToken: user.plexToken,
-          summary: req.body.playlistDescription,
-          thumb: req.body.playlistCoverUrl,
-        });
+    if (response) {
+      const editResponse = await plexClient.editPlaylist({
+        ratingKey: response[0].ratingKey,
+        userToken: user.plexToken,
+        summary: summary,
+        thumb: req.body.playlistCoverUrl,
+      });
 
-        if (editResponse) {
-          return res.status(editResponse.status).json(editResponse);
-        }
+      if (editResponse) {
+        return res.status(editResponse.status).json(editResponse);
       }
     }
 

@@ -105,6 +105,78 @@ userSettingsRoutes.post<
   }
 });
 
+userSettingsRoutes.get<
+  { id: string },
+  { username?: string; appendToTitle?: boolean; appendToSummary?: boolean }
+>('/playlists', isOwnProfileOrAdmin(), async (req, res, next) => {
+  const userRepository = getRepository(User);
+
+  try {
+    const user = await userRepository.findOne({
+      where: { id: Number(req.params.id) },
+    });
+
+    if (!user) {
+      return next({ status: 404, message: 'User not found.' });
+    }
+
+    return res.status(200).json({
+      username: user.username,
+      appendToTitle: user.settings?.appendToTitle,
+      appendToSummary: user.settings?.appendToSummary,
+    });
+  } catch (e) {
+    next({ status: 500, message: e.message });
+  }
+});
+
+userSettingsRoutes.post<
+  { id: string },
+  UserSettingsGeneralResponse,
+  UserSettingsGeneralResponse
+>('/playlists', isOwnProfileOrAdmin(), async (req, res, next) => {
+  const userRepository = getRepository(User);
+
+  try {
+    const user = await userRepository.findOne({
+      where: { id: Number(req.params.id) },
+    });
+
+    if (!user) {
+      return next({ status: 404, message: 'User not found.' });
+    }
+
+    // "Owner" user settings cannot be modified by other users
+    if (user.id === 1 && req.user?.id !== 1) {
+      return next({
+        status: 403,
+        message: "You do not have permission to modify this user's settings.",
+      });
+    }
+
+    if (!user.settings) {
+      user.settings = new UserSettings({
+        user: req.user,
+        appendToTitle: true,
+        appendToSummary: true,
+      });
+    } else {
+      user.settings.appendToTitle = req.body.appendToTitle;
+      user.settings.appendToSummary = req.body.appendToSummary;
+    }
+
+    await userRepository.save(user);
+
+    return res.status(200).json({
+      username: user.username,
+      appendToTitle: user.settings.appendToTitle,
+      appendToSummary: user.settings.appendToSummary,
+    });
+  } catch (e) {
+    next({ status: 500, message: e.message });
+  }
+});
+
 userSettingsRoutes.get<{ id: string }, { permissions?: number }>(
   '/permissions',
   isAuthenticated(Permission.MANAGE_USERS),
