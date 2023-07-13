@@ -16,10 +16,36 @@
   }
 
   body {
-    @apply bg-gray-900;
-    background-color: #282a2d;
+    background: radial-gradient(
+        circle farthest-side at 0% 100%,
+        rgb(47, 47, 47) 0%,
+        rgba(47, 47, 47, 0) 100%
+      ),
+      radial-gradient(
+        circle farthest-side at 100% 100%,
+        rgb(63, 63, 63) 0%,
+        rgba(63, 63, 63, 0) 100%
+      ),
+      radial-gradient(
+        circle farthest-side at 100% 0%,
+        rgb(76, 76, 76) 0%,
+        rgba(76, 76, 76, 0) 100%
+      ),
+      radial-gradient(
+        circle farthest-side at 0% 0%,
+        rgb(58, 58, 58) 0%,
+        rgba(58, 58, 58, 0) 100%
+      ),
+      black center center/cover no-repeat fixed;
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden;
+    background-repeat: repeat, no-repeat;
+    background-attachment: fixed, fixed;
+    background-position: center center, center center;
+    background-size: auto, cover;
+    -webkit-background-size: auto, cover;
+    -moz-background-size: auto, cover;
+    -o-background-size: auto, cover;
   }
 
   code {
