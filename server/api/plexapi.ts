@@ -240,7 +240,7 @@ class PlexAPI {
       const response = await this.plexClient.query<PlexLibraryResponse>({
         uri: `/library/sections/${id}/all?includeGuids=1${
           filter && '&title=' + filter
-        }${genre !== 'all' && '&genre=' + genre}`,
+        }${![undefined, 'all'].includes(genre) && '&genre=' + genre}`,
         extraHeaders: {
           'X-Plex-Container-Start': `${offset}`,
           'X-Plex-Container-Size': `${size}`,
