@@ -228,19 +228,19 @@ class PlexAPI {
       offset = 0,
       size = 50,
       filter,
-      latest,
+      genre,
     }: {
       offset?: number;
       size?: number;
       filter?: string;
-      latest?: boolean;
+      genre?: string;
     } = {}
   ): Promise<{ totalSize: number; items: PlexLibraryItem[] }> {
     try {
       const response = await this.plexClient.query<PlexLibraryResponse>({
-        uri: `/library/sections/${id}/${
-          latest ? 'newest' : 'all'
-        }?includeGuids=1${filter && '&title=' + filter}`,
+        uri: `/library/sections/${id}/all?includeGuids=1${
+          filter && '&title=' + filter
+        }${genre !== 'all' && '&genre=' + genre}`,
         extraHeaders: {
           'X-Plex-Container-Start': `${offset}`,
           'X-Plex-Container-Size': `${size}`,
