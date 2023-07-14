@@ -1178,6 +1178,12 @@ paths:
           schema:
             type: string
             example: 35625
+        - in: query
+          name: genre
+          required: false
+          schema:
+            type: string
+            example: Action
       responses:
         '200':
           description: OK
@@ -1209,6 +1215,12 @@ paths:
           schema:
             type: string
             example: Big Bang Theory
+        - in: query
+          name: genre
+          required: false
+          schema:
+            type: string
+            example: Action
       responses:
         '200':
           description: OK

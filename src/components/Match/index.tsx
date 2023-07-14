@@ -27,7 +27,8 @@ const Match = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastChoice, setLastChoice] = useState<string>();
   const [matches, setMatches] = useState<string[]>([]);
-  const [matchType, setMatchType] = useState('tv');
+  const [matchType, setMatchType] = useState('movies');
+  const [genre, setGenre] = useState('all');
   const [first, setFirst] = useState<boolean>(false);
 
   const matchID = router.query.matchID;
@@ -86,10 +87,21 @@ const Match = () => {
     };
   }, [matchType, matchID]);
 
+  useEffect(() => {
+    socket.emit('changeGenre', { room: matchID, genre });
+    socket.on('setGenre', (data) => {
+      setGenre(data);
+    });
+    return () => {
+      socket.off('changeGenre');
+      socket.off('setGenre');
+    };
+  }, [genre, matchID]);
+
   const { data, error } = useSWR(
     `/api/v1/${matchType}/${
       matchType === 'tv' ? 'shows' : 'newest'
-    }?page=${currentPage}`
+    }?page=${currentPage}&genre=${genre}`
   );
 
   if (!data && !error) {
@@ -147,7 +159,14 @@ const Match = () => {
               Matches ({matches.length})
             </Button>
             <MatchUsers sessionUsers={sessionUsers} />
-            {first && <MatchFilter type={matchType} setType={setMatchType} />}
+            {first && (
+              <MatchFilter
+                type={matchType}
+                setType={setMatchType}
+                genre={genre}
+                setGenre={setGenre}
+              />
+            )}
           </span>
         </div>
       </Card>
