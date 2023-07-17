@@ -1,4 +1,4 @@
-import LogoFull from '@app/assets/images/plex_shuffler_logo_long.png';
+import LogoIcon from '@app/assets/images/plex_shuffle_icon.png';
 import VersionStatus from '@app/components/Layout/VersionStatus';
 import { Permission, useUser } from '@app/hooks/useUser';
 import { Transition } from '@headlessui/react';
@@ -136,13 +136,19 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                     ref={navRef}
                     className="flex flex-1 flex-col overflow-y-auto pb-8 pt-8 sm:pb-4"
                   >
-                    <div className="flex flex-shrink-0 items-center">
-                      <span className="px-4 text-2xl text-gray-50">
-                        <Link href="/">
-                          <img src={LogoFull.src} alt="Logo" />
-                        </Link>
-                      </span>
-                    </div>
+                    <Link className="mr-2" href="/">
+                      <div className="flex flex-shrink-0 items-center">
+                        <span className="px-4 text-2xl text-gray-50">
+                          <img
+                            className="h-16 w-16"
+                            src={LogoIcon.src}
+                            alt="Logo"
+                          />
+                        </span>
+                        <h2 className="text-2xl font-bold">Plex Shuffler</h2>
+                      </div>
+                    </Link>
+
                     <nav className="mt-16 flex-1 space-y-4 px-4">
                       {SidebarLinks.filter((link) =>
                         link.requiredPermission
@@ -203,13 +209,14 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
         <div className="sidebar flex w-64 flex-col">
           <div className="flex h-0 flex-1 flex-col">
             <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-8">
-              <div className="flex flex-shrink-0 items-center">
-                <span className="px-4 text-2xl text-gray-50">
-                  <Link href="/">
-                    <img src={LogoFull.src} alt="Logo" />
-                  </Link>
-                </span>
-              </div>
+              <Link href="/">
+                <div className="flex flex-shrink-0 items-center">
+                  <span className="px-4 text-2xl text-gray-50">
+                    <img className="h-16 w-16" src={LogoIcon.src} alt="Logo" />
+                  </span>
+                  <h2 className="text-2xl font-bold">Plex Shuffler</h2>
+                </div>
+              </Link>
               <nav className="mt-16 flex-1 space-y-4 px-4">
                 {SidebarLinks.filter((link) =>
                   link.requiredPermission
