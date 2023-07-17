@@ -28,20 +28,75 @@ jobs:
       - name: Build
         run: yarn build
 
-  docker:
+  # docker:
+  #   name: Build & Publish Docker Images
+  #   if: github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip ci]')
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     packages: write
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v2
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
+  #     - name: Log in to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.repository_owner }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Build and push
+  #       uses: docker/build-push-action@v4
+  #       with:
+  #         context: .
+  #         platforms: linux/amd64,linux/arm64
+  #         file: ./Dockerfile
+  #         push: true
+  #         build-args: |
+  #           COMMIT_TAG=${{ github.sha }}
+  #         tags: |
+  #           douwjacobs/plex-shuffler:development
+  #           douwjacobs/plex-shuffler:${{ github.sha }}
+  #           ghcr.io/douwjacobs/plex-shuffler:development
+  #           ghcr.io/douwjacobs/plex-shuffler:${{ github.sha }}
+
+  build_and_push:
     name: Build & Publish Docker Images
     if: github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
     permissions:
       packages: write
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -56,8 +111,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
           file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             COMMIT_TAG=${{ github.sha }}
@@ -66,64 +121,9 @@ jobs:
             douwjacobs/plex-shuffler:${{ github.sha }}
             ghcr.io/douwjacobs/plex-shuffler:development
             ghcr.io/douwjacobs/plex-shuffler:${{ github.sha }}
-
-  # build_and_push:
-  #   name: Build & Publish Docker Images
-  #   if: github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip ci]')
-  #   runs-on: [linux, x64]
-  #   permissions:
-  #     packages: write
-  #   steps:
-  #     # - name: Free Disk Space (Ubuntu)
-  #     #   uses: jlumbroso/free-disk-space@main
-  #     #   with:
-  #     #     tool-cache: false
-  #     #     android: true
-  #     #     dotnet: true
-  #     #     haskell: true
-  #     #     large-packages: true
-  #     #     swap-storage: true
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v2
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-  #     - name: Cache Docker layers
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: /tmp/.buildx-cache
-  #         key: ${{ runner.os }}-buildx-${{ github.sha }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-buildx-
-  #     - name: Log in to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_TOKEN }}
-  #     - name: Log in to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-  #     - name: Build and push
-  #       uses: docker/build-push-action@v3
-  #       with:
-  #         context: .
-  #         file: ./Dockerfile
-  #         platforms: linux/amd64,linux/arm64,linux/arm/v7
-  #         push: true
-  #         build-args: |
-  #           COMMIT_TAG=${{ github.sha }}
-  #         tags: |
-  #           douwjacobs/plex-shuffler:development
-  #           douwjacobs/plex-shuffler:${{ github.sha }}
-  #           ghcr.io/douwjacobs/plex-shuffler:development
-  #           ghcr.io/douwjacobs/plex-shuffler:${{ github.sha }}
-  #         cache-from: type=local,src=/tmp/.buildx-cache
-  #         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-  #     - name: Move cache
-  #       run: |
-  #         rm -rf /tmp/.buildx-cache
-  #         mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
