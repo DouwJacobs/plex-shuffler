@@ -1,6 +1,6 @@
 {
   "name": "plex-shuffler",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "nodemon -e ts --watch server --watch plex-shuffler-api.yml -e .json,.ts,.yml -x npx ts-node -r tsconfig-paths/register --files --project server/tsconfig.json server/index.ts",

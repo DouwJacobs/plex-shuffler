@@ -1,3 +1,29 @@
+# [1.2.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.1.0...v1.2.0) (2023-07-17)
+
+
+### Bug Fixes
+
+* **migration:** initial ([1a06a90](https://github.com/DouwJacobs/plex-shuffler/commit/1a06a9063c36ed9dbf7eef2e851d760f462fd1d0))
+* **migration:** playlist migration ([324af3d](https://github.com/DouwJacobs/plex-shuffler/commit/324af3d01f6726f13019cde7f51f6974b41e84d0))
+* **migrations:** added migration files ([37188a8](https://github.com/DouwJacobs/plex-shuffler/commit/37188a8601ec864043b5cdc0561f9b629938d099))
+* **tv shows:** genres ([4118357](https://github.com/DouwJacobs/plex-shuffler/commit/4118357a8cac35e426d9a8865f7d5453d57ed2ba))
+
+
+### Features
+
+* **matchflix:** genre filter ([47153b8](https://github.com/DouwJacobs/plex-shuffler/commit/47153b8e093ee59cf338ca9b71075ba394d83fb9))
+* **playlist name:** append application name to playlist name ([14711ae](https://github.com/DouwJacobs/plex-shuffler/commit/14711ae528620974700887873992ccbcc009f4a5))
+
+
+### Performance Improvements
+
+* **title cards:** boop ([dc536cb](https://github.com/DouwJacobs/plex-shuffler/commit/dc536cbac17c77715acab96781e96617efbe47fc))
+
+
+### Reverts
+
+* **migration:** initial ([f4071c4](https://github.com/DouwJacobs/plex-shuffler/commit/f4071c40a6effe99edb19c148d115cf04b771c06))
+
 # [1.1.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.0.0...v1.1.0) (2023-07-12)
 
 
