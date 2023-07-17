@@ -40,6 +40,13 @@ const socketIO = (server: http.Server) => {
       }
     );
 
+    socket.on(
+      'changeGenre',
+      ({ room, genre }: { room: string; genre: string }): void => {
+        io.to(room).emit('setGenre', genre);
+      }
+    );
+
     socket.on('disconnect', () => {
       const user = getUser(socket.id);
       removeUser(socket.id);

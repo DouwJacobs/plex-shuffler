@@ -3,4 +3,6 @@ export interface UserSettingsGeneralResponse {
   locale?: string;
   region?: string;
   originalLanguage?: string;
+  appendToTitle?: boolean;
+  appendToSummary?: boolean;
 }

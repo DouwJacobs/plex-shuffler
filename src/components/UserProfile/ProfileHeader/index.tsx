@@ -85,7 +85,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
             }
             passHref
           >
-            <Button as="a">
+            <Button>
               <CogIcon />
               <span>{intl.formatMessage(messages.settings)}</span>
             </Button>
@@ -98,7 +98,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
               }
               passHref
             >
-              <Button as="a">
+              <Button>
                 <UserIcon />
                 <span>{intl.formatMessage(messages.profile)}</span>
               </Button>

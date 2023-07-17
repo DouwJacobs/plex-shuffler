@@ -1,5 +1,5 @@
 import favicon from '@app/assets/favicon.ico';
-import ParticlesTS from '@app/components/Common/ParticlesJS';
+// import ParticlesTS from '@app/components/Common/ParticlesJS';
 import Layout from '@app/components/Layout';
 import type { AvailableLocale } from '@app/context/LanguageContext';
 import { LanguageContext } from '@app/context/LanguageContext';
@@ -84,7 +84,7 @@ const CoreApp: Omit<NextAppComponentType, 'origGetInitialProps'> = ({
         >
           <SettingsProvider currentSettings={currentSettings}>
             <Toaster position="top-right" reverseOrder={true} />
-            <ParticlesTS />
+            {/* <ParticlesTS /> */}
             <Head>
               <title>{currentSettings.applicationTitle}</title>
               <link rel="icon" href={favicon.src} sizes="any" />
