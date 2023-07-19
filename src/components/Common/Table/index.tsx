@@ -6,7 +6,7 @@ type TBodyProps = {
 
 const TBody = ({ children }: TBodyProps) => {
   return (
-    <tbody className="plex-bg-secondary divide-y divide-gray-700">
+    <tbody className="plex-bg-secondary divide-y divide-txt-secondary">
       {children}
     </tbody>
   );
@@ -18,7 +18,7 @@ const TH = ({
   ...props
 }: React.ComponentPropsWithoutRef<'th'>) => {
   const style = [
-    'px-4 py-3 plex-bg-primary text-left text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider truncate',
+    'px-4 py-3 plex-bg-primary text-left text-xs leading-4 font-medium text-txt-primary uppercase tracking-wider truncate',
   ];
 
   if (className) {

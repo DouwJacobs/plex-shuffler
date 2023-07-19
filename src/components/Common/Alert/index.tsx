@@ -24,8 +24,8 @@ const Alert = ({ title, children, type }: AlertProps) => {
       design = {
         bgColor:
           'border plex-border-primary backdrop-blur plex-bg-secondary bg-opacity-20',
-        titleColor: 'text-gray-100',
-        textColor: 'text-gray-300',
+        titleColor: 'text-txt-primary',
+        textColor: 'text-txt-secondary',
         svg: <InformationCircleIcon className="h-5 w-5" />,
       };
       break;

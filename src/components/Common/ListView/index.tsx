@@ -34,7 +34,7 @@ const ListView = ({
   return (
     <>
       {isEmpty && (
-        <div className="mt-64 w-full text-center text-2xl text-gray-400">
+        <div className="mt-64 w-full text-center text-2xl text-txt-secondary">
           {intl.formatMessage(globalMessages.noresults)}
         </div>
       )}

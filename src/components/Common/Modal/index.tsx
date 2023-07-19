@@ -75,7 +75,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       <Transition.Child
         appear
         as="div"
-        className="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-800 bg-opacity-70"
+        className="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-full w-full items-center justify-center bg-modal bg-opacity-70"
         enter="transition-opacity duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -135,7 +135,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
                   )}
                   {subTitle && (
                     <span
-                      className="truncate text-lg font-semibold leading-6 text-gray-200"
+                      className="truncate text-lg font-semibold leading-6 text-txt-secondary"
                       id="modal-headline"
                       data-testid="modal-title"
                     >
@@ -148,7 +148,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           </div>
           {children && (
             <div
-              className={`relative mt-4 text-sm leading-5 text-gray-300 ${
+              className={`relative mt-4 text-sm leading-5 text-txt-secondary ${
                 !(onCancel || onOk || onSecondary || onTertiary) ? 'mb-3' : ''
               }`}
             >

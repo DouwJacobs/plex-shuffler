@@ -55,15 +55,15 @@ const Badge = (
       }
       break;
     case 'dark':
-      badgeStyle.push('bg-gray-900 !text-gray-400');
+      badgeStyle.push('text-txt-primary !text-txt-secondary');
       if (href) {
-        badgeStyle.push('hover:bg-gray-800');
+        badgeStyle.push('hover:text-txt-secondary');
       }
       break;
     case 'light':
-      badgeStyle.push('bg-gray-700 !text-gray-300');
+      badgeStyle.push('text-txt-primary !text-txt-secondary');
       if (href) {
-        badgeStyle.push('hover:bg-gray-600');
+        badgeStyle.push('hover:text-txt-secondary');
       }
       break;
     default:

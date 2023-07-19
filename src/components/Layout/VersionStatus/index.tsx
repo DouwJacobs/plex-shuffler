@@ -52,7 +52,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
       className={`mx-2 flex items-center rounded-lg p-2 text-xs ring-1 ring-gray-700 transition duration-300 ${
         data.updateAvailable
           ? 'bg-yellow-500 text-white hover:bg-yellow-400'
-          : 'plex-bg-secondary hover:plex-bg-primary text-gray-300'
+          : 'bg-primary-active text-gray-300 hover:bg-primary'
       }`}
     >
       {data.commitTag === 'local' ? (

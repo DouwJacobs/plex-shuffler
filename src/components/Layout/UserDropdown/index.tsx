@@ -29,7 +29,7 @@ const UserDropdown = () => {
     <Menu as="div" className="relative ml-3">
       <div>
         <Menu.Button
-          className="flex max-w-xs items-center rounded-full text-sm ring-1 ring-gray-700 hover:ring-gray-500 focus:outline-none focus:ring-gray-500"
+          className="flex max-w-xs items-center rounded-full text-sm ring-1 ring-gray-700 hover:bg-primary-active focus:bg-primary-active focus:outline-none"
           data-testid="user-menu"
         >
           <img
@@ -50,7 +50,7 @@ const UserDropdown = () => {
         appear
       >
         <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right rounded-md shadow-lg">
-          <div className="plex-bg-primary divide-y divide-gray-700 rounded-md bg-gray-800 bg-opacity-80 ring-1 ring-gray-700 backdrop-blur">
+          <div className="plex-bg-primary divide-y divide-gray-700 rounded-md bg-primary-active bg-opacity-80 ring-1 ring-gray-700 backdrop-blur">
             <div className="flex flex-col space-y-4 px-4 py-4">
               <div className="flex items-center space-x-2">
                 <img
@@ -75,7 +75,7 @@ const UserDropdown = () => {
                     href={`/profile`}
                     className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
+                        ? 'bg-primary-active bg-gradient-to-br text-white'
                         : ''
                     }`}
                     data-testid="user-menu-profile"
@@ -91,7 +91,7 @@ const UserDropdown = () => {
                     href={`/profile/settings`}
                     className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
+                        ? 'bg-primary-active bg-gradient-to-br text-white'
                         : ''
                     }`}
                     data-testid="user-menu-settings"
@@ -107,7 +107,7 @@ const UserDropdown = () => {
                     href="#"
                     className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
+                        ? 'bg-primary-active bg-gradient-to-br text-white'
                         : ''
                     }`}
                     onClick={() => logout()}

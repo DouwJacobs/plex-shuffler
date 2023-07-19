@@ -138,7 +138,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                   >
                     <Link className="mr-2" href="/">
                       <div className="flex flex-shrink-0 items-center">
-                        <span className="px-4 text-2xl text-gray-50">
+                        <span className="px-4 text-2xl text-txt-primary">
                           <img
                             className="h-16 w-16"
                             src={LogoIcon.src}
@@ -176,7 +176,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                                     sidebarLink.activeRegExp
                                   )
                                     ? 'plex-bg-secondary'
-                                    : 'hover:plex-bg-transparent-10 focus:bg-gray-700'
+                                    : 'hover:plex-bg-transparent-10 focus:bg-txt-secondary'
                                 }
                               `}
                             data-testid={`${sidebarLink.dataTestId}-mobile`}
@@ -211,7 +211,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
             <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-8">
               <Link href="/">
                 <div className="flex flex-shrink-0 items-center">
-                  <span className="px-4 text-2xl text-gray-50">
+                  <span className="px-4 text-2xl text-txt-primary">
                     <img className="h-16 w-16" src={LogoIcon.src} alt="Logo" />
                   </span>
                   <h2 className="text-2xl font-bold">Plex Shuffler</h2>
@@ -235,8 +235,8 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                                   router.pathname.match(
                                     sidebarLink.activeRegExp
                                   )
-                                    ? 'bg-zinc-700'
-                                    : 'hover:bg-zinc-500 focus:bg-zinc-500'
+                                    ? 'bg-primary-active'
+                                    : 'hover:bg-primary-active focus:bg-primary-active'
                                 }
                               `}
                       data-testid={sidebarLink.dataTestId}

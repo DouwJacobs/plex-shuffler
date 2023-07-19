@@ -76,7 +76,7 @@ function Button<P extends ElementTypes = 'button'>(
       break;
     default:
       buttonStyle.push(
-        'text-zinc-200 bg-zinc-800 bg-opacity-80 border-zinc-600 hover:text-white hover:bg-zinc-700 hover:border-zinc-600 group-hover:text-white group-hover:bg-zinc-700 group-hover:border-zinc-600 focus:border-blue-300 focus:ring-blue active:text-zinc-200 active:bg-zinc-700 active:border-zinc-600'
+        'text-zinc-200 bg-primary bg-opacity-80 border-zinc-600 hover:text-white hover:bg-primary-active hover:border-zinc-600 group-hover:text-white group-hover:bg-zinc-700 group-hover:border-zinc-600 focus:border-blue-300 focus:ring-blue active:text-zinc-200 active:bg-zinc-700 active:border-zinc-600'
       );
   }
 

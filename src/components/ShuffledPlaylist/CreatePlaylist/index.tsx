@@ -140,7 +140,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
           <form className="section" onSubmit={handleSubmit}>
             <div
               className={`sticky top-16 z-10 ${
-                isScrolled && 'plex-bg-secondary'
+                isScrolled && 'bg-primary-active'
               }`}
             >
               <Card className={`p-2`}>
