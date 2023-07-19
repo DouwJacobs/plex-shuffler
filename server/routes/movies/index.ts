@@ -30,6 +30,7 @@ movieRoutes.get('/newest', async (req, res, next) => {
 
     const query = req.query.query as string;
     const genre = req.query.genre as string;
+    const sortBy = req.query.sortBy as string;
 
     const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({
@@ -47,7 +48,8 @@ movieRoutes.get('/newest', async (req, res, next) => {
       offset,
       size: itemsPerPage,
       filter: query,
-      genre: genre,
+      genre,
+      sortBy,
     });
     const machineID = await plexapi.getIdentity();
 

@@ -47,6 +47,13 @@ const socketIO = (server: http.Server) => {
       }
     );
 
+    socket.on(
+      'changeSortBy',
+      ({ room, sortBy }: { room: string; sortBy: string }): void => {
+        io.to(room).emit('setsortBy', sortBy);
+      }
+    );
+
     socket.on('disconnect', () => {
       const user = getUser(socket.id);
       removeUser(socket.id);

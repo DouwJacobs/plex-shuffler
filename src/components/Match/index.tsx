@@ -30,6 +30,7 @@ const Match = () => {
   const [matchType, setMatchType] = useState('movies');
   const [genre, setGenre] = useState('all');
   const [first, setFirst] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState<string>('originallyAvailableAt:desc');
 
   const matchID = router.query.matchID;
 
@@ -98,10 +99,21 @@ const Match = () => {
     };
   }, [genre, matchID]);
 
+  useEffect(() => {
+    socket.emit('changeSortBy', { room: matchID, sortBy });
+    socket.on('setSortBy', (data) => {
+      setSortBy(data);
+    });
+    return () => {
+      socket.off('changeSortBy');
+      socket.off('setSortBy');
+    };
+  }, [sortBy, matchID]);
+
   const { data, error } = useSWR(
     `/api/v1/${matchType}/${
       matchType === 'tv' ? 'shows' : 'newest'
-    }?page=${currentPage}&genre=${genre}`
+    }?page=${currentPage}&genre=${genre}&sortBy=${encodeURIComponent(sortBy)}`
   );
 
   if (!data && !error) {
@@ -165,6 +177,8 @@ const Match = () => {
                 setType={setMatchType}
                 genre={genre}
                 setGenre={setGenre}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
               />
             )}
           </span>

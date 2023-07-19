@@ -170,7 +170,7 @@ CoreApp.getInitialProps = async (initialProps) => {
         if (!router.pathname.match(/(login|setup)/)) {
           const callbackURL = router.asPath;
           ctx.res.writeHead(307, {
-            Location: `/login?callbackURL=${callbackURL}`,
+            Location: `/login?callbackURL=${encodeURIComponent(callbackURL)}`,
           });
           ctx.res.end();
         }
