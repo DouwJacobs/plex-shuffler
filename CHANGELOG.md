@@ -1,3 +1,29 @@
+# [1.3.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.2.0...v1.3.0) (2023-07-26)
+
+
+### Bug Fixes
+
+* **ci:** workflow ([3f1b135](https://github.com/DouwJacobs/plex-shuffler/commit/3f1b135ddcfe0a98ceba3655775233420a2ad1b0))
+* **deps:** update dependency @types/react-dom to v18.2.7 ([3cb6d76](https://github.com/DouwJacobs/plex-shuffler/commit/3cb6d76a5742264a4b4904aeb7a41036d2464939))
+* **deps:** update dependency express-rate-limit to v6.7.1 ([da4058e](https://github.com/DouwJacobs/plex-shuffler/commit/da4058ed42e80133d04988a61e25f2d3bab7c3e8))
+* **deps:** update dependency react-icons to v4.10.1 ([6ba5c48](https://github.com/DouwJacobs/plex-shuffler/commit/6ba5c48ddfea86326e9bd1acd4963bec353be479))
+* **deps:** update dependency tailwindcss to v3.3.3 ([049e762](https://github.com/DouwJacobs/plex-shuffler/commit/049e7621ba946316b9e47eecf1b82128825b76f9))
+* **deps:** update react monorepo ([cdd2723](https://github.com/DouwJacobs/plex-shuffler/commit/cdd2723a9b240b7605a62e9480c5b71ccfc0b931))
+
+
+### Features
+
+* **matchflix:** sort ([526bedf](https://github.com/DouwJacobs/plex-shuffler/commit/526bedf1d051c8c0e246a7b1f6cab0e9b148242c))
+* **only-unwatched:** create shuffled playlists from unwatched episodes ([b21290f](https://github.com/DouwJacobs/plex-shuffler/commit/b21290fd317d0dc3b857a84f0ef85bd26eae71a2))
+* **pwa:** new ([f0042bb](https://github.com/DouwJacobs/plex-shuffler/commit/f0042bb1c3b06762932e7ed442d47693c44ab9be))
+* **shuffle:** one-show ([3fcf094](https://github.com/DouwJacobs/plex-shuffler/commit/3fcf0941fdcceef022455cd67eb8aa8856169b0a))
+
+
+### Performance Improvements
+
+* **ci:** workflow ([9175ad7](https://github.com/DouwJacobs/plex-shuffler/commit/9175ad7e0ebc2662eb56ead8c53b0ab21b324d33))
+* **workflow:** ci ([f71d070](https://github.com/DouwJacobs/plex-shuffler/commit/f71d070d7341f22d8a93a9e23ea415cd059feb7c))
+
 # [1.2.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.1.0...v1.2.0) (2023-07-17)
 
 
