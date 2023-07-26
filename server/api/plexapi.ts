@@ -64,6 +64,7 @@ export interface PlexMetadata {
   Media: Media[];
   thumb?: string;
   summary?: string;
+  viewCount?: string;
 }
 interface PlexPlaylistItem {
   ratingKey: string;

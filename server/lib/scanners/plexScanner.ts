@@ -13,10 +13,14 @@ class PlexScanner extends BaseScanner<PlexLibraryItem> {
   private plexClient: PlexAPI;
 
   public constructor() {
-    super('Plex Scan', { bundleSize: 50 });
+    super('Plex Playlist', { bundleSize: 50 });
   }
 
-  public async run(ratingKeys: string[]): Promise<any> {
+  public async run(
+    token: string | undefined,
+    ratingKeys: string[],
+    unwatched: boolean
+  ): Promise<any> {
     try {
       const userRepository = getRepository(User);
       const admin = await userRepository.findOne({
@@ -25,10 +29,10 @@ class PlexScanner extends BaseScanner<PlexLibraryItem> {
       });
 
       if (!admin) {
-        this.log('No admin configured. Plex scan skipped.', 'warn');
+        this.log('No admin configured. Plex playlist creation skipped', 'warn');
       }
 
-      this.plexClient = new PlexAPI({ plexToken: admin?.plexToken });
+      this.plexClient = new PlexAPI({ plexToken: token });
 
       const allEpisodes: TVShow[] = [];
 
@@ -41,21 +45,24 @@ class PlexScanner extends BaseScanner<PlexLibraryItem> {
       await Promise.all(
         ratingKeys.map(async (ratingKey) => {
           const plexItem = await this.plexClient.getMetadata(ratingKey);
-          const episodes = await this.processPlexShow(plexItem);
+          const episodes = await this.processPlexShow(plexItem, unwatched);
           allEpisodes.push(episodes);
         })
       );
 
-      this.log('Scan Completed', 'info');
+      this.log('Playlist Created', 'info');
       return allEpisodes;
     } catch (e) {
-      this.log('Scan interrupted', 'error', {
+      this.log('Playlist Creation Error', 'error', {
         errorMessage: e.message,
       });
     }
   }
 
-  private async processPlexShow(plexitem: PlexLibraryItem): Promise<TVShow> {
+  private async processPlexShow(
+    plexitem: PlexLibraryItem,
+    unwatched: boolean
+  ): Promise<TVShow> {
     const ratingKey =
       plexitem.grandparentRatingKey ??
       plexitem.parentRatingKey ??
@@ -71,7 +78,13 @@ class PlexScanner extends BaseScanner<PlexLibraryItem> {
       const episodesMetadata = await this.plexClient.getChildrenMetadata(
         season
       );
-      episodesMetadata.map((episode) => episodes.push(episode.ratingKey));
+      if (unwatched) {
+        episodesMetadata.map(
+          (episode) => !episode.viewCount && episodes.push(episode.ratingKey)
+        );
+      } else {
+        episodesMetadata.map((episode) => episodes.push(episode.ratingKey));
+      }
     }
 
     return { ratingKey, episodes };

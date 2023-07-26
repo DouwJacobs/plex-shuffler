@@ -390,7 +390,11 @@ router.post('/shuffled-playlist', async (req, res, next) => {
 
     const plexClient = new PlexAPI({ plexToken: user.plexToken });
 
-    const allEpisodes: TVShow[] = await plexShowScanner.run(req.body.playlists);
+    const allEpisodes: TVShow[] = await plexShowScanner.run(
+      user.plexToken,
+      req.body.playlists,
+      req.body.unwatchedOnly
+    );
 
     const shuffledEpisodes = plexShuffle(allEpisodes);
 
