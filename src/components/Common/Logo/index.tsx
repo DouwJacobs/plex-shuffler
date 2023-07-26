@@ -1,10 +1,15 @@
-import styles from './Logo.module.css';
-
-import logo from '@app/assets/images/plex_shuffler_logo.png';
+import LogoIcon from '@app/assets/images/plex_shuffle_icon.png';
 
 const Logo = () => {
   return (
-    <img src={logo.src} className={styles.logo} alt="Plex Shuffler Logo" />
+    <div className="align-center flex flex-shrink-0">
+      <div className="mx-auto my-8 flex w-11/12 items-center justify-center">
+        <span className="px-4">
+          <img src={LogoIcon.src} alt="Logo" />
+        </span>
+        <h2 className="text-6xl md:text-6xl lg:text-8xl">Plex Shuffler</h2>
+      </div>
+    </div>
   );
 };
 

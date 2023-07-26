@@ -1,6 +1,7 @@
 import favicon from '@app/assets/favicon.ico';
 // import ParticlesTS from '@app/components/Common/ParticlesJS';
 import Layout from '@app/components/Layout';
+import PWAHeader from '@app/components/PWAHeader';
 import type { AvailableLocale } from '@app/context/LanguageContext';
 import { LanguageContext } from '@app/context/LanguageContext';
 import { SettingsProvider } from '@app/context/SettingsContext';
@@ -92,6 +93,7 @@ const CoreApp: Omit<NextAppComponentType, 'origGetInitialProps'> = ({
                 name="viewport"
                 content="initial-scale=1, width=device-width"
               ></meta>
+              <PWAHeader applicationTitle={currentSettings.applicationTitle} />
             </Head>
 
             <UserContext initialUser={user}>{component}</UserContext>
@@ -168,7 +170,7 @@ CoreApp.getInitialProps = async (initialProps) => {
         if (!router.pathname.match(/(login|setup)/)) {
           const callbackURL = router.asPath;
           ctx.res.writeHead(307, {
-            Location: `/login?callbackURL=${callbackURL}`,
+            Location: `/login?callbackURL=${encodeURIComponent(callbackURL)}`,
           });
           ctx.res.end();
         }

@@ -1,3 +1,4 @@
+import shuffle from '@server/utils/shuffle';
 import weighted from 'weighted';
 
 interface Show {
@@ -6,7 +7,15 @@ interface Show {
 }
 
 const plexShuffle = (allEpisodes: Show[]) => {
-  const shuffledEpisodes = [];
+  const shuffledEpisodes: any[] = [];
+
+  if (allEpisodes.length === 1) {
+    shuffle(allEpisodes[0].episodes).map((episode) =>
+      shuffledEpisodes.push(episode)
+    );
+
+    return shuffledEpisodes;
+  }
 
   while (allEpisodes.length > 0) {
     const totalEpisodes = allEpisodes.reduce(

@@ -30,6 +30,7 @@ tvRoutes.get('/shows', async (req, res, next) => {
 
     const query = req.query.query as string;
     const genre = req.query.genre as string;
+    const sortBy = req.query.genre as string;
 
     const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({
@@ -48,6 +49,7 @@ tvRoutes.get('/shows', async (req, res, next) => {
       size: itemsPerPage,
       filter: query,
       genre,
+      sortBy,
     });
     const machineID = await plexapi.getIdentity();
 

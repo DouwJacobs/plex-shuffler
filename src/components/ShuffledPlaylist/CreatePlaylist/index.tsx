@@ -24,6 +24,7 @@ const messages = defineMessages({
   playlistCoverUrl: 'Playlist Cover URL',
   playlistValidUrl: 'Playlist Cover URL should be a valid url',
   playlistDescription: 'Playlist Description',
+  unwatchedOnly: 'Include Unwatched Only',
 });
 
 interface CreatePlaylistProps {
@@ -99,6 +100,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
         playlistTitle: '',
         playlistCoverUrl: '',
         playlistDescription: '',
+        unwatchedOnly: false,
       }}
       enableReinitialize={true}
       validationSchema={CreatePlaylistSchema}
@@ -113,6 +115,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
             playlists: playlists.selections,
             playlistDescription: values.playlistDescription,
             playlistCoverUrl: values.playlistCoverUrl,
+            unwatchedOnly: values.unwatchedOnly,
           });
 
           if (toastId) {
@@ -227,6 +230,18 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                               {errors.playlistDescription}
                             </div>
                           )}
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <label htmlFor="unwatchedOnly" className="checkbox-label">
+                        {intl.formatMessage(messages.unwatchedOnly)}
+                      </label>
+                      <div className="form-input-area">
+                        <Field
+                          type="checkbox"
+                          id="unwatchedOnly"
+                          name="unwatchedOnly"
+                        />
                       </div>
                     </div>
                   </Disclosure.Panel>

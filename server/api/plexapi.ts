@@ -64,6 +64,7 @@ export interface PlexMetadata {
   Media: Media[];
   thumb?: string;
   summary?: string;
+  viewCount?: string;
 }
 interface PlexPlaylistItem {
   ratingKey: string;
@@ -229,18 +230,22 @@ class PlexAPI {
       size = 50,
       filter,
       genre,
+      sortBy,
     }: {
       offset?: number;
       size?: number;
       filter?: string;
       genre?: string;
+      sortBy?: string;
     } = {}
   ): Promise<{ totalSize: number; items: PlexLibraryItem[] }> {
     try {
       const response = await this.plexClient.query<PlexLibraryResponse>({
         uri: `/library/sections/${id}/all?includeGuids=1${
           filter && '&title=' + filter
-        }${![undefined, 'all'].includes(genre) && '&genre=' + genre}`,
+        }${![undefined, 'all'].includes(genre) && '&genre=' + genre}${
+          sortBy && '&sort=' + sortBy
+        }`,
         extraHeaders: {
           'X-Plex-Container-Start': `${offset}`,
           'X-Plex-Container-Size': `${size}`,

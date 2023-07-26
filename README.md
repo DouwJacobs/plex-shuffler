@@ -4,10 +4,11 @@
 <p align="center">
 <img src="https://github.com/DouwJacobs/plex-shuffler/actions/workflows/release.yml/badge.svg?branch=master" alt="Plex Shuffler Release" />
 <img src="https://github.com/DouwJacobs/plex-shuffler/actions/workflows/ci.yml/badge.svg?branch=development" alt="Plex Shuffler CI" />
-<img src="https://img.shields.io/docker/pulls/douwjacobs/plex-shuffler" alt="Docker Pulls">
+<a href="https://hub.docker.com/r/douwjacobs/plex-shuffler"><img src="https://img.shields.io/docker/pulls/douwjacobs/plex-shuffler" alt="Docker Pulls"></a>
+<a href="https://github.com/DouwJacobs/plex-shuffler/tags"><img src="https://img.shields.io/github/v/release/DouwJacobs/plex-shuffler"></a>
 </p>
 <p align="center">
-<img alt="GitHub" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+<a href="https://github.com/DouwJacobs/plex-shuffler/blob/development/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 
 **Plex Shuffler** is a free and open source software application for creating shuffled playlists on Plex. It integrates with **[Plex](https://www.plex.tv/)** and allows the user to shuffle different TV shows but keep a single TV show's episodes in order. The idea is to create a TV channel-like experience by shuffling your favorite TV shows.
 
@@ -73,6 +74,8 @@ Matchflix can be used to facilitate group decision-making when it comes to choos
 - Matching and Filtering: Once there are more than 2 users in the session users can start swiping left or right on content. When all users swipe right on a specific movie or TV show a "matches" button will appear. Users can then decide to either continue swiping or click the "matches" button to see movies or TV shows that all users selected.
 
 - Group Recommendations: Matchflix generates a list of recommended movies or TV shows based on the initial user's filters.
+
+<div align="center"><img src="./public/preview-matchflix.png" width="400"></div>
 
 <br>
 
