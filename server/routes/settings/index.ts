@@ -415,27 +415,31 @@ settingsRoutes.get('/about', async (req, res) => {
 });
 
 settingsRoutes.post(
-  '/title',
+  '/general',
   isAuthenticated(Permission.ADMIN),
   (_req, res) => {
     const settings = getSettings();
 
     settings.main.applicationTitle = _req.body.applicationTitle;
+    settings.main.defaultShowLibrary = _req.body.defaultShowLibrary;
+    settings.main.defaultMovieLibrary = _req.body.defaultMovieLibrary;
     settings.save();
 
     return res.status(200).json(settings.public);
   }
 );
 
-settingsRoutes.get('/title', async (req, res, next) => {
+settingsRoutes.get('/general', async (req, res, next) => {
   try {
     const settings = getSettings();
 
-    return res
-      .status(200)
-      .json({ applicationTitle: settings.main.applicationTitle });
+    return res.status(200).json({
+      applicationTitle: settings.main.applicationTitle,
+      defaultShowLibrary: settings.main.defaultShowLibrary,
+      defaultMovieLibrary: settings.main.defaultMovieLibrary,
+    });
   } catch (e) {
-    next({ status: 404, message: 'Application title not found' });
+    next({ status: 404, message: 'General Settings Not Found' });
   }
 });
 

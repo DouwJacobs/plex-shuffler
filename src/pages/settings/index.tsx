@@ -1,4 +1,4 @@
-import SettingsApplicationName from '@app/components/Settings/SettingsApplicationName';
+import SettingsApplicationName from '@app/components/Settings/SettingsGeneral';
 import SettingsLayout from '@app/components/Settings/SettingsLayout';
 import useRouteGuard from '@app/hooks/useRouteGuard';
 import { Permission } from '@app/hooks/useUser';

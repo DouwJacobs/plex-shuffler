@@ -1,6 +1,6 @@
 import Button from '@app/components/Common/Button';
 import PageTitle from '@app/components/Common/PageTitle';
-import SettingsApplicationName from '@app/components/Settings/SettingsApplicationName';
+import SettingsApplicationName from '@app/components/Settings/SettingsGeneral';
 import SettingsPlex from '@app/components/Settings/SettingsPlex';
 import LoginWithPlex from '@app/components/Setup/LoginWithPlex';
 import SetupSteps from '@app/components/Setup/SetupSteps';
