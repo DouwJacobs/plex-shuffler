@@ -1,36 +1,30 @@
 import PlexAPI from '@server/api/plexapi';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
-import { getSettings } from '@server/lib/settings';
+import { getLibraries, getSettings } from '@server/lib/settings';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
 const tvRoutes = Router();
 
-const getLibraries = () => {
-  const settings = getSettings();
-
-  const tvLibraries = settings.plex.libraries.filter(
-    (lib) => lib.type === 'show'
-  );
-
-  return tvLibraries;
-};
-
 tvRoutes.get('/libraries', (req, res) => {
-  const tvLibraries = getLibraries();
+  const tvLibraries = getLibraries('show');
   res.status(200).json(tvLibraries);
 });
 
 tvRoutes.get('/shows', async (req, res, next) => {
   const plexUrl = getPlexUrl();
   try {
-    const tvLibraries = getLibraries();
-    const libID = tvLibraries[0].id;
+    const settings = getSettings();
+    const tvLibraries = getLibraries('show');
+    const libID =
+      settings.main.defaultShowLibrary === 'Not Defined'
+        ? tvLibraries[0].id
+        : settings.main.defaultShowLibrary;
 
     const query = req.query.query as string;
     const genre = req.query.genre as string;
-    const sortBy = req.query.genre as string;
+    const sortBy = req.query.sortBy as string;
 
     const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({

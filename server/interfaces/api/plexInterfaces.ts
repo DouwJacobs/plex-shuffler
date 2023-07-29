@@ -42,3 +42,10 @@ export interface PlexDevice {
   sourceTitle?: string;
   connection: PlexConnection[];
 }
+
+export interface PlexLibrary {
+  id: number | string;
+  name: string;
+  enabled: boolean;
+  type: string;
+}

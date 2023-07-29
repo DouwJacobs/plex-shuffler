@@ -144,12 +144,15 @@ components:
         defaultPermissions:
           type: number
           example: 32
-    ApplicationTitle:
+    GeneralSettings:
       type: object
       properties:
         applicationTitle:
           type: string
           example: Plex Shuffler
+        defaultShowLibrary:
+          type: string
+          example: '1'
     PlexSettings:
       type: object
       properties:
@@ -591,10 +594,10 @@ paths:
                       type: string
                     thumb:
                       type: string
-  /settings/title:
+  /settings/general:
     get:
-      summary: Get application title
-      description: Get application title
+      summary: Get general settings
+      description: Get general settings
       tags:
         - settings
       responses:
@@ -603,10 +606,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationTitle'
+                $ref: '#/components/schemas/GeneralSettings'
     post:
-      summary: Update application title
-      description: Updates application title with given values
+      summary: General Settings
+      description: Update general settings
       tags:
         - settings
       requestBody:
@@ -614,14 +617,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ApplicationTitle'
+              $ref: '#/components/schemas/GeneralSettings'
       responses:
         '200':
           description: 'Values were sucessfully updated'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationTitle'
+                $ref: '#/components/schemas/GeneralSettings'
   /settings/logs:
     get:
       summary: Returns logs
@@ -1245,6 +1248,21 @@ paths:
                     $ref: '#/components/schemas/PageInfo'
                   results:
                     $ref: '#/components/schemas/MoviesResults'
+  /movies/libraries:
+    get:
+      summary: Get all movie libraries
+      description: Retrieves all movie libraries
+      tags:
+        - movie
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlexLibrary'
   /matchflix/matches:
     get:
       summary: Gets matches for Matchflix session
