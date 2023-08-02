@@ -6,6 +6,7 @@
 <img src="https://github.com/DouwJacobs/plex-shuffler/actions/workflows/ci.yml/badge.svg?branch=development" alt="Plex Shuffler CI" />
 <a href="https://hub.docker.com/r/douwjacobs/plex-shuffler"><img src="https://img.shields.io/docker/pulls/douwjacobs/plex-shuffler" alt="Docker Pulls"></a>
 <a href="https://github.com/DouwJacobs/plex-shuffler/tags"><img src="https://img.shields.io/github/v/release/DouwJacobs/plex-shuffler"></a>
+<a href="https://discord.gg/VTngBReD"><img src="https://img.shields.io/discord/1135458985022066728"></a>
 </p>
 <p align="center">
 <a href="https://github.com/DouwJacobs/plex-shuffler/blob/development/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
