@@ -49,10 +49,10 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
       }}
       role="button"
       tabIndex={0}
-      className={`mx-2 flex items-center rounded-lg p-2 text-xs ring-1 ring-gray-700 transition duration-300 ${
+      className={`mx-2 flex items-center rounded-lg p-2 text-xs transition duration-300 ${
         data.updateAvailable
-          ? 'bg-yellow-500 text-white hover:bg-yellow-400'
-          : 'plex-bg-secondary hover:plex-bg-primary text-gray-300'
+          ? 'plex-border-primary plex-bg-primary rounded-md bg-opacity-50 text-gray-100 backdrop-blur'
+          : 'plex-bg-secondary hover:plex-bg-primary text-gray-300 ring-1 ring-gray-700'
       }`}
     >
       {data.commitTag === 'local' ? (
