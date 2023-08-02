@@ -18,7 +18,7 @@ export class UserPlaylists {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @ManyToOne(() => User, (user) => user.playlists, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.playlists)
   public user: User;
 
   @ManyToMany(() => PlaylistShows, { onDelete: 'CASCADE' })

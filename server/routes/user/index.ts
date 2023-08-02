@@ -440,14 +440,9 @@ router.post('/shuffled-playlist', async (req, res, next) => {
           updatedShowEpisodes.totalUnwatchedEpisodes;
         newPlaylist.unwatchedInd = req.body.unwatchedOnly;
         newPlaylist.shows = updatedShowEpisodes.showEnitities;
-
-        const existingPlaylists = user.playlists;
-        existingPlaylists?.push(newPlaylist);
-
-        user.playlists = existingPlaylists;
+        newPlaylist.user = user;
 
         await playlistRepository.save(newPlaylist);
-        await userRepository.save(user);
       }
 
       const editResponse = await plexClient.editPlaylist({

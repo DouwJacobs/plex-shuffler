@@ -66,11 +66,7 @@ export class User {
   })
   public settings?: UserSettings;
 
-  @OneToMany(() => UserPlaylists, (playlists) => playlists.user, {
-    cascade: true,
-    eager: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => UserPlaylists, (playlists) => playlists.user)
   public playlists?: UserPlaylists[];
 
   @CreateDateColumn()
