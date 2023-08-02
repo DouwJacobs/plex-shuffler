@@ -20,6 +20,7 @@ const messages = defineMessages({
   version: 'Version',
   gettingsupport: 'Getting Support',
   githubdiscussions: 'GitHub Discussions',
+  discord: 'Discord',
   timezone: 'Time Zone',
   appDataPath: 'Data Directory',
   supportplexshuffler: 'Support Plex Shuffler',
@@ -167,6 +168,16 @@ const SettingsAbout = () => {
               https://github.com/DouwJacobs/plex-shuffler/discussions
             </a>
           </List.Item>
+          <List.Item title={intl.formatMessage(messages.discord)}>
+            <a
+              href="https://discord.gg/VTngBReD"
+              target="_blank"
+              rel="noreferrer"
+              className="plex-color-primary transition duration-300 hover:underline"
+            >
+              https://discord.gg/VTngBReD
+            </a>
+          </List.Item>
         </List>
       </div>
       <div className="section">
@@ -188,12 +199,12 @@ const SettingsAbout = () => {
           </List.Item>
           <List.Item title="">
             <a
-              href="https://patreon.com/plex-shuffler"
+              href="https://patreon.com/plex_shuffler"
               target="_blank"
               rel="noreferrer"
               className="plex-color-primary transition duration-300 hover:underline"
             >
-              https://patreon.com/plex-shuffler
+              https://patreon.com/plex_shuffler
             </a>
           </List.Item>
         </List>
