@@ -56,6 +56,7 @@ const TitleCard = (props: PlaylistCardProps) => {
                 <CachedImage
                   alt={props.title}
                   src={props.thumb}
+                  className={props.selected ? 'cardSelected' : ''}
                   onLoad={() => {
                     setIsLoading(false);
                   }}

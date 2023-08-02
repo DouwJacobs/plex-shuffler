@@ -7,6 +7,8 @@ import BaseScanner from '@server/lib/scanners/baseScanner';
 export interface TVShow {
   ratingKey: string;
   episodes: string[];
+  totalEpisodes: number;
+  totalUnwatched: number;
 }
 
 class PlexScanner extends BaseScanner<PlexLibraryItem> {
@@ -87,7 +89,12 @@ class PlexScanner extends BaseScanner<PlexLibraryItem> {
       }
     }
 
-    return { ratingKey, episodes };
+    return {
+      ratingKey,
+      episodes,
+      totalEpisodes: plexitem.leafCount,
+      totalUnwatched: episodes.length,
+    };
   }
 }
 

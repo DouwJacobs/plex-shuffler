@@ -2,7 +2,9 @@ import PlexAPI from '@server/api/plexapi';
 import PlexTvAPI from '@server/api/plextv';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
+import { UserPlaylists } from '@server/entity/UserPlaylists';
 import type { UserResultsResponse } from '@server/interfaces/api/userInterfaces';
+import { updateShowEpisodes } from '@server/lib/entityFunctions';
 import { hasPermission, Permission } from '@server/lib/permissions';
 import plexShuffle from '@server/lib/plexShuffle';
 import type { TVShow } from '@server/lib/scanners/plexScanner';
@@ -374,6 +376,7 @@ router.post(
 router.post('/shuffled-playlist', async (req, res, next) => {
   try {
     const userRepository = getRepository(User);
+    const playlistRepository = getRepository(UserPlaylists);
     if (!req.user) {
       return res.status(500).json({
         status: 500,
@@ -384,7 +387,7 @@ router.post('/shuffled-playlist', async (req, res, next) => {
     const settings = getSettings();
 
     const user = await userRepository.findOneOrFail({
-      select: { id: true, plexToken: true },
+      select: { id: true, plexToken: true, playlists: true },
       where: { id: req.user.id },
     });
 
@@ -414,6 +417,39 @@ router.post('/shuffled-playlist', async (req, res, next) => {
     );
 
     if (response) {
+      const currentPlaylist = await playlistRepository.findOne({
+        where: { ratingKey: response[0].ratingKey },
+      });
+
+      const updatedShowEpisodes = await updateShowEpisodes(allEpisodes);
+
+      if (currentPlaylist) {
+        currentPlaylist.numEpisodes = updatedShowEpisodes.totalEpisodes;
+        currentPlaylist.numEpisodesUnwatched =
+          updatedShowEpisodes.totalUnwatchedEpisodes;
+        currentPlaylist.unwatchedInd = req.body.unwatchedOnly;
+        currentPlaylist.shows = updatedShowEpisodes.showEnitities;
+
+        await playlistRepository.save(currentPlaylist);
+      } else {
+        const newPlaylist = new UserPlaylists();
+
+        newPlaylist.ratingKey = response[0].ratingKey;
+        newPlaylist.numEpisodes = updatedShowEpisodes.totalEpisodes;
+        newPlaylist.numEpisodesUnwatched =
+          updatedShowEpisodes.totalUnwatchedEpisodes;
+        newPlaylist.unwatchedInd = req.body.unwatchedOnly;
+        newPlaylist.shows = updatedShowEpisodes.showEnitities;
+
+        const existingPlaylists = user.playlists;
+        existingPlaylists?.push(newPlaylist);
+
+        user.playlists = existingPlaylists;
+
+        await playlistRepository.save(newPlaylist);
+        await userRepository.save(user);
+      }
+
       const editResponse = await plexClient.editPlaylist({
         ratingKey: response[0].ratingKey,
         userToken: user.plexToken,

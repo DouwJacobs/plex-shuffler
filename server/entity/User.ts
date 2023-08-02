@@ -8,10 +8,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserPlaylists } from './UserPlaylists';
 import { UserSettings } from './UserSettings';
 
 @Entity()
@@ -63,6 +65,13 @@ export class User {
     onDelete: 'CASCADE',
   })
   public settings?: UserSettings;
+
+  @OneToMany(() => UserPlaylists, (playlists) => playlists.user, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  public playlists?: UserPlaylists[];
 
   @CreateDateColumn()
   public createdAt: Date;
