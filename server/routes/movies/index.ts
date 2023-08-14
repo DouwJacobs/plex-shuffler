@@ -1,32 +1,26 @@
 import PlexAPI from '@server/api/plexapi';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
-import { getSettings } from '@server/lib/settings';
+import { getLibraries, getSettings } from '@server/lib/settings';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
 const movieRoutes = Router();
 
-const getLibraries = () => {
-  const settings = getSettings();
-
-  const movieLibraries = settings.plex.libraries.filter(
-    (lib) => lib.type === 'movie'
-  );
-
-  return movieLibraries;
-};
-
 movieRoutes.get('/libraries', (req, res) => {
-  const movieLibraries = getLibraries();
+  const movieLibraries = getLibraries('movie');
   res.status(200).json(movieLibraries);
 });
 
 movieRoutes.get('/newest', async (req, res, next) => {
   const plexUrl = getPlexUrl();
   try {
-    const movieLibraries = getLibraries();
-    const libID = movieLibraries[0].id;
+    const movieLibraries = getLibraries('movie');
+    const settings = getSettings();
+    const libID =
+      settings.main.defaultMovieLibrary === 'Not Defined'
+        ? movieLibraries[0].id
+        : settings.main.defaultMovieLibrary;
 
     const query = req.query.query as string;
     const genre = req.query.genre as string;

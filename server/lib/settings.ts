@@ -36,6 +36,8 @@ export interface MainSettings {
   region: string;
   originalLanguage: string;
   locale: string;
+  defaultShowLibrary: string;
+  defaultMovieLibrary: string;
 }
 
 interface PublicSettings {
@@ -99,6 +101,8 @@ class Settings {
         region: '',
         originalLanguage: '',
         locale: 'en',
+        defaultShowLibrary: 'Not Defined',
+        defaultMovieLibrary: 'Not Defined',
       },
       plex: {
         name: '',
@@ -237,6 +241,14 @@ export const getSettings = (initialSettings?: AllSettings): Settings => {
   }
 
   return settings;
+};
+
+export const getLibraries = (type: string) => {
+  const settings = getSettings();
+
+  const libraries = settings.plex.libraries.filter((lib) => lib.type === type);
+
+  return libraries;
 };
 
 export default Settings;

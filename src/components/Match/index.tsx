@@ -184,7 +184,6 @@ const Match = () => {
           </span>
         </div>
       </Card>
-
       <SwapableCard
         data={data.results}
         addSelected={addSelected}
