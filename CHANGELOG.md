@@ -1,3 +1,14 @@
+## [1.3.1](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.0...v1.3.1) (2023-08-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v20.4.5 ([8e96bae](https://github.com/DouwJacobs/plex-shuffler/commit/8e96bae63f3a690b5539e11e721c0843850b7da7))
+* **deps:** update dependency react-select to v5.7.4 ([4d897a6](https://github.com/DouwJacobs/plex-shuffler/commit/4d897a695e0248a14d6c2a003309ea40010d275f))
+* **deps:** update dependency swr to v2.2.0 ([fad2ac5](https://github.com/DouwJacobs/plex-shuffler/commit/fad2ac539142d002eefd5fe7e25ec11ff5961b2a))
+* **husky commit-msg:** typo in commit-msg hook ([ae501e1](https://github.com/DouwJacobs/plex-shuffler/commit/ae501e10304cecc8ae8ba80c7e43dbe94533a792))
+* **libraries:** select default libraries ([6651510](https://github.com/DouwJacobs/plex-shuffler/commit/6651510968fbe53ae47a283deb3adf18dbc7403a))
+
 # [1.3.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.2.0...v1.3.0) (2023-07-26)
 
 
