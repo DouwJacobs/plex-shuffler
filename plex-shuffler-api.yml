@@ -1141,6 +1141,62 @@ paths:
       responses:
         '200':
           description: Created shuffled playlist
+  /user/{userId}/settings/permissions:
+    get:
+      summary: Get permission settings for a user
+      description: Returns permission settings for a specific user. Requires `MANAGE_USERS` permission if viewing other users.
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: User permission settings returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: number
+                    example: 2
+    post:
+      summary: Update permission settings for a user
+      description: Updates and returns permission settings for a specific user. Requires `MANAGE_USERS` permission if editing other users.
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissions:
+                  type: number
+              required:
+                - permissions
+      responses:
+        '200':
+          description: Updated user general settings returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: number
+                    example: 2
   /tv/libraries:
     get:
       summary: Get all tv libraries
