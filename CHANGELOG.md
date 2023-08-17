@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.1...v1.3.2) (2023-08-17)
+
+
+### Bug Fixes
+
+* **user permissions:** added user permissions api route ([9c776f2](https://github.com/DouwJacobs/plex-shuffler/commit/9c776f23604b753522c5123857ff8dfee60fd8bc))
+
 ## [1.3.1](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.0...v1.3.1) (2023-08-14)
 
 
