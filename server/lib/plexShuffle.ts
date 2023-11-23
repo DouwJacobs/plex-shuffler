@@ -6,8 +6,16 @@ interface Show {
   episodes: string[];
 }
 
+const removeNoEpisodes = (allEpisodes: Show[]) => {
+  allEpisodes = allEpisodes.filter((show) => show.episodes.length > 0);
+
+  return allEpisodes;
+};
+
 const plexShuffle = (allEpisodes: Show[]) => {
   const shuffledEpisodes: any[] = [];
+
+  allEpisodes = removeNoEpisodes(allEpisodes);
 
   if (allEpisodes.length === 1) {
     shuffle(allEpisodes[0].episodes).map((episode) =>

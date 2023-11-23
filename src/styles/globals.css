@@ -838,3 +838,8 @@ h2 {
   animation-name: popup;
   animation-duration: 800ms;
 }
+
+.cardSelected {
+  border-color: #e5a00d;
+  border-width: thick;
+}
