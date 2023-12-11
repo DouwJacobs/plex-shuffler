@@ -118,6 +118,7 @@ app
     server.use(
       '/api',
       session({
+        name: 'plex-shuffler.connect.sid',
         secret: settings.clientId,
         resave: false,
         saveUninitialized: false,

@@ -362,7 +362,7 @@ components:
   securitySchemes:
     cookieAuth:
       type: apiKey
-      name: connect.sid
+      name: plex-shuffler.connect.sid
       in: cookie
     apiKey:
       type: apiKey
