@@ -417,6 +417,7 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       const editResponse = await plexClient.editPlaylist({
         ratingKey: response[0].ratingKey,
         userToken: user.plexToken,
+        title: playlistTitle,
         summary: summary,
         thumb: req.body.playlistCoverUrl,
       });
