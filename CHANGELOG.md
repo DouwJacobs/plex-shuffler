@@ -1,3 +1,11 @@
+## [1.3.3](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.2...v1.3.3) (2024-01-06)
+
+
+### Bug Fixes
+
+* **proxy:** updated cookie name to not conflict with Overseerr cookie ([222c6ec](https://github.com/DouwJacobs/plex-shuffler/commit/222c6ecbd8a046e84d6d66b96ef99fcfa234ec46))
+* **shuffled-playlist:** playlist poster error ([8a1adee](https://github.com/DouwJacobs/plex-shuffler/commit/8a1adeebf6eb38a6ec078e765bcf9dc1f2080b07))
+
 ## [1.3.2](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.1...v1.3.2) (2023-08-17)
 
 
