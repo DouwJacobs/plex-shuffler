@@ -275,16 +275,16 @@ export const getLibraries = async (type: string, id?: number) => {
     });
 
   // const libraries = settings.plex.libraries.filter((lib) => lib.type === type);
-  if (!user.settings) {
+  if (!user.settings && settings.public.initialized) {
     user.settings = new UserSettings({
       user: user,
       appendToTitle: false,
       appendToSummary: false,
       userDefaultShowLibraryID: Number(settings.main.defaultShowLibrary),
     });
-  }
 
-  await userRepository.save(user);
+    await userRepository.save(user);
+  }
 
   return newLibraries;
 };
