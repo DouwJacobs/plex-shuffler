@@ -7,26 +7,40 @@ import { Router } from 'express';
 
 const tvRoutes = Router();
 
-tvRoutes.get('/libraries', (req, res) => {
-  const tvLibraries = getLibraries('show');
+tvRoutes.get('/libraries', async (req, res) => {
+  const tvLibraries = await getLibraries('show', req.user?.id);
   res.status(200).json(tvLibraries);
 });
 
 tvRoutes.get('/shows', async (req, res, next) => {
   const plexUrl = getPlexUrl();
+
+  const userRepository = getRepository(User);
+
+  if (!req.user) {
+    return res.status(500).json({
+      status: 500,
+      error: 'Please sign in.',
+    });
+  }
+
+  const user = await userRepository.findOneOrFail({
+    where: { id: req.user.id },
+  });
+
   try {
     const settings = getSettings();
-    const tvLibraries = getLibraries('show');
-    const libID =
-      settings.main.defaultShowLibrary === 'Not Defined'
-        ? tvLibraries[0].id
-        : settings.main.defaultShowLibrary;
+    const tvLibraries = await getLibraries('show');
+    const libID = user.settings?.userDefaultShowLibraryID
+      ? user.settings?.userDefaultShowLibraryID
+      : settings.main.defaultShowLibrary === 'Not Defined'
+      ? tvLibraries[0].id
+      : settings.main.defaultShowLibrary;
 
     const query = req.query.query as string;
     const genre = req.query.genre as string;
     const sortBy = req.query.sortBy as string;
 
-    const userRepository = getRepository(User);
     const admin = await userRepository.findOneOrFail({
       select: { id: true, plexToken: true },
       where: { id: 1 },

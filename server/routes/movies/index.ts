@@ -7,15 +7,15 @@ import { Router } from 'express';
 
 const movieRoutes = Router();
 
-movieRoutes.get('/libraries', (req, res) => {
-  const movieLibraries = getLibraries('movie');
+movieRoutes.get('/libraries', async (req, res) => {
+  const movieLibraries = await getLibraries('movie', req.user?.id);
   res.status(200).json(movieLibraries);
 });
 
 movieRoutes.get('/newest', async (req, res, next) => {
   const plexUrl = getPlexUrl();
   try {
-    const movieLibraries = getLibraries('movie');
+    const movieLibraries = await getLibraries('movie', req.user?.id);
     const settings = getSettings();
     const libID =
       settings.main.defaultMovieLibrary === 'Not Defined'

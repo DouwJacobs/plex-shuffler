@@ -224,7 +224,7 @@ class PlexAPI {
   }
 
   public async getLibraryContents(
-    id: string,
+    id: string | number,
     {
       offset = 0,
       size = 50,

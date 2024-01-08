@@ -4,6 +4,7 @@ import PageTitle from '@app/components/Common/PageTitle';
 import { useUser } from '@app/hooks/useUser';
 import Error from '@app/pages/_error';
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
+import type { PlexLibrary } from '@server/interfaces/api/plexInterfaces';
 import type { UserSettingsGeneralResponse } from '@server/interfaces/api/userSettingsInterfaces';
 import axios from 'axios';
 import { Field, Formik } from 'formik';
@@ -23,6 +24,7 @@ const messages = defineMessages({
   save: 'Save Changes',
   appendtotitlelabel: 'Append Plex Shuffler to playlist titles',
   appendtosummarylabel: 'Append Plex Shuffler to playlist summary',
+  userDefaultShowLibrary: 'User Default TV Show Library',
 });
 
 const UserPlaylistSettings = () => {
@@ -31,6 +33,10 @@ const UserPlaylistSettings = () => {
   const { user, revalidate: revalidateUser } = useUser({
     id: Number(router.query.userId),
   });
+  const { data: plexTVLibraries } = useSWR<PlexLibrary[]>(
+    '/api/v1/tv/libraries'
+  );
+
   const {
     data,
     error,
@@ -66,6 +72,7 @@ const UserPlaylistSettings = () => {
         initialValues={{
           appendToTitle: data?.appendToTitle,
           appendToSummary: data?.appendToSummary,
+          userDefaultShowLibraryID: data?.userDefaultShowLibraryID,
         }}
         validationSchema={UserGeneralSettingsSchema}
         enableReinitialize
@@ -74,6 +81,7 @@ const UserPlaylistSettings = () => {
             await axios.post(`/api/v1/user/${user?.id}/settings/playlists`, {
               appendToTitle: values.appendToTitle,
               appendToSummary: values.appendToSummary,
+              userDefaultShowLibraryID: values.userDefaultShowLibraryID,
             });
 
             toast.success(intl.formatMessage(messages.toastSettingsSuccess));
@@ -85,7 +93,14 @@ const UserPlaylistSettings = () => {
           }
         }}
       >
-        {({ isSubmitting, handleSubmit }) => {
+        {({
+          errors,
+          touched,
+          values,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+        }) => {
           return (
             <form className="section" onSubmit={handleSubmit}>
               <div className="form-row">
@@ -110,6 +125,49 @@ const UserPlaylistSettings = () => {
                     id="appendToSummary"
                     name="appendToSummary"
                   />
+                </div>
+              </div>
+              <div className="form-row">
+                <label
+                  htmlFor="userDefaultShowLibraryID"
+                  className="text-label"
+                >
+                  {intl.formatMessage(messages.userDefaultShowLibrary)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <select
+                      id="userDefaultShowLibraryID"
+                      name="userDefaultShowLibraryID"
+                      value={values.userDefaultShowLibraryID}
+                      disabled={!plexTVLibraries}
+                      className="rounded"
+                      onChange={(e) =>
+                        setFieldValue(
+                          'userDefaultShowLibraryID',
+                          e.target.value
+                        )
+                      }
+                    >
+                      {plexTVLibraries?.map(
+                        (library: PlexLibrary, index: number) => (
+                          <option
+                            key={`plex-tv-library-${index}`}
+                            value={library.id}
+                          >
+                            {library.name}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                  {errors.userDefaultShowLibraryID &&
+                    touched.userDefaultShowLibraryID &&
+                    typeof errors.userDefaultShowLibraryID === 'string' && (
+                      <div className="error">
+                        {errors.userDefaultShowLibraryID}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="actions">
