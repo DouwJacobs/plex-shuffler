@@ -150,7 +150,7 @@ class PlexAPI {
       token: plexToken,
       authenticator: {
         authenticate: (
-          _plexApi,
+          _plexApi: NodePlexAPI,
           cb: (err?: string, token?: string) => void
         ) => {
           if (!plexToken) {
@@ -346,7 +346,7 @@ class PlexAPI {
       });
 
       const playlistDetails = await Promise.all(
-        (response.MediaContainer.Metadata ?? []).map((playlistItem) => {
+        (response.MediaContainer.Metadata ?? []).map((playlistItem: any) => {
           return {
             ratingKey: playlistItem.ratingKey,
             title: playlistItem.title,
