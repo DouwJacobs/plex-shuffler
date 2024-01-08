@@ -88,7 +88,7 @@ const UserDropdown = () => {
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    href={`/profile/settings`}
+                    href={`/profile/settings/main`}
                     className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
                       active
                         ? 'plex-bg-secondary bg-gradient-to-br text-white'

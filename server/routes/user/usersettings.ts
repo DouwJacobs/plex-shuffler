@@ -3,6 +3,7 @@ import { User } from '@server/entity/User';
 import { UserSettings } from '@server/entity/UserSettings';
 import type { UserSettingsGeneralResponse } from '@server/interfaces/api/userSettingsInterfaces';
 import { Permission } from '@server/lib/permissions';
+import { getSettings } from '@server/lib/settings';
 import { isAuthenticated } from '@server/middleware/auth';
 import { Router } from 'express';
 import { canMakePermissionsChange } from '.';
@@ -107,7 +108,12 @@ userSettingsRoutes.post<
 
 userSettingsRoutes.get<
   { id: string },
-  { username?: string; appendToTitle?: boolean; appendToSummary?: boolean }
+  {
+    username?: string;
+    appendToTitle?: boolean;
+    appendToSummary?: boolean;
+    userDefaultShowLibraryID?: number;
+  }
 >('/playlists', isOwnProfileOrAdmin(), async (req, res, next) => {
   const userRepository = getRepository(User);
 
@@ -124,6 +130,7 @@ userSettingsRoutes.get<
       username: user.username,
       appendToTitle: user.settings?.appendToTitle,
       appendToSummary: user.settings?.appendToSummary,
+      userDefaultShowLibraryID: user.settings?.userDefaultShowLibraryID,
     });
   } catch (e) {
     next({ status: 500, message: e.message });
@@ -136,6 +143,8 @@ userSettingsRoutes.post<
   UserSettingsGeneralResponse
 >('/playlists', isOwnProfileOrAdmin(), async (req, res, next) => {
   const userRepository = getRepository(User);
+
+  const settings = getSettings();
 
   try {
     const user = await userRepository.findOne({
@@ -157,12 +166,15 @@ userSettingsRoutes.post<
     if (!user.settings) {
       user.settings = new UserSettings({
         user: req.user,
-        appendToTitle: true,
-        appendToSummary: true,
+        appendToTitle: false,
+        appendToSummary: false,
+        userDefaultShowLibraryID: Number(settings.main.defaultShowLibrary),
       });
     } else {
       user.settings.appendToTitle = req.body.appendToTitle;
       user.settings.appendToSummary = req.body.appendToSummary;
+      user.settings.userDefaultShowLibraryID =
+        req.body.userDefaultShowLibraryID;
     }
 
     await userRepository.save(user);
@@ -171,6 +183,7 @@ userSettingsRoutes.post<
       username: user.username,
       appendToTitle: user.settings.appendToTitle,
       appendToSummary: user.settings.appendToSummary,
+      userDefaultShowLibraryID: user.settings.userDefaultShowLibraryID,
     });
   } catch (e) {
     next({ status: 500, message: e.message });

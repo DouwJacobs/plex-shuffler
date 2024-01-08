@@ -5,4 +5,5 @@ export interface UserSettingsGeneralResponse {
   originalLanguage?: string;
   appendToTitle?: boolean;
   appendToSummary?: boolean;
+  userDefaultShowLibraryID?: number;
 }

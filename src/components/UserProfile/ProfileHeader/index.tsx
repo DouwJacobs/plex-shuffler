@@ -80,7 +80,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
           <Link
             href={
               loggedInUser?.id === user.id
-                ? `/profile/settings`
+                ? `/profile/settings/main`
                 : `/users/${user.id}/settings`
             }
             passHref
