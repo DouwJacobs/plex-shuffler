@@ -20,6 +20,7 @@ export interface PlexLibraryItem {
   }[];
   type: 'movie' | 'show' | 'season' | 'episode';
   Media: Media[];
+  leafCount: number;
 }
 
 interface PlexLibraryResponse {
