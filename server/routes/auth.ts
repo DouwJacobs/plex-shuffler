@@ -121,7 +121,15 @@ authRoutes.post('/plex', async (req, res, next) => {
             account.id
           );
 
-          user.plexToken = userServerToken;
+          if (
+            account.id === mainUser.plexId ||
+            (account.email === mainUser.email && !mainUser.plexId)
+          ) {
+            user.plexToken = body.authToken;
+          } else {
+            user.plexToken = userServerToken;
+          }
+
           user.plexId = account.id;
           user.avatar = account.thumb;
           user.email = account.email;
