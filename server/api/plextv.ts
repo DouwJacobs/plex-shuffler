@@ -293,9 +293,9 @@ class PlexTvAPI extends ExternalAPI {
         throw new Error('Plex is not configured!');
       }
 
-      const friends = await this.getFriends();
+      const usersResponse = await this.getUsers();
 
-      const users = friends.MediaContainer.User;
+      const users = usersResponse.MediaContainer.User;
 
       const user = users.find((u) => parseInt(u.$.id) === userId);
 
