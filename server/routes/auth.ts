@@ -126,6 +126,7 @@ authRoutes.post('/plex', async (req, res, next) => {
             (account.email === mainUser.email && !mainUser.plexId)
           ) {
             user.plexToken = body.authToken;
+            user.permissions = Permission.ADMIN;
           } else {
             user.plexToken = userServerToken;
           }
