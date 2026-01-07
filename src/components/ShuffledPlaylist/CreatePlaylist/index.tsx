@@ -1,17 +1,18 @@
-import ListView from '@app/components/Common/ListView';
-import { useEffect, useState } from 'react';
-// import SearchInput from '@app/components/Common/SearchInput';
 import Button from '@app/components/Common/Button';
 import Card from '@app/components/Common/Card';
+import ListView from '@app/components/Common/ListView';
 import useDiscover from '@app/hooks/useListLoading';
 import Error from '@app/pages/_error';
 import { Disclosure } from '@headlessui/react';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import type { PlexLibrary } from '@server/interfaces/api/plexInterfaces';
 import type { ShowResult } from '@server/models/Search';
 import axios from 'axios';
 import { Field, Formik } from 'formik';
+import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { defineMessages, useIntl } from 'react-intl';
+import useSWR from 'swr';
 import * as Yup from 'yup';
 
 const messages = defineMessages({
@@ -25,6 +26,12 @@ const messages = defineMessages({
   playlistValidUrl: 'Playlist Cover URL should be a valid url',
   playlistDescription: 'Playlist Description',
   unwatchedOnly: 'Include Unwatched Only',
+  selectLibraries: 'Select Libraries',
+  allLibraries: 'All Libraries',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  librariesSelected: 'Libraries Selected',
+  librarySelected: 'Library Selected',
 });
 
 interface CreatePlaylistProps {
@@ -34,11 +41,18 @@ interface CreatePlaylistProps {
 const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
   const intl = useIntl();
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const [librarySelectorOpen, setLibrarySelectorOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedLibraryIds, setSelectedLibraryIds] = useState<string[]>([]);
 
   const [playlists, setPlaylists] = useState<{ selections: string[] }>({
     selections: [],
   });
+
+  // Fetch available libraries
+  const { data: plexTVLibraries } = useSWR<PlexLibrary[]>(
+    '/api/v1/tv/libraries'
+  );
 
   useEffect(() => {
     const updateScrolled = () => {
@@ -56,6 +70,26 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
     };
   }, []);
 
+  // Close library selector when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        librarySelectorOpen &&
+        !target.closest('.library-selector-container')
+      ) {
+        setLibrarySelectorOpen(false);
+      }
+    };
+
+    if (librarySelectorOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [librarySelectorOpen]);
+
   function handleCheckboxChange(key: string) {
     const sel = playlists.selections;
     const find = sel.indexOf(key);
@@ -70,6 +104,39 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
     });
   }
 
+  function handleLibraryToggle(libraryId: string) {
+    setSelectedLibraryIds((prev) => {
+      if (prev.includes(libraryId)) {
+        return prev.filter((id) => id !== libraryId);
+      } else {
+        return [...prev, libraryId];
+      }
+    });
+  }
+
+  function handleSelectAllLibraries() {
+    if (plexTVLibraries) {
+      if (selectedLibraryIds.length === plexTVLibraries.length) {
+        // Deselect all
+        setSelectedLibraryIds([]);
+      } else {
+        // Select all
+        setSelectedLibraryIds(plexTVLibraries.map((lib) => String(lib.id)));
+      }
+    }
+  }
+
+  // Build options for useDiscover, including libraryIds if selected
+  // Use useMemo to ensure the options object reference changes when selectedLibraryIds changes
+  // Always include libraryIds parameter (even if empty) so SWR detects changes properly
+  const discoverOptions = useMemo(
+    () => ({
+      libraryIds:
+        selectedLibraryIds.length > 0 ? selectedLibraryIds.join(',') : 'all',
+    }),
+    [selectedLibraryIds]
+  );
+
   const {
     isLoadingInitialData,
     isEmpty,
@@ -78,7 +145,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
     titles,
     fetchMore,
     error,
-  } = useDiscover<ShowResult>('/api/v1/tv/shows');
+  } = useDiscover<ShowResult>('/api/v1/tv/shows', discoverOptions);
 
   if (error) {
     return <Error statusCode={500} />;
@@ -148,7 +215,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
             >
               <Card className={`p-2`}>
                 <div className="shuffled-playlist-form-row">
-                  <div className="form-input-area">
+                  <div className="form-input-area flex-1">
                     <Field
                       type="text"
                       id="playlistTitle"
@@ -163,6 +230,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                         <div className="error">{errors.playlistTitle}</div>
                       )}
                   </div>
+
                   <div className="flex">
                     <span className="mt-2 inline-flex h-9 rounded-md shadow-sm md:ml-3 md:mt-0">
                       <Button
@@ -177,6 +245,73 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                         </span>
                       </Button>
                     </span>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-input-area">
+                    <div className="form-input-field library-selector-container w-1/4">
+                      <button
+                        type="button"
+                        id="librarySelector"
+                        onClick={() =>
+                          setLibrarySelectorOpen(!librarySelectorOpen)
+                        }
+                        className="block h-9 w-full min-w-0 flex-1 rounded-md border border-gray-500 bg-zinc-700 px-3 py-2 text-left text-white transition duration-150 ease-in-out focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm sm:leading-5"
+                        disabled={!plexTVLibraries}
+                      >
+                        {selectedLibraryIds.length === 0
+                          ? intl.formatMessage(messages.allLibraries)
+                          : selectedLibraryIds.length ===
+                            plexTVLibraries?.length
+                          ? intl.formatMessage(messages.allLibraries)
+                          : `${selectedLibraryIds.length} ${
+                              selectedLibraryIds.length === 1
+                                ? intl.formatMessage(messages.librarySelected)
+                                : intl.formatMessage(messages.librariesSelected)
+                            }`}
+                      </button>
+                      {librarySelectorOpen && plexTVLibraries && (
+                        <div className="absolute z-20 mt-1 w-full max-w-xl rounded-md border border-gray-500 bg-zinc-700 shadow-lg">
+                          <div className="max-h-60 overflow-auto py-1">
+                            <button
+                              type="button"
+                              className="w-full cursor-pointer px-3 py-2 text-left text-sm text-white transition duration-150 ease-in-out hover:bg-gray-600 focus:bg-gray-600 focus:outline-none sm:text-sm sm:leading-5"
+                              onClick={handleSelectAllLibraries}
+                            >
+                              {selectedLibraryIds.length ===
+                              plexTVLibraries.length
+                                ? intl.formatMessage(messages.deselectAll)
+                                : intl.formatMessage(messages.selectAll)}
+                            </button>
+                            <div className="border-t border-gray-500"></div>
+                            {plexTVLibraries.map((library: PlexLibrary) => (
+                              <div
+                                key={library.id}
+                                className="flex items-center px-3 py-2 text-white transition duration-150 ease-in-out hover:bg-gray-600 sm:text-sm sm:leading-5"
+                              >
+                                <input
+                                  type="checkbox"
+                                  id={`library-${library.id}`}
+                                  checked={selectedLibraryIds.includes(
+                                    String(library.id)
+                                  )}
+                                  onChange={() =>
+                                    handleLibraryToggle(String(library.id))
+                                  }
+                                  className="h-6 w-6 rounded-md text-indigo-600 transition duration-150 ease-in-out"
+                                />
+                                <label
+                                  htmlFor={`library-${library.id}`}
+                                  className="ml-3 cursor-pointer text-sm text-white"
+                                >
+                                  {library.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Disclosure>
