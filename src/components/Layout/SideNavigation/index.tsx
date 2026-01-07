@@ -49,31 +49,31 @@ const SidebarLinks: SidebarLinkProps[] = [
   {
     href: '/',
     messagesKey: 'home',
-    svgIcon: <HomeIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <HomeIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/(home\/?)?$/,
   },
   {
     href: '/match',
     messagesKey: 'match',
-    svgIcon: <FilmIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <FilmIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/match/,
   },
   {
     href: '/user/playlists',
     messagesKey: 'playlists',
-    svgIcon: <QueueListIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <QueueListIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/user\/playlists$/,
   },
   {
     href: '/shows',
     messagesKey: 'shows',
-    svgIcon: <TvIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <TvIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/shows/,
   },
   {
     href: '/users',
     messagesKey: 'users',
-    svgIcon: <UsersIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <UsersIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/users/,
     requiredPermission: Permission.MANAGE_USERS,
     dataTestId: 'sidebar-menu-users',
@@ -81,7 +81,7 @@ const SidebarLinks: SidebarLinkProps[] = [
   {
     href: '/settings',
     messagesKey: 'settings',
-    svgIcon: <CogIcon className="plex-color-primary mr-3 h-6 w-6" />,
+    svgIcon: <CogIcon className="plex-color-primary mr-3 h-7 w-7" />,
     activeRegExp: /^\/settings/,
     requiredPermission: Permission.ADMIN,
     dataTestId: 'sidebar-menu-settings',
@@ -170,13 +170,13 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                             }}
                             role="button"
                             tabIndex={0}
-                            className={`flex items-center rounded-md px-2 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out focus:outline-none
+                            className={`flex items-center rounded-lg px-4 py-3 text-lg font-medium leading-6 text-white transition-all duration-200 ease-in-out focus:outline-none
                                 ${
                                   router.pathname.match(
                                     sidebarLink.activeRegExp
                                   )
-                                    ? 'plex-bg-secondary'
-                                    : 'hover:plex-bg-transparent-10 focus:bg-gray-700'
+                                    ? 'border-l-4 border-plex-primary bg-plex-primary/20 text-white shadow-lg'
+                                    : 'hover:bg-zinc-700/50 focus:bg-zinc-700/50'
                                 }
                               `}
                             data-testid={`${sidebarLink.dataTestId}-mobile`}
@@ -190,7 +190,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                       })}
                     </nav>
                     {hasPermission(Permission.ADMIN) && (
-                      <div className="px-2">
+                      <div className="px-4 pb-4">
                         <VersionStatus onClick={() => setClosed()} />
                       </div>
                     )}
@@ -205,10 +205,10 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
         </Transition>
       </div>
 
-      <div className="fixed bottom-0 left-0 top-0 z-30 hidden lg:flex lg:flex-shrink-0">
+      <div className="fixed bottom-0 left-0 top-16 z-30 hidden lg:flex lg:flex-shrink-0">
         <div className="sidebar flex w-64 flex-col">
           <div className="flex h-0 flex-1 flex-col">
-            <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-8">
+            <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-6">
               <Link href="/">
                 <div className="flex flex-shrink-0 items-center">
                   <span className="px-4 text-2xl text-gray-50">
@@ -230,13 +230,13 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                       key={`desktop-${sidebarLink.messagesKey}`}
                       href={sidebarLink.href}
                       as={sidebarLink.as}
-                      className={`group flex items-center rounded-md px-2 py-2 text-lg font-medium leading-6 text-white transition duration-150 ease-in-out focus:outline-none
+                      className={`group flex items-center rounded-lg px-4 py-3 text-xl font-medium leading-6 text-white transition-all duration-200 ease-in-out focus:outline-none
                                 ${
                                   router.pathname.match(
                                     sidebarLink.activeRegExp
                                   )
-                                    ? 'bg-zinc-700'
-                                    : 'hover:bg-zinc-500 focus:bg-zinc-500'
+                                    ? 'border-l-4 border-plex-primary bg-plex-primary/20 text-white shadow-lg'
+                                    : 'hover:bg-zinc-700/50 focus:bg-zinc-700/50'
                                 }
                               `}
                       data-testid={sidebarLink.dataTestId}
@@ -250,7 +250,7 @@ const SideNavigation = ({ open, setClosed }: SidebarProps) => {
                 })}
               </nav>
               {hasPermission(Permission.ADMIN) && (
-                <div className="px-2">
+                <div className="px-4 pb-4">
                   <VersionStatus />
                 </div>
               )}

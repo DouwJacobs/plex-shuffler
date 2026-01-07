@@ -29,11 +29,11 @@ const UserDropdown = () => {
     <Menu as="div" className="relative ml-3">
       <div>
         <Menu.Button
-          className="flex max-w-xs items-center rounded-full text-sm ring-1 ring-gray-700 hover:ring-gray-500 focus:outline-none focus:ring-gray-500"
+          className="flex max-w-xs items-center rounded-full text-sm shadow-lg ring-2 ring-gray-600/50 transition-all duration-200 hover:shadow-xl hover:ring-gray-500/80 focus:outline-none focus:ring-2 focus:ring-plex-primary/50"
           data-testid="user-menu"
         >
           <img
-            className="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
+            className="h-8 w-8 rounded-full object-cover ring-2 ring-gray-700/50 transition-all duration-200 hover:ring-gray-500/80 sm:h-10 sm:w-10"
             src={user?.avatar}
             alt=""
           />
@@ -49,38 +49,38 @@ const UserDropdown = () => {
         leaveTo="opacity-0 scale-95"
         appear
       >
-        <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right rounded-md shadow-lg">
-          <div className="plex-bg-primary divide-y divide-gray-700 rounded-md bg-gray-800 bg-opacity-80 ring-1 ring-gray-700 backdrop-blur">
-            <div className="flex flex-col space-y-4 px-4 py-4">
-              <div className="flex items-center space-x-2">
+        <Menu.Items className="absolute right-0 mt-3 w-72 origin-top-right rounded-lg shadow-2xl">
+          <div className="divide-y divide-gray-700/50 overflow-hidden rounded-lg bg-zinc-800/95 ring-1 ring-gray-600/50 backdrop-blur-md">
+            <div className="flex flex-col space-y-4 px-5 py-5">
+              <div className="flex items-center space-x-3">
                 <img
-                  className="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-gray-600/50 sm:h-12 sm:w-12"
                   src={user?.avatar}
                   alt=""
                 />
                 <div className="flex min-w-0 flex-col">
-                  <span className="truncate text-xl font-semibold text-gray-200">
+                  <span className="truncate text-lg font-semibold text-gray-100">
                     {user?.displayName}
                   </span>
-                  <span className="plex-color-secondary truncate text-sm">
+                  <span className="truncate text-sm text-gray-400">
                     {user?.email}
                   </span>
                 </div>
               </div>
             </div>
-            <div className="p-1">
+            <div className="p-2">
               <Menu.Item>
                 {({ active }) => (
                   <Link
                     href={`/profile`}
-                    className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
+                    className={`flex items-center rounded-lg px-5 py-3 text-base font-medium text-gray-200 transition-all duration-200 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
-                        : ''
+                        ? 'bg-zinc-700/80 text-white shadow-md'
+                        : 'hover:bg-zinc-700/50'
                     }`}
                     data-testid="user-menu-profile"
                   >
-                    <UserIcon className="mr-2 inline h-5 w-5" />
+                    <UserIcon className="mr-3 inline h-6 w-6" />
                     <span>{intl.formatMessage(messages.myprofile)}</span>
                   </Link>
                 )}
@@ -89,14 +89,14 @@ const UserDropdown = () => {
                 {({ active }) => (
                   <Link
                     href={`/profile/settings/main`}
-                    className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
+                    className={`flex items-center rounded-lg px-5 py-3 text-base font-medium text-gray-200 transition-all duration-200 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
-                        : ''
+                        ? 'bg-zinc-700/80 text-white shadow-md'
+                        : 'hover:bg-zinc-700/50'
                     }`}
                     data-testid="user-menu-settings"
                   >
-                    <CogIcon className="mr-2 inline h-5 w-5" />
+                    <CogIcon className="mr-3 inline h-6 w-6" />
                     <span>{intl.formatMessage(messages.settings)}</span>
                   </Link>
                 )}
@@ -105,14 +105,17 @@ const UserDropdown = () => {
                 {({ active }) => (
                   <a
                     href="#"
-                    className={`flex items-center rounded px-4 py-2 text-sm font-medium text-gray-200 transition duration-150 ease-in-out ${
+                    className={`flex items-center rounded-lg px-5 py-3 text-base font-medium text-gray-200 transition-all duration-200 ease-in-out ${
                       active
-                        ? 'plex-bg-secondary bg-gradient-to-br text-white'
-                        : ''
+                        ? 'bg-red-600/80 text-white shadow-md'
+                        : 'hover:bg-red-600/50'
                     }`}
-                    onClick={() => logout()}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      logout();
+                    }}
                   >
-                    <ArrowRightOnRectangleIcon className="mr-2 inline h-5 w-5" />
+                    <ArrowRightOnRectangleIcon className="mr-3 inline h-6 w-6" />
                     <span>{intl.formatMessage(messages.signout)}</span>
                   </a>
                 )}

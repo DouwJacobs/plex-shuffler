@@ -45,7 +45,7 @@ const SettingsLink = ({
     'px-1 py-4 ml-8 text-sm font-medium leading-5 transition duration-300 border-b-2 border-transparent whitespace-nowrap first:ml-0';
   let activeLinkColor = 'plex-color-primary plex-border-primary';
   let inactiveLinkColor =
-    'text-white border-transparent hover:border-white hover:border-white focus:text-white focus:border-white';
+    'text-gray-300 border-transparent hover:border-gray-500/50 hover:text-white focus:text-white focus:border-gray-500/50';
 
   if (tabType === 'button') {
     linkClasses =
@@ -142,7 +142,7 @@ const SettingsTabs = ({
           </nav>
         </div>
       ) : (
-        <div className="hide-scrollbar hidden overflow-x-scroll border-b border-zinc-700 sm:block">
+        <div className="hide-scrollbar hidden overflow-x-scroll border-b border-gray-600/30 sm:block">
           <nav className="flex" data-testid="settings-nav-desktop">
             {settingsRoutes
               .filter(

@@ -51,10 +51,7 @@ const SetupContent = () => {
       <PageTitle title={intl.formatMessage(messages.setup)} />
       <div className="relative z-40 px-4 sm:mx-auto sm:w-full sm:max-w-4xl">
         <nav className="relative z-50">
-          <ul
-            className="plex-border-primary divide-y divide-gray-600 rounded-md border bg-gray-800 bg-opacity-50 md:flex md:divide-y-0"
-            style={{ backdropFilter: 'blur(5px)' }}
-          >
+          <ul className="plex-border-primary divide-y divide-gray-600/50 overflow-hidden rounded-lg border border-gray-600/50 bg-zinc-800/60 shadow-lg backdrop-blur-md md:flex md:divide-y-0">
             <SetupSteps
               stepNumber={1}
               description={intl.formatMessage(messages.loginwithplex)}
@@ -76,7 +73,7 @@ const SetupContent = () => {
             />
           </ul>
         </nav>
-        <div className="mt-10 w-full bg-opacity-50 p-4 text-white">
+        <div className="mt-10 w-full p-6 text-white">
           {currentStep === 1 && (
             <LoginWithPlex onComplete={() => setCurrentStep(2)} />
           )}

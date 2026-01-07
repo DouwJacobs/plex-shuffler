@@ -82,9 +82,11 @@ const Login = () => {
       <Card className={styles['login-card']}>
         <div className={styles['login-content']}>
           <h2>{intl.formatMessage(messages.signinheader)}</h2>
-          <PlexLoginButton
-            onAuthToken={(authToken) => setAuthToken(authToken)}
-          />
+          <div className="w-full max-w-xs">
+            <PlexLoginButton
+              onAuthToken={(authToken) => setAuthToken(authToken)}
+            />
+          </div>
         </div>
       </Card>
     </React.Fragment>

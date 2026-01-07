@@ -38,7 +38,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
         <div className="flex-shrink-0">
           <div className="relative">
             <img
-              className="h-24 w-24 rounded-full bg-gray-600 object-cover ring-1 ring-gray-700"
+              className="h-28 w-28 rounded-full bg-gray-600 object-cover shadow-lg ring-2 ring-gray-600/50"
               src={user.avatar}
               alt=""
             />
@@ -49,12 +49,12 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
           </div>
         </div>
         <div className="pt-1.5">
-          <h1 className="mb-1 flex flex-col sm:flex-row sm:items-center">
+          <h1 className="mb-2 flex flex-col sm:flex-row sm:items-center">
             <Link
               href={
                 user.id === loggedInUser?.id ? '/profile' : `/users/${user.id}`
               }
-              className="plex-color-primary text-lg font-bold hover:to-purple-200 sm:text-2xl"
+              className="plex-color-primary text-xl font-bold transition-colors duration-200 hover:text-plex-primary/80 sm:text-3xl"
             >
               {user.displayName}
             </Link>
@@ -73,7 +73,7 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
           </p>
         </div>
       </div>
-      <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse lg:flex-row lg:justify-end lg:space-x-3 lg:space-y-0 lg:space-x-reverse">
+      <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse lg:flex-row lg:justify-end lg:space-x-4 lg:space-y-0 lg:space-x-reverse">
         {(loggedInUser?.id === user.id ||
           (user.id !== 1 && hasPermission(Permission.MANAGE_USERS))) &&
         !isSettingsPage ? (
@@ -85,8 +85,8 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
             }
             passHref
           >
-            <Button>
-              <CogIcon />
+            <Button buttonType="primary" buttonSize="lg">
+              <CogIcon className="h-6 w-6" />
               <span>{intl.formatMessage(messages.settings)}</span>
             </Button>
           </Link>
@@ -98,8 +98,8 @@ const ProfileHeader = ({ user, isSettingsPage }: ProfileHeaderProps) => {
               }
               passHref
             >
-              <Button>
-                <UserIcon />
+              <Button buttonType="primary" buttonSize="lg">
+                <UserIcon className="h-6 w-6" />
                 <span>{intl.formatMessage(messages.profile)}</span>
               </Button>
             </Link>

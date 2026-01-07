@@ -6,7 +6,7 @@ type TBodyProps = {
 
 const TBody = ({ children }: TBodyProps) => {
   return (
-    <tbody className="plex-bg-secondary divide-y divide-gray-700">
+    <tbody className="plex-bg-secondary divide-y divide-gray-600/30">
       {children}
     </tbody>
   );

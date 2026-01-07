@@ -56,14 +56,14 @@ const LoginWithPlex = ({ onComplete }: LoginWithPlexProps) => {
   }, [user, onComplete]);
 
   return (
-    <form>
-      <div className="mb-2 flex justify-center text-xl font-bold">
+    <form className="flex flex-col items-center">
+      <div className="mb-4 flex justify-center text-2xl font-bold text-white">
         {intl.formatMessage(messages.welcome)}
       </div>
-      <div className="mb-2 flex justify-center pb-6 text-sm">
+      <div className="mb-8 flex justify-center text-base text-gray-300">
         {intl.formatMessage(messages.signinMessage)}
       </div>
-      <div className="">
+      <div className="w-full max-w-xs">
         <PlexLoginButton onAuthToken={(authToken) => setAuthToken(authToken)} />
       </div>
     </form>

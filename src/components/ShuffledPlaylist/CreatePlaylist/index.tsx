@@ -209,18 +209,18 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
         return (
           <form className="section" onSubmit={handleSubmit}>
             <div
-              className={`sticky top-16 z-10 ${
-                isScrolled && 'plex-bg-secondary'
+              className={`sticky top-16 z-10 transition-all duration-300 ${
+                isScrolled && 'plex-bg-secondary backdrop-blur-md'
               }`}
             >
-              <Card className={`p-2`}>
+              <Card className={`p-6`}>
                 <div className="shuffled-playlist-form-row">
                   <div className="form-input-area flex-1">
                     <Field
                       type="text"
                       id="playlistTitle"
                       name="playlistTitle"
-                      className="block h-9"
+                      className="block h-11"
                       placeholder={intl.formatMessage(messages.playlistTitle)}
                       value={values.playlistTitle}
                     />
@@ -232,14 +232,14 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                   </div>
 
                   <div className="flex">
-                    <span className="mt-2 inline-flex h-9 rounded-md shadow-sm md:ml-3 md:mt-0">
+                    <span className="mt-0 inline-flex h-11 rounded-lg shadow-lg md:ml-4 md:mt-0">
                       <Button
                         id="savePlaylist"
                         buttonType="primary"
                         type="submit"
                         disabled={isSubmitting}
                       >
-                        <PlusIcon />
+                        <PlusIcon className="h-5 w-5" />
                         <span>
                           {intl.formatMessage(messages.playlistCreate)}
                         </span>
@@ -256,7 +256,7 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                         onClick={() =>
                           setLibrarySelectorOpen(!librarySelectorOpen)
                         }
-                        className="block h-9 w-full min-w-0 flex-1 rounded-md border border-gray-500 bg-zinc-700 px-3 py-2 text-left text-white transition duration-150 ease-in-out focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm sm:leading-5"
+                        className="block h-11 w-full min-w-0 flex-1 rounded-lg border border-gray-600 bg-zinc-800/60 px-4 py-2.5 text-left text-white shadow-sm backdrop-blur-sm transition-all duration-200 ease-in-out hover:border-gray-500 hover:bg-zinc-800/80 focus:outline-none focus:ring-2 focus:ring-plex-primary/50 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm sm:leading-5"
                         disabled={!plexTVLibraries}
                       >
                         {selectedLibraryIds.length === 0
@@ -271,11 +271,11 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                             }`}
                       </button>
                       {librarySelectorOpen && plexTVLibraries && (
-                        <div className="absolute z-20 mt-1 w-full max-w-xl rounded-md border border-gray-500 bg-zinc-700 shadow-lg">
+                        <div className="absolute z-20 mt-2 w-full max-w-xl overflow-hidden rounded-lg border border-gray-600 bg-zinc-800/95 shadow-2xl backdrop-blur-md">
                           <div className="max-h-60 overflow-auto py-1">
                             <button
                               type="button"
-                              className="w-full cursor-pointer px-3 py-2 text-left text-sm text-white transition duration-150 ease-in-out hover:bg-gray-600 focus:bg-gray-600 focus:outline-none sm:text-sm sm:leading-5"
+                              className="w-full cursor-pointer px-4 py-2.5 text-left text-sm font-medium text-white transition-all duration-200 ease-in-out hover:bg-zinc-700/80 focus:bg-zinc-700/80 focus:outline-none sm:text-sm sm:leading-5"
                               onClick={handleSelectAllLibraries}
                             >
                               {selectedLibraryIds.length ===
@@ -283,11 +283,11 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                                 ? intl.formatMessage(messages.deselectAll)
                                 : intl.formatMessage(messages.selectAll)}
                             </button>
-                            <div className="border-t border-gray-500"></div>
+                            <div className="border-t border-gray-600/50"></div>
                             {plexTVLibraries.map((library: PlexLibrary) => (
                               <div
                                 key={library.id}
-                                className="flex items-center px-3 py-2 text-white transition duration-150 ease-in-out hover:bg-gray-600 sm:text-sm sm:leading-5"
+                                className="flex items-center px-4 py-2.5 text-white transition-all duration-200 ease-in-out hover:bg-zinc-700/60 sm:text-sm sm:leading-5"
                               >
                                 <input
                                   type="checkbox"
@@ -298,11 +298,11 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                                   onChange={() =>
                                     handleLibraryToggle(String(library.id))
                                   }
-                                  className="h-6 w-6 rounded-md text-indigo-600 transition duration-150 ease-in-out"
+                                  className="h-5 w-5 cursor-pointer rounded border-gray-600 bg-zinc-800/60 text-plex-primary transition-all duration-200 ease-in-out"
                                 />
                                 <label
                                   htmlFor={`library-${library.id}`}
-                                  className="ml-3 cursor-pointer text-sm text-white"
+                                  className="ml-3 cursor-pointer text-sm font-medium text-gray-200"
                                 >
                                   {library.name}
                                 </label>
@@ -317,23 +317,24 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                 <Disclosure>
                   <Disclosure.Button
                     onClick={() => setOptionsOpen(!optionsOpen)}
-                    className="mt-2 inline-flex cursor-pointer items-center justify-center whitespace-nowrap font-medium leading-5 transition duration-150 ease-in-out focus:outline-none disabled:opacity-50"
+                    className="mt-4 inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 font-semibold leading-5 text-gray-300 transition-all duration-200 ease-in-out hover:bg-zinc-800/50 hover:text-white focus:outline-none focus:ring-2 focus:ring-plex-primary/50 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50"
                   >
-                    {optionsOpen ? '-' : '+'} Options
+                    <span className="text-lg">{optionsOpen ? '−' : '+'}</span>
+                    <span>Options</span>
                   </Disclosure.Button>
                   <Disclosure.Panel>
                     <div className="form-row">
-                      <label htmlFor="hostname" className="text-label">
+                      <label htmlFor="playlistCoverUrl" className="text-label">
                         {intl.formatMessage(messages.playlistCoverUrl)}
                       </label>
                       <div className="form-input-area">
-                        <div className="form-input-field h-9">
+                        <div className="form-input-field h-11">
                           <Field
                             type="text"
                             id="playlistCoverUrl"
                             name="playlistCoverUrl"
                             value={values.playlistCoverUrl}
-                            className="rounded"
+                            className="rounded-lg"
                           />
                         </div>
                         {errors.playlistCoverUrl &&
@@ -345,17 +346,20 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
                       </div>
                     </div>
                     <div className="form-row">
-                      <label htmlFor="hostname" className="text-label">
+                      <label
+                        htmlFor="playlistDescription"
+                        className="text-label"
+                      >
                         {intl.formatMessage(messages.playlistDescription)}
                       </label>
                       <div className="form-input-area">
-                        <div className="form-input-field h-9">
+                        <div className="form-input-field">
                           <Field
                             component="textarea"
                             id="playlistDescription"
                             name="playlistDescription"
                             value={values.playlistDescription}
-                            className="rounded"
+                            className="min-h-[100px] resize-y rounded-lg"
                             rows="3"
                           />
                         </div>
@@ -384,18 +388,20 @@ const CreatePlaylist = ({ onComplete }: CreatePlaylistProps) => {
               </Card>
             </div>
 
-            <ListView
-              items={titles}
-              isEmpty={isEmpty}
-              isLoading={
-                isLoadingInitialData ||
-                (isLoadingMore && (titles?.length ?? 0) > 0)
-              }
-              isReachingEnd={isReachingEnd}
-              onScrollBottom={fetchMore}
-              handleOnChange={handleCheckboxChange}
-              selected={playlists.selections}
-            />
+            <div className="mt-8">
+              <ListView
+                items={titles}
+                isEmpty={isEmpty}
+                isLoading={
+                  isLoadingInitialData ||
+                  (isLoadingMore && (titles?.length ?? 0) > 0)
+                }
+                isReachingEnd={isReachingEnd}
+                onScrollBottom={fetchMore}
+                handleOnChange={handleCheckboxChange}
+                selected={playlists.selections}
+              />
+            </div>
           </form>
         );
       }}
