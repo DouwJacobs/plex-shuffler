@@ -318,14 +318,17 @@ const UserList = () => {
             <Table.TH>{intl.formatMessage(messages.created)}</Table.TH>
             <Table.TH className="text-right">
               {(data.results ?? []).length > 1 && (
-                <Button
-                  buttonType="warning"
-                  onClick={() => setShowBulkEditModal(true)}
-                  disabled={selectedUsers.length === 0}
-                >
-                  <PencilIcon />
-                  <span>{intl.formatMessage(messages.bulkedit)}</span>
-                </Button>
+                <div className="flex justify-end">
+                  <Button
+                    buttonType="warning"
+                    buttonSize="sm"
+                    onClick={() => setShowBulkEditModal(true)}
+                    disabled={selectedUsers.length === 0}
+                  >
+                    <PencilIcon />
+                    <span>{intl.formatMessage(messages.bulkedit)}</span>
+                  </Button>
+                </div>
               )}
             </Table.TH>
           </tr>
@@ -394,30 +397,33 @@ const UserList = () => {
                 })}
               </Table.TD>
               <Table.TD alignText="right">
-                <Button
-                  buttonType="warning"
-                  disabled={user.id === 1 && currentUser?.id !== 1}
-                  className="mr-2"
-                  onClick={() =>
-                    router.push(
-                      '/users/[userId]/settings',
-                      `/users/${user.id}/settings`
-                    )
-                  }
-                >
-                  {intl.formatMessage(globalMessages.edit)}
-                </Button>
-                <Button
-                  buttonType="danger"
-                  disabled={
-                    user.id === 1 ||
-                    (currentUser?.id !== 1 &&
-                      hasPermission(Permission.ADMIN, user.permissions))
-                  }
-                  onClick={() => setDeleteModal({ isOpen: true, user })}
-                >
-                  {intl.formatMessage(globalMessages.delete)}
-                </Button>
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    buttonType="warning"
+                    buttonSize="sm"
+                    disabled={user.id === 1 && currentUser?.id !== 1}
+                    onClick={() =>
+                      router.push(
+                        '/users/[userId]/settings',
+                        `/users/${user.id}/settings`
+                      )
+                    }
+                  >
+                    {intl.formatMessage(globalMessages.edit)}
+                  </Button>
+                  <Button
+                    buttonType="danger"
+                    buttonSize="sm"
+                    disabled={
+                      user.id === 1 ||
+                      (currentUser?.id !== 1 &&
+                        hasPermission(Permission.ADMIN, user.permissions))
+                    }
+                    onClick={() => setDeleteModal({ isOpen: true, user })}
+                  >
+                    {intl.formatMessage(globalMessages.delete)}
+                  </Button>
+                </div>
               </Table.TD>
             </tr>
           ))}
@@ -469,8 +475,9 @@ const UserList = () => {
                     })}
                   </span>
                 </div>
-                <div className="flex flex-auto justify-center space-x-2 sm:flex-1 sm:justify-end">
+                <div className="flex flex-auto justify-center gap-2 sm:flex-1 sm:justify-end">
                   <Button
+                    buttonSize="md"
                     disabled={!hasPrevPage}
                     onClick={() =>
                       updateQueryParams('page', (page - 1).toString())
@@ -480,6 +487,7 @@ const UserList = () => {
                     <span>{intl.formatMessage(globalMessages.previous)}</span>
                   </Button>
                   <Button
+                    buttonSize="md"
                     disabled={!hasNextPage}
                     onClick={() =>
                       updateQueryParams('page', (page + 1).toString())
