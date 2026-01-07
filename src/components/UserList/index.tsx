@@ -475,9 +475,10 @@ const UserList = () => {
                     })}
                   </span>
                 </div>
-                <div className="flex flex-auto justify-center gap-2 sm:flex-1 sm:justify-end">
+                <div className="flex flex-auto items-center justify-center gap-2 sm:flex-1 sm:justify-end">
                   <Button
                     buttonSize="md"
+                    className="h-9"
                     disabled={!hasPrevPage}
                     onClick={() =>
                       updateQueryParams('page', (page - 1).toString())
@@ -488,6 +489,7 @@ const UserList = () => {
                   </Button>
                   <Button
                     buttonSize="md"
+                    className="h-9"
                     disabled={!hasNextPage}
                     onClick={() =>
                       updateQueryParams('page', (page + 1).toString())
