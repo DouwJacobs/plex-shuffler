@@ -59,6 +59,9 @@ const TitleCard = (props: PlaylistCardProps) => {
                   onLoad={() => {
                     setIsLoading(false);
                   }}
+                  onError={() => {
+                    setIsLoading(false);
+                  }}
                 />
               ) : (
                 <a href={props.url} target="_blank" rel="noreferrer">
@@ -66,6 +69,9 @@ const TitleCard = (props: PlaylistCardProps) => {
                     alt={props.title}
                     src={props.thumb}
                     onLoad={() => {
+                      setIsLoading(false);
+                    }}
+                    onError={() => {
                       setIsLoading(false);
                     }}
                   />
