@@ -372,9 +372,24 @@ router.post(
 );
 
 router.post('/shuffled-playlist', async (req, res, next) => {
+  logger.info('Creating shuffled playlist', {
+    label: 'API',
+    userId: req.user?.id,
+    playlistTitle: req.body.playlistTitle,
+    playlistCount: req.body.playlists?.length || 0,
+    unwatchedOnly: req.body.unwatchedOnly,
+    ip: req.ip,
+  });
   try {
     const userRepository = getRepository(User);
     if (!req.user) {
+      logger.warn(
+        'Shuffled playlist creation attempted without authenticated user',
+        {
+          label: 'API',
+          ip: req.ip,
+        }
+      );
       return res.status(500).json({
         status: 500,
         error: 'Please sign in.',
@@ -390,12 +405,26 @@ router.post('/shuffled-playlist', async (req, res, next) => {
 
     const plexClient = new PlexAPI({ plexToken: user.plexToken });
 
+    logger.debug('Scanning playlists for episodes', {
+      label: 'API',
+      userId: user.id,
+      playlistCount: req.body.playlists?.length || 0,
+    });
     const allEpisodes: TVShow[] = await plexShowScanner.run(
       user.plexToken,
       req.body.playlists,
       req.body.unwatchedOnly
     );
 
+    logger.debug('Shuffling episodes', {
+      label: 'API',
+      userId: user.id,
+      showCount: allEpisodes.length,
+      totalEpisodes: allEpisodes.reduce(
+        (sum, show) => sum + show.episodes.length,
+        0
+      ),
+    });
     const shuffledEpisodes = plexShuffle(allEpisodes);
 
     const playlistTitle = user.settings?.appendToTitle
@@ -414,6 +443,12 @@ router.post('/shuffled-playlist', async (req, res, next) => {
     );
 
     if (response) {
+      logger.debug('Editing playlist metadata', {
+        label: 'API',
+        userId: user.id,
+        ratingKey: response[0].ratingKey,
+        hasCover: !!req.body.playlistCoverUrl,
+      });
       const editResponse = await plexClient.editPlaylist({
         ratingKey: response[0].ratingKey,
         userToken: user.plexToken,
@@ -423,12 +458,31 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       });
 
       if (editResponse) {
+        logger.warn('Playlist edit returned error response', {
+          label: 'API',
+          userId: user.id,
+          status: editResponse.status,
+          message: editResponse.message,
+        });
         return res.status(editResponse.status).json(editResponse);
       }
     }
 
+    logger.info('Shuffled playlist created successfully', {
+      label: 'API',
+      userId: user.id,
+      playlistTitle,
+      ratingKey: response?.[0]?.ratingKey,
+      episodeCount: shuffledEpisodes.length,
+    });
     return res.status(200).json(response);
   } catch (e) {
+    logger.error('Failed to create shuffled playlist', {
+      label: 'API',
+      error: e.message,
+      userId: req.user?.id,
+      ip: req.ip,
+    });
     next({ status: 404, message: 'User not found.' });
   }
 });

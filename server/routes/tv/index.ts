@@ -2,22 +2,48 @@ import PlexAPI from '@server/api/plexapi';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
 import { getLibraries } from '@server/lib/settings';
+import logger from '@server/logger';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
 const tvRoutes = Router();
 
 tvRoutes.get('/libraries', async (req, res) => {
+  logger.debug('Get TV libraries endpoint called', {
+    label: 'API',
+    userId: req.user?.id,
+    ip: req.ip,
+  });
   const tvLibraries = await getLibraries('show', req.user?.id);
+  logger.debug('TV libraries retrieved', {
+    label: 'API',
+    libraryCount: tvLibraries.length,
+    userId: req.user?.id,
+  });
   res.status(200).json(tvLibraries);
 });
 
 tvRoutes.get('/shows', async (req, res, next) => {
+  logger.debug('Get TV shows endpoint called', {
+    label: 'API',
+    userId: req.user?.id,
+    libraryId: req.query.libraryId,
+    libraryIds: req.query.libraryIds,
+    query: req.query.query,
+    genre: req.query.genre,
+    sortBy: req.query.sortBy,
+    page: req.query.page,
+    ip: req.ip,
+  });
   const plexUrl = getPlexUrl();
 
   const userRepository = getRepository(User);
 
   if (!req.user) {
+    logger.warn('Get TV shows called without authenticated user', {
+      label: 'API',
+      ip: req.ip,
+    });
     return res.status(500).json({
       status: 500,
       error: 'Please sign in.',
@@ -111,12 +137,26 @@ tvRoutes.get('/shows', async (req, res, next) => {
     // If only one library is requested, use the simpler single-library path
     if (librariesToFetch.length === 1) {
       const libID = String(librariesToFetch[0].id);
+      logger.debug('Fetching TV shows from single library', {
+        label: 'API',
+        libraryId: libID,
+        userId: req.user.id,
+      });
       const result = await plexapi.getLibraryContents(libID, {
         offset,
         size: itemsPerPage,
         filter: query,
         genre,
         sortBy,
+      });
+
+      logger.info('TV shows retrieved successfully', {
+        label: 'API',
+        libraryId: libID,
+        totalResults: result.totalSize,
+        page,
+        totalPages: Math.ceil(result.totalSize / itemsPerPage),
+        userId: req.user.id,
       });
 
       return res.status(200).json({
@@ -140,6 +180,14 @@ tvRoutes.get('/shows', async (req, res, next) => {
     // Calculate how many items we need: (page * itemsPerPage) + some buffer
     const itemsNeeded = page * itemsPerPage;
     const fetchSize = Math.max(itemsNeeded + 100, 500); // Fetch enough to cover the page plus buffer, minimum 500
+
+    logger.debug('Fetching TV shows from multiple libraries', {
+      label: 'API',
+      libraryCount: librariesToFetch.length,
+      libraryIds: librariesToFetch.map((lib) => lib.id),
+      fetchSize,
+      userId: req.user.id,
+    });
 
     const libraryResults = await Promise.all(
       librariesToFetch.map(async (library) => {
@@ -191,6 +239,15 @@ tvRoutes.get('/shows', async (req, res, next) => {
     const totalPages = Math.ceil(totalResults / itemsPerPage);
     const paginatedItems = allItems.slice(offset, offset + itemsPerPage);
 
+    logger.info('TV shows retrieved successfully from multiple libraries', {
+      label: 'API',
+      libraryCount: librariesToFetch.length,
+      totalResults,
+      page,
+      totalPages,
+      userId: req.user.id,
+    });
+
     return res.status(200).json({
       page,
       totalPages,
@@ -205,6 +262,12 @@ tvRoutes.get('/shows', async (req, res, next) => {
       })),
     });
   } catch (e) {
+    logger.error('Failed to retrieve TV shows', {
+      label: 'API',
+      error: e.message,
+      userId: req.user?.id,
+      ip: req.ip,
+    });
     next({ status: 500, message: e.message || 'Error fetching shows' });
   }
 });

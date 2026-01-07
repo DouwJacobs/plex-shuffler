@@ -1,3 +1,4 @@
+import logger from '@server/logger';
 import shuffle from '@server/utils/shuffle';
 import weighted from 'weighted';
 
@@ -14,9 +15,22 @@ interface ShowState {
 }
 
 const plexShuffle = (allEpisodes: Show[]) => {
+  logger.debug('Starting playlist shuffle', {
+    label: 'PlexShuffle',
+    showCount: allEpisodes.length,
+    totalEpisodes: allEpisodes.reduce(
+      (sum, show) => sum + show.episodes.length,
+      0
+    ),
+  });
   const shuffledEpisodes: string[] = [];
 
   if (allEpisodes.length === 1) {
+    logger.debug('Single show shuffle - using simple shuffle', {
+      label: 'PlexShuffle',
+      showRatingKey: allEpisodes[0].ratingKey,
+      episodeCount: allEpisodes[0].episodes.length,
+    });
     return shuffle([...allEpisodes[0].episodes]);
   }
 
@@ -40,7 +54,15 @@ const plexShuffle = (allEpisodes: Show[]) => {
     0
   );
 
+  logger.debug('Multi-show weighted shuffle initialized', {
+    label: 'PlexShuffle',
+    showCount: showStates.length,
+    totalEpisodes,
+  });
+
+  let iterationCount = 0;
   while (showStates.length > 0) {
+    iterationCount++;
     // Only recalculate weights when needed (more efficient than every iteration)
     const weights: Record<string, number> = {};
     for (const state of showStates) {
@@ -69,6 +91,11 @@ const plexShuffle = (allEpisodes: Show[]) => {
 
     // If show is exhausted, remove it efficiently
     if (selectedShow.currentIndex >= selectedShow.totalEpisodes) {
+      logger.debug('Show exhausted, removing from shuffle', {
+        label: 'PlexShuffle',
+        ratingKey: selectedRatingKey,
+        remainingShows: showStates.length - 1,
+      });
       const indexToRemove = showStates.findIndex(
         (state) => state.ratingKey === selectedRatingKey
       );
@@ -78,6 +105,13 @@ const plexShuffle = (allEpisodes: Show[]) => {
       }
     }
   }
+
+  logger.info('Playlist shuffle completed', {
+    label: 'PlexShuffle',
+    totalEpisodes: shuffledEpisodes.length,
+    iterations: iterationCount,
+    showCount: allEpisodes.length,
+  });
 
   return shuffledEpisodes;
 };

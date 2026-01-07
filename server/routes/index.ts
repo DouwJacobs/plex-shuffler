@@ -2,6 +2,7 @@ import GithubAPI from '@server/api/github';
 import type { StatusResponse } from '@server/interfaces/api/settingsInterfaces';
 import { Permission } from '@server/lib/permissions';
 import { getSettings } from '@server/lib/settings';
+import logger from '@server/logger';
 import { checkUser, isAuthenticated } from '@server/middleware/auth';
 import settingsRoutes from '@server/routes/settings';
 import { appDataPath, appDataStatus } from '@server/utils/appDataVolume';
@@ -19,6 +20,11 @@ const router = Router();
 router.use(checkUser);
 
 router.get<unknown, StatusResponse>('/status', async (req, res) => {
+  logger.debug('Status endpoint called', {
+    label: 'API',
+    ip: req.ip,
+    userId: req.user?.id,
+  });
   const githubApi = new GithubAPI();
 
   const currentVersion = getAppVersion();
@@ -57,6 +63,12 @@ router.get<unknown, StatusResponse>('/status', async (req, res) => {
     }
   }
 
+  logger.debug('Status check completed', {
+    label: 'API',
+    updateAvailable,
+    commitsBehind,
+    restartRequired: restartFlag.isSet(),
+  });
   return res.status(200).json({
     version: getAppVersion(),
     commitTag: getCommitTag(),
@@ -66,7 +78,12 @@ router.get<unknown, StatusResponse>('/status', async (req, res) => {
   });
 });
 
-router.get('/status/appdata', (_req, res) => {
+router.get('/status/appdata', (req, res) => {
+  logger.debug('App data status endpoint called', {
+    label: 'API',
+    ip: req.ip,
+    userId: req.user?.id,
+  });
   return res.status(200).json({
     appData: appDataStatus(),
     appDataPath: appDataPath(),
@@ -75,6 +92,11 @@ router.get('/status/appdata', (_req, res) => {
 
 router.use('/user', isAuthenticated(), user);
 router.get('/settings/public', async (req, res) => {
+  logger.debug('Public settings endpoint called', {
+    label: 'API',
+    ip: req.ip,
+    userId: req.user?.id,
+  });
   const settings = getSettings();
 
   return res.status(200).json(settings.fullPublicSettings);
@@ -86,7 +108,11 @@ router.use('/tv', isAuthenticated(), tvRoutes);
 router.use('/movies', isAuthenticated(), movieRoutes);
 router.use('/matchflix', isAuthenticated(), matchflixRoutes);
 
-router.get('/', (_req, res) => {
+router.get('/', (req, res) => {
+  logger.debug('API root endpoint called', {
+    label: 'API',
+    ip: req.ip,
+  });
   return res.status(200).json({
     api: 'Plex Shuffler API',
     version: '1.0',
