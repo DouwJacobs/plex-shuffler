@@ -44,8 +44,7 @@ const plexShuffle = (allEpisodes: Show[]) => {
     // Only recalculate weights when needed (more efficient than every iteration)
     const weights: Record<string, number> = {};
     for (const state of showStates) {
-      const remainingEpisodes =
-        state.totalEpisodes - state.currentIndex;
+      const remainingEpisodes = state.totalEpisodes - state.currentIndex;
       if (remainingEpisodes > 0) {
         weights[state.ratingKey] = remainingEpisodes / totalEpisodes;
       }
@@ -61,8 +60,7 @@ const plexShuffle = (allEpisodes: Show[]) => {
     }
 
     // Get the current episode using index (O(1) instead of shift() which is O(n))
-    const currentEpisode =
-      selectedShow.episodes[selectedShow.currentIndex];
+    const currentEpisode = selectedShow.episodes[selectedShow.currentIndex];
     shuffledEpisodes.push(currentEpisode);
 
     // Move to next episode
@@ -70,9 +68,7 @@ const plexShuffle = (allEpisodes: Show[]) => {
     totalEpisodes--;
 
     // If show is exhausted, remove it efficiently
-    if (
-      selectedShow.currentIndex >= selectedShow.totalEpisodes
-    ) {
+    if (selectedShow.currentIndex >= selectedShow.totalEpisodes) {
       const indexToRemove = showStates.findIndex(
         (state) => state.ratingKey === selectedRatingKey
       );
