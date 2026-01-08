@@ -12,7 +12,8 @@ jobs:
   test:
     name: Lint & Test Build
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-20.04
+    runs-on: self-hosted
     container: node:20.4.0
     steps:
       - name: Checkout
@@ -70,19 +71,20 @@ jobs:
   build_and_push:
     name: Build & Publish Docker Images
     if: github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip ci]')
-    runs-on: ubuntu-20.04
+    # runs-on: ubuntu-20.04
+    runs-on: self-hosted
     permissions:
       packages: write
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: false
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     swap-storage: true
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up QEMU
@@ -132,7 +134,8 @@ jobs:
     name: Send Discord Notification
     needs: build_and_push
     if: always() && github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[skip ci]')
-    runs-on: ubuntu-20.04
+    # runs-on: ubuntu-20.04
+    runs-on: self-hosted
     environment: CI
     steps:
       - name: Get Build Job Status
