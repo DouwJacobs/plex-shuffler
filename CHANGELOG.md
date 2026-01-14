@@ -1,3 +1,28 @@
+# [1.4.0](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.3...v1.4.0) (2026-01-14)
+
+
+### Bug Fixes
+
+* **admin permissions:** check user admin permissions on login ([afa01b3](https://github.com/DouwJacobs/plex-shuffler/commit/afa01b359cd7b01f0f671510021825746c98fbd7))
+* **authentication:** update plex token when user logs in ([5e0d435](https://github.com/DouwJacobs/plex-shuffler/commit/5e0d4359a337d8dc1b3213b2a5bfbc0ae5fc9e40))
+* **cards:** still display checkbox on show card even when image can't be retreived ([4ca728d](https://github.com/DouwJacobs/plex-shuffler/commit/4ca728ddc2668e27382e7f383136d31ae6814d0d))
+* **tsconfig:** include types ([022b14d](https://github.com/DouwJacobs/plex-shuffler/commit/022b14d704d66db4b2c0475573aa0f2b3815b6ec))
+* **ui:** update list pagination buttons ([dc02e69](https://github.com/DouwJacobs/plex-shuffler/commit/dc02e69b16e687f29ca2d257c1989bb81e5d00b0))
+* **ui:** userlist buttons ([f97e183](https://github.com/DouwJacobs/plex-shuffler/commit/f97e1835022597457f952b325a9d1238a9df9b67))
+* **user-settings-init:** user default library initialise ([dd8afe2](https://github.com/DouwJacobs/plex-shuffler/commit/dd8afe2ffda961c34c9fbdaf688af1b29275e01a))
+
+
+### Features
+
+* **multi library:** added multi library support for tv shows ([7464270](https://github.com/DouwJacobs/plex-shuffler/commit/7464270566150f15a6eb21145ad60ec7f9ad718c))
+* **ui:** uI improvements ([30a82d8](https://github.com/DouwJacobs/plex-shuffler/commit/30a82d82f52a0aea8de28be6551278a9f5122c48))
+* **user-default-library:** set user default library ([71ee03c](https://github.com/DouwJacobs/plex-shuffler/commit/71ee03c6e59b2052696fe94c942b52397ba6fcca))
+
+
+### Performance Improvements
+
+* **shuffle:** improved performance for big libraries ([ed731d3](https://github.com/DouwJacobs/plex-shuffler/commit/ed731d3a750965c4aca7ccef111b1d77061c94f3))
+
 ## [1.3.3](https://github.com/DouwJacobs/plex-shuffler/compare/v1.3.2...v1.3.3) (2024-01-06)
 
 
