@@ -1249,6 +1249,15 @@ paths:
           schema:
             type: string
             example: originalTitle:desc
+        - in: query
+          name: libraryIds
+          required: false
+          schema:
+            anyOf:
+              - type: number
+              - type: string
+            minLength: 0
+          example: 15
       responses:
         '200':
           description: OK
