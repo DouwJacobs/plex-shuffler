@@ -17,22 +17,34 @@ const SetupSteps = ({
 }: CurrentStep) => {
   return (
     <li className="relative md:flex md:flex-1">
-      <div className="flex items-center space-x-4 px-6 py-4 text-sm font-medium leading-5">
+      <div className="flex items-center space-x-4 px-6 py-5 text-base font-medium leading-6">
         <div
-          className={`flex h-10 w-10 flex-shrink-0 items-center justify-center border-2 
-          ${active ? 'plex-border-primary ' : 'border-white '}
+          className={`flex h-12 w-12 flex-shrink-0 items-center justify-center border-2 transition-all duration-200
           ${
-            completed ? 'plex-border-white plex-bg-primary ' : ''
+            active
+              ? 'plex-border-primary border-plex-primary shadow-lg shadow-plex-primary/30 '
+              : 'border-gray-500/50 '
+          }
+          ${
+            completed
+              ? 'plex-border-primary plex-bg-primary border-plex-primary shadow-lg shadow-plex-primary/30 '
+              : ''
           } rounded-full`}
         >
-          {completed && <CheckIcon className="h-6 w-6 text-white" />}
+          {completed && <CheckIcon className="h-7 w-7 text-white" />}
           {!completed && (
-            <p className={active ? 'text-white' : 'text-white'}>{stepNumber}</p>
+            <p
+              className={`text-base font-semibold ${
+                active ? 'text-white' : 'text-gray-400'
+              }`}
+            >
+              {stepNumber}
+            </p>
           )}
         </div>
         <p
-          className={`plex-border-primary text-sm font-medium leading-5 ${
-            active ? 'text-white' : 'text-white'
+          className={`text-base font-medium leading-6 transition-colors duration-200 ${
+            active ? 'text-white' : 'text-gray-400'
           }`}
         >
           {description}
@@ -42,7 +54,7 @@ const SetupSteps = ({
       {!isLastStep && (
         <div className="absolute right-0 top-0 hidden h-full w-5 md:block">
           <svg
-            className="plex-color-primary h-full w-full"
+            className="h-full w-full text-gray-600/50"
             viewBox="0 0 22 80"
             fill="none"
             preserveAspectRatio="none"
@@ -52,6 +64,7 @@ const SetupSteps = ({
               vectorEffect="non-scaling-stroke"
               stroke="currentcolor"
               strokeLinejoin="round"
+              strokeWidth="2"
             />
           </svg>
         </div>

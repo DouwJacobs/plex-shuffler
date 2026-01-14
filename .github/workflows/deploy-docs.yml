@@ -7,7 +7,8 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-20.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       - name: Generate Swagger UI
@@ -15,6 +16,7 @@ jobs:
         with:
           output: swagger-ui
           spec-file: plex-shuffler-api.yml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

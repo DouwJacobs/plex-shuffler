@@ -29,9 +29,12 @@ export class UserSettings {
   @Column({ nullable: true })
   public originalLanguage?: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   public appendToTitle?: boolean;
 
-  @Column({ default: true })
+  @Column({ default: false })
   public appendToSummary?: boolean;
+
+  @Column({ nullable: true })
+  public userDefaultShowLibraryID?: number;
 }

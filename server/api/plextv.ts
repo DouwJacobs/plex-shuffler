@@ -201,6 +201,7 @@ class PlexTvAPI extends ExternalAPI {
   }
 
   public async getDevices(): Promise<PlexDevice[]> {
+    logger.debug('Fetching devices from Plex.tv', { label: 'Plex.tv API' });
     try {
       const devicesResp = await this.axios.get(
         '/api/resources?includeHttps=1',
@@ -212,41 +213,48 @@ class PlexTvAPI extends ExternalAPI {
       const parsedXml = await xml2js.parseStringPromise(
         devicesResp.data as DeviceResponse
       );
-      return parsedXml?.MediaContainer?.Device?.map((pxml: DeviceResponse) => ({
-        name: pxml.$.name,
-        product: pxml.$.product,
-        productVersion: pxml.$.productVersion,
-        platform: pxml.$?.platform,
-        platformVersion: pxml.$?.platformVersion,
-        device: pxml.$?.device,
-        clientIdentifier: pxml.$.clientIdentifier,
-        createdAt: new Date(parseInt(pxml.$?.createdAt, 10) * 1000),
-        lastSeenAt: new Date(parseInt(pxml.$?.lastSeenAt, 10) * 1000),
-        provides: pxml.$.provides.split(','),
-        owned: pxml.$.owned == '1' ? true : false,
-        accessToken: pxml.$?.accessToken,
-        publicAddress: pxml.$?.publicAddress,
-        publicAddressMatches:
-          pxml.$?.publicAddressMatches == '1' ? true : false,
-        httpsRequired: pxml.$?.httpsRequired == '1' ? true : false,
-        synced: pxml.$?.synced == '1' ? true : false,
-        relay: pxml.$?.relay == '1' ? true : false,
-        dnsRebindingProtection:
-          pxml.$?.dnsRebindingProtection == '1' ? true : false,
-        natLoopbackSupported:
-          pxml.$?.natLoopbackSupported == '1' ? true : false,
-        presence: pxml.$?.presence == '1' ? true : false,
-        ownerID: pxml.$?.ownerID,
-        home: pxml.$?.home == '1' ? true : false,
-        sourceTitle: pxml.$?.sourceTitle,
-        connection: pxml?.Connection?.map((conn: ConnectionResponse) => ({
-          protocol: conn.$.protocol,
-          address: conn.$.address,
-          port: parseInt(conn.$.port, 10),
-          uri: conn.$.uri,
-          local: conn.$.local == '1' ? true : false,
-        })),
-      }));
+      const devices = parsedXml?.MediaContainer?.Device?.map(
+        (pxml: DeviceResponse) => ({
+          name: pxml.$.name,
+          product: pxml.$.product,
+          productVersion: pxml.$.productVersion,
+          platform: pxml.$?.platform,
+          platformVersion: pxml.$?.platformVersion,
+          device: pxml.$?.device,
+          clientIdentifier: pxml.$.clientIdentifier,
+          createdAt: new Date(parseInt(pxml.$?.createdAt, 10) * 1000),
+          lastSeenAt: new Date(parseInt(pxml.$?.lastSeenAt, 10) * 1000),
+          provides: pxml.$.provides.split(','),
+          owned: pxml.$.owned == '1' ? true : false,
+          accessToken: pxml.$?.accessToken,
+          publicAddress: pxml.$?.publicAddress,
+          publicAddressMatches:
+            pxml.$?.publicAddressMatches == '1' ? true : false,
+          httpsRequired: pxml.$?.httpsRequired == '1' ? true : false,
+          synced: pxml.$?.synced == '1' ? true : false,
+          relay: pxml.$?.relay == '1' ? true : false,
+          dnsRebindingProtection:
+            pxml.$?.dnsRebindingProtection == '1' ? true : false,
+          natLoopbackSupported:
+            pxml.$?.natLoopbackSupported == '1' ? true : false,
+          presence: pxml.$?.presence == '1' ? true : false,
+          ownerID: pxml.$?.ownerID,
+          home: pxml.$?.home == '1' ? true : false,
+          sourceTitle: pxml.$?.sourceTitle,
+          connection: pxml?.Connection?.map((conn: ConnectionResponse) => ({
+            protocol: conn.$.protocol,
+            address: conn.$.address,
+            port: parseInt(conn.$.port, 10),
+            uri: conn.$.uri,
+            local: conn.$.local == '1' ? true : false,
+          })),
+        })
+      );
+      logger.info('Devices retrieved from Plex.tv', {
+        label: 'Plex.tv API',
+        deviceCount: devices?.length || 0,
+      });
+      return devices;
     } catch (e) {
       logger.error('Something went wrong getting the devices from plex.tv', {
         label: 'Plex.tv API',
@@ -257,11 +265,20 @@ class PlexTvAPI extends ExternalAPI {
   }
 
   public async getUser(): Promise<PlexUser> {
+    logger.debug('Fetching user account from Plex.tv', {
+      label: 'Plex.tv API',
+    });
     try {
       const account = await this.axios.get<PlexAccountResponse>(
         '/users/account.json'
       );
 
+      logger.debug('User account retrieved from Plex.tv', {
+        label: 'Plex.tv API',
+        userId: account.data.user.id,
+        email: account.data.user.email,
+        username: account.data.user.username,
+      });
       return account.data.user;
     } catch (e) {
       logger.error(
@@ -286,6 +303,10 @@ class PlexTvAPI extends ExternalAPI {
   }
 
   public async checkUserAccess(userId: number): Promise<boolean> {
+    logger.debug('Checking user access to Plex server', {
+      label: 'Plex.tv API',
+      userId,
+    });
     const settings = getSettings();
 
     try {
@@ -293,23 +314,36 @@ class PlexTvAPI extends ExternalAPI {
         throw new Error('Plex is not configured!');
       }
 
-      const friends = await this.getFriends();
+      const usersResponse = await this.getUsers();
 
-      const users = friends.MediaContainer.User;
+      const users = usersResponse.MediaContainer.User;
 
       const user = users.find((u) => parseInt(u.$.id) === userId);
 
       if (!user) {
+        logger.warn('User not found in Plex account shared list', {
+          label: 'Plex.tv API',
+          userId,
+        });
         throw new Error(
           "This user does not exist on the main Plex account's shared list"
         );
       }
 
-      return !!user.Server?.find(
+      const hasAccess = !!user.Server?.find(
         (server) => server.$.machineIdentifier === settings.plex.machineId
       );
+      logger.debug('User access check completed', {
+        label: 'Plex.tv API',
+        userId,
+        hasAccess,
+      });
+      return hasAccess;
     } catch (e) {
-      logger.error(`Error checking user access: ${e.message}`);
+      logger.error(`Error checking user access: ${e.message}`, {
+        label: 'Plex.tv API',
+        userId,
+      });
       return false;
     }
   }
@@ -327,6 +361,10 @@ class PlexTvAPI extends ExternalAPI {
   }
 
   public async getUserAccessToken(userID: number): Promise<string | undefined> {
+    logger.debug('Getting user access token', {
+      label: 'Plex.tv API',
+      userId: userID,
+    });
     const settings = getSettings();
 
     try {
@@ -346,9 +384,18 @@ class PlexTvAPI extends ExternalAPI {
         return parseInt(u.$.userID) === userID;
       });
 
-      return user?.$.accessToken;
+      const token = user?.$.accessToken;
+      logger.debug('User access token retrieved', {
+        label: 'Plex.tv API',
+        userId: userID,
+        hasToken: !!token,
+      });
+      return token;
     } catch (e) {
-      logger.error(`Error checking user access: ${e.message}`);
+      logger.error(`Error getting user access token: ${e.message}`, {
+        label: 'Plex.tv API',
+        userId: userID,
+      });
       return;
     }
   }
@@ -362,6 +409,11 @@ class PlexTvAPI extends ExternalAPI {
     totalSize: number;
     items: PlexWatchlistItem[];
   }> {
+    logger.debug('Fetching watchlist from Plex.tv', {
+      label: 'Plex.tv API',
+      offset,
+      size,
+    });
     try {
       const response = await this.axios.get<WatchlistResponse>(
         '/library/sections/watchlist/all',
@@ -409,6 +461,12 @@ class PlexTvAPI extends ExternalAPI {
       );
 
       const filteredList = watchlistDetails.filter((detail) => detail.tmdbId);
+
+      logger.info('Watchlist retrieved from Plex.tv', {
+        label: 'Plex.TV Metadata API',
+        totalSize: response.data.MediaContainer.totalSize,
+        itemsReturned: filteredList.length,
+      });
 
       return {
         offset,

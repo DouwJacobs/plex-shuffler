@@ -150,7 +150,7 @@ class PlexAPI {
       token: plexToken,
       authenticator: {
         authenticate: (
-          _plexApi,
+          _plexApi: NodePlexAPI,
           cb: (err?: string, token?: string) => void
         ) => {
           if (!plexToken) {
@@ -172,22 +172,39 @@ class PlexAPI {
   }
 
   public async getStatus() {
-    return await this.plexClient.query('/');
+    logger.debug('Getting Plex server status', { label: 'Plex API' });
+    const result = await this.plexClient.query('/');
+    logger.debug('Plex server status retrieved', {
+      label: 'Plex API',
+      machineIdentifier: result?.MediaContainer?.machineIdentifier,
+    });
+    return result;
   }
 
   public async getLibraries(): Promise<PlexLibrary[]> {
+    logger.debug('Fetching Plex libraries', { label: 'Plex API' });
     const response = await this.plexClient.query<PlexLibrariesResponse>(
       '/library/sections'
     );
 
-    return response.MediaContainer.Directory;
+    const libraries = response.MediaContainer.Directory;
+    logger.info('Plex libraries retrieved', {
+      label: 'Plex API',
+      libraryCount: libraries.length,
+    });
+    return libraries;
   }
 
   public async syncLibraries(): Promise<void> {
+    logger.info('Syncing Plex libraries', { label: 'Plex API' });
     const settings = getSettings();
 
     try {
       const libraries = await this.getLibraries();
+      logger.debug('Processing libraries for sync', {
+        label: 'Plex API',
+        totalLibraries: libraries.length,
+      });
 
       const newLibraries: Library[] = libraries
         // Remove libraries that are not movie or show
@@ -211,6 +228,11 @@ class PlexAPI {
         });
 
       settings.plex.libraries = newLibraries;
+      logger.info('Plex libraries synced successfully', {
+        label: 'Plex API',
+        libraryCount: newLibraries.length,
+        enabledCount: newLibraries.filter((lib) => lib.enabled).length,
+      });
     } catch (e) {
       logger.error('Failed to fetch Plex libraries', {
         label: 'Plex API',
@@ -224,7 +246,7 @@ class PlexAPI {
   }
 
   public async getLibraryContents(
-    id: string,
+    id: string | number,
     {
       offset = 0,
       size = 50,
@@ -239,6 +261,15 @@ class PlexAPI {
       sortBy?: string;
     } = {}
   ): Promise<{ totalSize: number; items: PlexLibraryItem[] }> {
+    logger.debug('Fetching library contents', {
+      label: 'Plex API',
+      libraryId: id,
+      offset,
+      size,
+      filter,
+      genre,
+      sortBy,
+    });
     try {
       const response = await this.plexClient.query<PlexLibraryResponse>({
         uri: `/library/sections/${id}/all?includeGuids=1${
@@ -252,11 +283,23 @@ class PlexAPI {
         },
       });
 
-      return {
+      const result = {
         totalSize: response.MediaContainer.totalSize,
         items: response.MediaContainer.Metadata ?? [],
       };
+      logger.debug('Library contents retrieved', {
+        label: 'Plex API',
+        libraryId: id,
+        totalSize: result.totalSize,
+        itemsReturned: result.items.length,
+      });
+      return result;
     } catch (e) {
+      logger.error('Failed to fetch library contents', {
+        label: 'Plex API',
+        libraryId: id,
+        error: e.message,
+      });
       return {
         totalSize: 0,
         items: [],
@@ -268,26 +311,48 @@ class PlexAPI {
     key: string,
     options: { includeChildren?: boolean } = {}
   ): Promise<PlexMetadata> {
+    logger.debug('Fetching metadata', {
+      label: 'Plex API',
+      ratingKey: key,
+      includeChildren: options.includeChildren,
+    });
     const response = await this.plexClient.query<PlexMetadataResponse>(
       `/library/metadata/${key}${
         options.includeChildren ? '?includeChildren=1' : ''
       }`
     );
 
-    return response.MediaContainer.Metadata[0];
+    const metadata = response.MediaContainer.Metadata[0];
+    logger.debug('Metadata retrieved', {
+      label: 'Plex API',
+      ratingKey: key,
+      type: metadata?.type,
+      title: metadata?.title,
+    });
+    return metadata;
   }
 
   public async getMultipleMetadata(
     key: string,
     options: { includeChildren?: boolean } = {}
   ): Promise<{ Metadata: PlexMetadata[]; size?: number }> {
+    logger.debug('Fetching multiple metadata', {
+      label: 'Plex API',
+      ratingKeys: key,
+      includeChildren: options.includeChildren,
+    });
     const response = await this.plexClient.query<PlexMetadataResponse>(
       `/library/metadata/${key}${
         options.includeChildren ? '?includeChildren=1' : ''
       }`
     );
 
-    return response.MediaContainer;
+    const result = response.MediaContainer;
+    logger.debug('Multiple metadata retrieved', {
+      label: 'Plex API',
+      count: result.size || result.Metadata?.length || 0,
+    });
+    return result;
   }
 
   public async getChildrenMetadata(key: string): Promise<PlexMetadata[]> {
@@ -334,6 +399,13 @@ class PlexAPI {
     totalSize: number;
     items: PlexPlaylistItem[];
   }> {
+    logger.debug('Fetching playlists', {
+      label: 'Plex API',
+      offset,
+      size,
+      filter,
+      hasUserToken: !!userToken,
+    });
     try {
       const response = await this.plexClient.query<PlexPlaylistResponse>({
         uri: `/playlists/all?X-Plex-Token=${userToken}${
@@ -346,7 +418,7 @@ class PlexAPI {
       });
 
       const playlistDetails = await Promise.all(
-        (response.MediaContainer.Metadata ?? []).map((playlistItem) => {
+        (response.MediaContainer.Metadata ?? []).map((playlistItem: any) => {
           return {
             ratingKey: playlistItem.ratingKey,
             title: playlistItem.title,
@@ -357,13 +429,23 @@ class PlexAPI {
         })
       );
 
-      return {
+      const result = {
         offset,
         size,
         totalSize: response.MediaContainer.size,
         items: playlistDetails,
       };
+      logger.debug('Playlists retrieved', {
+        label: 'Plex API',
+        totalSize: result.totalSize,
+        itemsReturned: result.items.length,
+      });
+      return result;
     } catch (e) {
+      logger.error('Failed to fetch playlists', {
+        label: 'Plex API',
+        error: e.message,
+      });
       return {
         offset,
         size,
@@ -385,9 +467,19 @@ class PlexAPI {
     ratingKeys: string[],
     userToken: string | undefined
   ): Promise<PlexPlaylistItem[] | undefined> {
+    logger.info('Creating Plex playlist', {
+      label: 'Plex API',
+      title,
+      itemCount: ratingKeys.length,
+      hasUserToken: !!userToken,
+    });
     try {
       const plexIdentity = await this.getIdentity();
       const machineId = plexIdentity.machineIdentifier;
+      logger.debug('Plex identity retrieved for playlist creation', {
+        label: 'Plex API',
+        machineId,
+      });
 
       const response =
         await this.plexClient.postQuery<PlexCreatePlaylistResponse>({
@@ -396,10 +488,19 @@ class PlexAPI {
           )}&X-Plex-Token=${userToken}`,
         });
 
-      return response.MediaContainer.Metadata;
+      const result = response.MediaContainer.Metadata;
+      logger.info('Plex playlist created successfully', {
+        label: 'Plex API',
+        title,
+        ratingKey: result[0]?.ratingKey,
+        itemCount: ratingKeys.length,
+      });
+      return result;
     } catch (e) {
       logger.error('Failed to create Plex Playlist', {
         label: 'Plex API',
+        title,
+        itemCount: ratingKeys.length,
         message: e.message,
       });
     }
@@ -418,6 +519,13 @@ class PlexAPI {
     summary?: string;
     thumb?: string;
   }): Promise<{ status: number; message: string } | undefined> {
+    logger.info('Editing Plex playlist', {
+      label: 'Plex API',
+      ratingKey,
+      hasTitle: !!title,
+      hasSummary: !!summary,
+      hasThumb: !!thumb,
+    });
     try {
       await this.plexClient.putQuery<PlexCreatePlaylistResponse>({
         uri: `/playlists/${ratingKey}?X-Plex-Token=${userToken}${
@@ -426,13 +534,22 @@ class PlexAPI {
       });
 
       if (thumb) {
+        logger.debug('Uploading playlist cover', {
+          label: 'Plex API',
+          ratingKey,
+        });
         await this.plexClient.postQuery<PlexCreatePlaylistResponse>({
           uri: `/library/metadata/${ratingKey}/posters?X-Plex-Token=${userToken}&url=${thumb}`,
         });
       }
+      logger.info('Plex playlist edited successfully', {
+        label: 'Plex API',
+        ratingKey,
+      });
     } catch (e) {
       logger.error('Failed to edit Plex Playlist', {
         label: 'Plex API',
+        ratingKey,
         message: e.message,
       });
 

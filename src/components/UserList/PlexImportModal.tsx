@@ -155,7 +155,7 @@ const PlexImportModal = ({ onCancel, onComplete }: PlexImportProps) => {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="plex-bg-transparent-10 divide-y divide-gray-700">
+                    <tbody className="plex-bg-transparent-10 divide-y divide-gray-600/30">
                       {data?.map((user) => (
                         <tr key={`user-${user.id}`}>
                           <td className="whitespace-nowrap px-4 py-4 text-sm font-medium leading-5 text-gray-100">

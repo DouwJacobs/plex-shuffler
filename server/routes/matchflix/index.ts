@@ -1,12 +1,21 @@
 import PlexAPI from '@server/api/plexapi';
 import { getRepository } from '@server/datasource';
 import { User } from '@server/entity/User';
+import logger from '@server/logger';
 import { getPlexUrl } from '@server/utils';
 import { Router } from 'express';
 
 const matchflixRoutes = Router();
 
 matchflixRoutes.get('/matches', async (req, res, next) => {
+  logger.debug('Get matches endpoint called', {
+    label: 'API',
+    userId: req.user?.id,
+    ratingKeysCount: req.query.ratingKeys
+      ? decodeURIComponent(req.query.ratingKeys as string).split(',').length
+      : 0,
+    ip: req.ip,
+  });
   const plexUrl = getPlexUrl();
   try {
     const ratingKeys = decodeURIComponent(req.query.ratingKeys as string);
@@ -24,6 +33,12 @@ matchflixRoutes.get('/matches', async (req, res, next) => {
     const result = await plexapi.getMultipleMetadata(ratingKeys);
     const machineID = await plexapi.getIdentity();
 
+    logger.info('Matches retrieved successfully', {
+      label: 'API',
+      totalResults: result.size,
+      userId: req.user?.id,
+    });
+
     return res.status(200).json({
       page,
       totalPages: 1,
@@ -38,6 +53,12 @@ matchflixRoutes.get('/matches', async (req, res, next) => {
       })),
     });
   } catch (e) {
+    logger.error('Failed to retrieve matches', {
+      label: 'API',
+      error: e.message,
+      userId: req.user?.id,
+      ip: req.ip,
+    });
     next({ status: 404, message: 'User not found.' });
   }
 });

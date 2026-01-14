@@ -1,3 +1,7 @@
+import PlexAPI from '@server/api/plexapi';
+import { getRepository } from '@server/datasource';
+import { User } from '@server/entity/User';
+import { UserSettings } from '@server/entity/UserSettings';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { merge } from 'lodash';
@@ -8,7 +12,7 @@ import { Permission } from './permissions';
 export interface Library {
   id: string;
   name: string;
-  enabled: boolean;
+  enabled?: boolean;
   type: 'show' | 'movie';
   lastScan?: number;
 }
@@ -243,12 +247,46 @@ export const getSettings = (initialSettings?: AllSettings): Settings => {
   return settings;
 };
 
-export const getLibraries = (type: string) => {
+export const getLibraries = async (type: string, id?: number) => {
   const settings = getSettings();
 
-  const libraries = settings.plex.libraries.filter((lib) => lib.type === type);
+  const userRepository = getRepository(User);
 
-  return libraries;
+  const user = await userRepository.findOneOrFail({
+    select: { id: true, plexToken: true },
+    where: { id: id ? id : 1 },
+  });
+
+  const plexapi = new PlexAPI({ plexToken: user.plexToken });
+
+  const libraries = await plexapi.getLibraries();
+
+  const newLibraries: Library[] = libraries
+    // Remove libraries that are not movie or show
+    .filter((library) => library.type === type)
+    // Remove libraries that do not have a metadata agent set (usually personal video libraries)
+    .filter((library) => library.agent !== 'com.plexapp.agents.none')
+    .map((library) => {
+      return {
+        id: library.key,
+        name: library.title,
+        type: library.type,
+      };
+    });
+
+  // const libraries = settings.plex.libraries.filter((lib) => lib.type === type);
+  if (!user.settings && settings.public.initialized) {
+    user.settings = new UserSettings({
+      user: user,
+      appendToTitle: false,
+      appendToSummary: false,
+      userDefaultShowLibraryID: Number(settings.main.defaultShowLibrary),
+    });
+
+    await userRepository.save(user);
+  }
+
+  return newLibraries;
 };
 
 export default Settings;

@@ -49,22 +49,24 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
       }}
       role="button"
       tabIndex={0}
-      className={`mx-2 flex items-center rounded-lg p-2 text-xs transition duration-300 ${
+      className={`mx-2 mb-2 flex items-center rounded-lg px-4 py-3 text-sm transition-all duration-200 ${
         data.updateAvailable
-          ? 'plex-border-primary plex-bg-primary rounded-md bg-opacity-50 text-gray-100 backdrop-blur'
-          : 'plex-bg-secondary hover:plex-bg-primary text-gray-300 ring-1 ring-gray-700'
+          ? 'plex-border-primary plex-bg-primary border-2 border-plex-primary bg-opacity-80 text-white shadow-lg shadow-plex-primary/30 backdrop-blur-md hover:bg-opacity-90'
+          : 'plex-bg-secondary bg-zinc-800/60 text-gray-200 ring-1 ring-gray-600/50 backdrop-blur-sm hover:bg-zinc-700/80 hover:ring-gray-500/50'
       }`}
     >
       {data.commitTag === 'local' ? (
-        <CodeBracketIcon className="h-6 w-6" />
+        <CodeBracketIcon className="h-5 w-5 flex-shrink-0" />
       ) : data.version.startsWith('development-') ? (
-        <BeakerIcon className="h-6 w-6" />
+        <BeakerIcon className="h-5 w-5 flex-shrink-0" />
       ) : (
-        <ServerIcon className="h-6 w-6" />
+        <ServerIcon className="h-5 w-5 flex-shrink-0" />
       )}
-      <div className="flex min-w-0 flex-1 flex-col truncate px-2 last:pr-0">
-        <span className="font-bold">{versionStream}</span>
-        <span className="truncate">
+      <div className="flex min-w-0 flex-1 flex-col truncate px-3 last:pr-0">
+        <span className="text-xs font-semibold leading-tight">
+          {versionStream}
+        </span>
+        <span className="truncate text-xs leading-tight">
           {data.commitTag === 'local' ? (
             '(⌐■_■)'
           ) : data.commitsBehind > 0 ? (
@@ -74,13 +76,15 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
           ) : data.commitsBehind === -1 ? (
             intl.formatMessage(messages.outofdate)
           ) : (
-            <code className="bg-transparent p-0">
+            <code className="bg-transparent p-0 font-mono text-xs">
               {data.version.replace('development-', '')}
             </code>
           )}
         </span>
       </div>
-      {data.updateAvailable && <ArrowUpCircleIcon className="h-6 w-6" />}
+      {data.updateAvailable && (
+        <ArrowUpCircleIcon className="ml-1 h-5 w-5 flex-shrink-0" />
+      )}
     </Link>
   );
 };

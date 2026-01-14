@@ -7,7 +7,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import styles from './PlexLoginButton.module.css';
 
 const messages = defineMessages({
-  signinwithplex: 'Sign In',
+  signinwithplex: 'Sign in with Plex',
   signingin: 'Signing In…',
 });
 

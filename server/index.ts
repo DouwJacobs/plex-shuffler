@@ -29,24 +29,46 @@ const API_SPEC_PATH = path.join(__dirname, '../plex-shuffler-api.yml');
 
 logger.info(`Starting Plex Shuffler version ${getAppVersion()}`);
 const dev = process.env.NODE_ENV !== 'production';
+logger.debug('Initializing Next.js application', {
+  label: 'Server',
+  isDevelopment: dev,
+});
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app
   .prepare()
   .then(async () => {
+    logger.debug('Next.js application prepared, initializing database', {
+      label: 'Server',
+    });
     const dbConnection = await dataSource.initialize();
+    logger.info('Database connection established', {
+      label: 'Server',
+      database: dbConnection.options.type,
+    });
 
     // Run migrations in production
     if (process.env.NODE_ENV === 'production') {
+      logger.debug('Running database migrations', { label: 'Server' });
       await dbConnection.query('PRAGMA foreign_keys=OFF');
-      await dbConnection.runMigrations();
+      const migrations = await dbConnection.runMigrations();
+      logger.info('Database migrations completed', {
+        label: 'Server',
+        migrationCount: migrations.length,
+      });
       await dbConnection.query('PRAGMA foreign_keys=ON');
     }
 
     // Load Settings
+    logger.debug('Loading application settings', { label: 'Server' });
     const settings = getSettings().load();
     restartFlag.initializeSettings(settings.main);
+    logger.debug('Settings loaded and initialized', {
+      label: 'Server',
+      hasPlexConfig: !!settings.plex.machineId,
+      libraryCount: settings.plex.libraries.length,
+    });
 
     // Migrate library types
     if (
@@ -66,16 +88,25 @@ app
 
         const plexapi = new PlexAPI({ plexToken: admin.plexToken });
         await plexapi.syncLibraries();
+        logger.debug('Plex library migration completed', {
+          label: 'Settings',
+        });
       }
     }
 
+    logger.debug('Initializing Express server and HTTP server', {
+      label: 'Server',
+    });
     const server = express();
     const httpServer: http.Server = http.createServer(server);
     socketIO(httpServer);
+    logger.debug('Socket.IO initialized', { label: 'Server' });
 
     if (settings.main.trustProxy) {
+      logger.debug('Trust proxy enabled', { label: 'Server' });
       server.enable('trust proxy');
     }
+    logger.debug('Configuring Express middleware', { label: 'Server' });
     server.use(cookieParser());
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
@@ -84,6 +115,11 @@ app
         const descriptor = Object.getOwnPropertyDescriptor(req, 'ip');
         if (descriptor?.writable === true) {
           req.ip = getClientIp(req) ?? '';
+          logger.debug('Client IP attached to request', {
+            label: 'Middleware',
+            ip: req.ip,
+            path: req.path,
+          });
         }
       } catch (e) {
         logger.error('Failed to attach the ip to the request', {
@@ -95,6 +131,7 @@ app
       }
     });
     if (settings.main.csrfProtection) {
+      logger.debug('CSRF protection enabled', { label: 'Server' });
       server.use(
         csurf({
           cookie: {
@@ -114,6 +151,7 @@ app
     }
 
     // Set up sessions
+    logger.debug('Configuring session middleware', { label: 'Server' });
     const sessionRespository = getRepository(Session);
     server.use(
       '/api',
@@ -134,6 +172,10 @@ app
         }).connect(sessionRespository) as Store,
       })
     );
+    logger.debug('Session middleware configured', { label: 'Server' });
+    logger.debug('Loading API documentation and validators', {
+      label: 'Server',
+    });
     const apiDocs = YAML.load(API_SPEC_PATH);
     server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
     server.use(
@@ -142,6 +184,9 @@ app
         validateRequests: true,
       })
     );
+    logger.debug('API documentation and validators configured', {
+      label: 'Server',
+    });
     /**
      * This is a workaround to convert dates to strings before they are validated by
      * OpenAPI validator. Otherwise, they are treated as objects instead of strings
@@ -154,20 +199,31 @@ app
       };
       next();
     });
+    logger.debug('Registering API routes', { label: 'Server' });
     server.use('/api/v1', routes);
 
     server.use('/imageproxy', clearCookies, imageproxy);
 
     server.get('*', (req, res) => handle(req, res));
+    logger.debug('All routes registered', { label: 'Server' });
     server.use(
       (
         err: { status: number; message: string; errors: string[] },
-        _req: Request,
+        req: Request,
         res: Response,
         // We must provide a next function for the function signature here even though its not used
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _next: NextFunction
       ) => {
+        logger.error('Request error', {
+          label: 'Server',
+          status: err.status || 500,
+          message: err.message,
+          path: req.path,
+          method: req.method,
+          ip: req.ip,
+          errors: err.errors,
+        });
         // format error
         res.status(err.status || 500).json({
           message: err.message,
@@ -178,6 +234,11 @@ app
 
     const port = Number(process.env.PORT) || 3210;
     const host = process.env.HOST;
+    logger.debug('Starting HTTP server', {
+      label: 'Server',
+      port,
+      host: host || '0.0.0.0',
+    });
     if (host) {
       httpServer.listen(port, host, () => {
         logger.info(`Server ready on ${host} port ${port}`, {
@@ -193,6 +254,10 @@ app
     }
   })
   .catch((err) => {
-    logger.error(err.stack);
+    logger.error('Failed to start server', {
+      label: 'Server',
+      error: err.message,
+      stack: err.stack,
+    });
     process.exit(1);
   });
