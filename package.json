@@ -61,7 +61,7 @@
     "express-openapi-validator": "^5.0.4",
     "express-rate-limit": "^6.7.0",
     "formik": "^2.4.2",
-    "gravatar-url": "^3.1.0",
+    "gravatar-url": "^4.0.0",
     "hamburger-react": "^2.5.0",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
