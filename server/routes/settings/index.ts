@@ -39,7 +39,7 @@ settingsRoutes.get('/main', (req, res, next) => {
   const settings = getSettings();
 
   if (!req.user) {
-    return next({ status: 400, message: 'User missing from request.' });
+    return next({ status: 401, message: 'User missing from request.' });
   }
 
   res.status(200).json(filteredMainSettings(req.user, settings.main));
@@ -60,7 +60,7 @@ settingsRoutes.post('/main/regenerate', (req, res, next) => {
   const main = settings.regenerateApiKey();
 
   if (!req.user) {
-    return next({ status: 500, message: 'User missing from request.' });
+    return next({ status: 401, message: 'User missing from request.' });
   }
 
   return res.status(200).json(filteredMainSettings(req.user, main));

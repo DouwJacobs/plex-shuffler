@@ -101,7 +101,7 @@ movieRoutes.get('/newest', async (req, res, next) => {
       userId: req.user?.id,
       ip: req.ip,
     });
-    next({ status: 404, message: 'User not found.' });
+    next({ status: 500, message: 'Failed to retrieve movies.' });
   }
 });
 

@@ -9,7 +9,7 @@ import { Router } from 'express';
 
 const authRoutes = Router();
 
-authRoutes.get('/me', isAuthenticated(), async (req, res) => {
+authRoutes.get('/me', isAuthenticated(), async (req, res, next) => {
   logger.debug('Get current user endpoint called', {
     label: 'API',
     userId: req.user?.id,
@@ -21,9 +21,9 @@ authRoutes.get('/me', isAuthenticated(), async (req, res) => {
       label: 'API',
       ip: req.ip,
     });
-    return res.status(500).json({
-      status: 500,
-      error: 'Please sign in.',
+    return next({
+      status: 401,
+      message: 'Please sign in.',
     });
   }
   const user = await userRepository.findOneOrFail({
@@ -38,12 +38,12 @@ authRoutes.get('/me', isAuthenticated(), async (req, res) => {
   return res.status(200).json(user);
 });
 
-authRoutes.get('/me/token', isAuthenticated(), async (req, res) => {
+authRoutes.get('/me/token', isAuthenticated(), async (req, res, next) => {
   const userRepository = getRepository(User);
   if (!req.user) {
-    return res.status(500).json({
-      status: 500,
-      error: 'Please sign in.',
+    return next({
+      status: 401,
+      message: 'Please sign in.',
     });
   }
   const user = await userRepository.findOneOrFail({
@@ -70,7 +70,7 @@ authRoutes.post('/plex', async (req, res, next) => {
       ip: req.ip,
     });
     return next({
-      status: 500,
+      status: 400,
       message: 'Authentication token required.',
     });
   }

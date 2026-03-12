@@ -390,9 +390,9 @@ router.post('/shuffled-playlist', async (req, res, next) => {
           ip: req.ip,
         }
       );
-      return res.status(500).json({
-        status: 500,
-        error: 'Please sign in.',
+      return next({
+        status: 401,
+        message: 'Please sign in.',
       });
     }
 
@@ -410,11 +410,22 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       userId: user.id,
       playlistCount: req.body.playlists?.length || 0,
     });
-    const allEpisodes: TVShow[] = await plexShowScanner.run(
-      user.plexToken,
-      req.body.playlists,
-      req.body.unwatchedOnly
-    );
+    const allEpisodes: TVShow[] = (
+      await plexShowScanner.run(
+        user.plexToken,
+        req.body.playlists,
+        req.body.unwatchedOnly
+      )
+    ).filter((show: TVShow) => show.episodes.length > 0);
+
+    if (allEpisodes.length === 0) {
+      return next({
+        status: 404,
+        message: req.body.unwatchedOnly
+          ? 'No unwatched episodes found for the selected shows.'
+          : 'No episodes found for the selected shows.',
+      });
+    }
 
     logger.debug('Shuffling episodes', {
       label: 'API',
@@ -483,7 +494,7 @@ router.post('/shuffled-playlist', async (req, res, next) => {
       userId: req.user?.id,
       ip: req.ip,
     });
-    next({ status: 404, message: 'User not found.' });
+    next({ status: 500, message: e.message });
   }
 });
 

@@ -25,6 +25,11 @@ const plexShuffle = (allEpisodes: Show[]) => {
   });
   const shuffledEpisodes: string[] = [];
 
+  if (allEpisodes.length === 0) {
+    logger.debug('No episodes to shuffle', { label: 'PlexShuffle' });
+    return [];
+  }
+
   if (allEpisodes.length === 1) {
     logger.debug('Single show shuffle - using simple shuffle', {
       label: 'PlexShuffle',

@@ -44,9 +44,9 @@ tvRoutes.get('/shows', async (req, res, next) => {
       label: 'API',
       ip: req.ip,
     });
-    return res.status(500).json({
-      status: 500,
-      error: 'Please sign in.',
+    return next({
+      status: 401,
+      message: 'Please sign in.',
     });
   }
 
@@ -107,9 +107,9 @@ tvRoutes.get('/shows', async (req, res, next) => {
 
         // Validate that all requested libraries exist
         if (librariesToFetch.length !== libraryIdArray.length) {
-          return res.status(400).json({
+          return next({
             status: 400,
-            error: 'One or more invalid library IDs',
+            message: 'One or more invalid library IDs',
           });
         }
       }
@@ -119,9 +119,9 @@ tvRoutes.get('/shows', async (req, res, next) => {
         (lib) => String(lib.id) === String(requestedLibID)
       );
       if (!libraryExists) {
-        return res.status(400).json({
+        return next({
           status: 400,
-          error: 'Invalid library ID',
+          message: 'Invalid library ID',
         });
       }
       librariesToFetch = tvLibraries.filter(
